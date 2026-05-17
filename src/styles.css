@@ -9635,3 +9635,414 @@ body {
   .premium-week-calendar { display: none; }
   .premium-recipe-tags span:nth-child(3) { display: none; }
 }
+
+/* ============================================================
+   HOTFIX HOME PREMIUM - ENSALADAS EN FRASCO
+   Corrige hero vazio, unicode visual, cards cortados e layout mobile.
+   Cole no FINAL do styles.css.
+   ============================================================ */
+
+.screen.salad-premium-home {
+  display: none;
+  position: relative;
+  min-height: 100dvh;
+  padding: 0 0 calc(104px + env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at -8% 76%, rgba(139, 166, 106, 0.18), transparent 112px),
+    radial-gradient(circle at 108% 80%, rgba(139, 166, 106, 0.16), transparent 112px),
+    linear-gradient(180deg, #fffaf0 0%, #fbf4e4 48%, #fff9ee 100%) !important;
+  font-family: Inter, Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.screen.salad-premium-home.active {
+  display: block !important;
+}
+
+.screen.salad-premium-home::before,
+.screen.salad-premium-home::after {
+  position: absolute;
+  z-index: 0;
+  width: 92px;
+  height: 170px;
+  pointer-events: none;
+  content: "";
+  opacity: 0.32;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.screen.salad-premium-home::before {
+  left: -52px;
+  bottom: 104px;
+  background-image:
+    radial-gradient(ellipse at 48% 8%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 34% 24%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 61% 31%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 41% 48%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 65% 58%, #8cab70 0 10px, transparent 11px);
+  transform: rotate(-22deg);
+}
+
+.screen.salad-premium-home::after {
+  right: -58px;
+  bottom: 86px;
+  background-image:
+    radial-gradient(ellipse at 48% 8%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 34% 24%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 61% 31%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 41% 48%, #8cab70 0 10px, transparent 11px),
+    radial-gradient(ellipse at 65% 58%, #8cab70 0 10px, transparent 11px);
+  transform: rotate(24deg);
+}
+
+.salad-premium-home .premium-salad-header {
+  position: relative !important;
+  z-index: 10 !important;
+  display: grid !important;
+  grid-template-columns: 44px 1fr 44px !important;
+  align-items: center !important;
+  min-height: 96px !important;
+  padding: calc(8px + env(safe-area-inset-top)) 18px 14px !important;
+  color: #fffef6 !important;
+  background:
+    radial-gradient(circle at 50% -38%, rgba(255, 255, 255, 0.12), transparent 150px),
+    linear-gradient(180deg, #506f3a 0%, #3f6031 100%) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 12px 26px rgba(47, 68, 38, 0.14) !important;
+}
+
+.salad-premium-home .premium-header-button {
+  display: grid !important;
+  place-items: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: #fffef6 !important;
+  background: transparent !important;
+}
+
+.salad-premium-home .premium-salad-brand {
+  position: relative !important;
+  display: grid !important;
+  justify-items: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  line-height: 1 !important;
+}
+
+.salad-premium-home .premium-salad-brand strong {
+  color: #fffef6 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(34px, 10vw, 45px) !important;
+  font-style: italic !important;
+  font-weight: 700 !important;
+  line-height: 0.82 !important;
+  letter-spacing: -1.8px !important;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07) !important;
+}
+
+.salad-premium-home .premium-salad-brand small {
+  margin-top: 8px !important;
+  color: #fffef6 !important;
+  font-size: clamp(14px, 4vw, 19px) !important;
+  font-weight: 900 !important;
+  line-height: 0.9 !important;
+  letter-spacing: 4px !important;
+}
+
+.salad-premium-home .premium-brand-leaf {
+  position: absolute !important;
+  top: -15px !important;
+  left: 26px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 18px !important;
+  transform: rotate(-28deg) !important;
+}
+
+.salad-premium-home .premium-jars-hero {
+  position: relative !important;
+  z-index: 2 !important;
+  display: block !important;
+  min-height: 216px !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(90, 122, 63, 0.18), transparent 80px),
+    radial-gradient(circle at 92% 62%, rgba(102, 133, 73, 0.16), transparent 74px),
+    linear-gradient(180deg, #fff3de 0%, #fffaf1 72%, #fff8ed 100%) !important;
+  border-bottom: 1px solid rgba(80, 111, 58, 0.08) !important;
+}
+
+.salad-premium-home .premium-jars-hero::before {
+  position: absolute;
+  left: -18px;
+  bottom: 24px;
+  width: 88px;
+  height: 48px;
+  border-radius: 999px;
+  content: "";
+  background: rgba(191, 168, 127, 0.23);
+  filter: blur(10px);
+  transform: rotate(-18deg);
+}
+
+.salad-premium-home .premium-jars-hero::after {
+  position: absolute;
+  right: -18px;
+  bottom: 36px;
+  width: 82px;
+  height: 58px;
+  border-radius: 50%;
+  content: "";
+  background:
+    radial-gradient(circle at 34% 36%, #4d7b38 0 7px, transparent 8px),
+    radial-gradient(circle at 54% 48%, #6e9c4d 0 8px, transparent 9px),
+    radial-gradient(circle at 67% 33%, #4d7b38 0 6px, transparent 7px),
+    rgba(203, 180, 133, 0.22);
+}
+
+.salad-premium-home .premium-hero-kitchen-blur {
+  position: absolute !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  opacity: 0.28 !important;
+}
+
+.salad-premium-home .premium-left-blur {
+  left: -20px !important;
+  top: 18px !important;
+  width: 74px !important;
+  height: 100px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 24% 20%, #6d934d 0 8px, transparent 9px),
+    radial-gradient(circle at 56% 32%, #7ca95a 0 10px, transparent 11px),
+    radial-gradient(circle at 38% 70%, #89b465 0 8px, transparent 9px) !important;
+  filter: blur(1px) !important;
+}
+
+.salad-premium-home .premium-right-blur {
+  right: 4px !important;
+  top: 86px !important;
+  width: 54px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  background: rgba(105, 137, 71, 0.22) !important;
+}
+
+.salad-premium-home .premium-jars-row {
+  position: absolute !important;
+  z-index: 5 !important;
+  left: 50% !important;
+  bottom: 22px !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  width: calc(100% - 34px) !important;
+  max-width: 390px !important;
+  transform: translateX(-50%) !important;
+}
+
+.salad-premium-home .premium-jar {
+  position: relative !important;
+  display: block !important;
+  height: clamp(142px, 38vw, 170px) !important;
+  min-width: 0 !important;
+  border-radius: 15px 15px 20px 20px !important;
+  overflow: visible !important;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.34), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.22)),
+    rgba(255, 255, 255, 0.22) !important;
+  border: 2px solid rgba(255, 255, 255, 0.74) !important;
+  box-shadow:
+    inset 5px 0 8px rgba(255, 255, 255, 0.34),
+    inset -5px 0 10px rgba(89, 93, 68, 0.1),
+    0 14px 22px rgba(85, 76, 50, 0.16) !important;
+}
+
+.salad-premium-home .premium-jar::before {
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: 16px;
+  bottom: 7px;
+  z-index: 3;
+  border-radius: 10px 10px 18px 18px;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.27), transparent 16%, transparent 76%, rgba(255, 255, 255, 0.18)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 30%);
+}
+
+.salad-premium-home .premium-jar::after {
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: -9px;
+  height: 14px;
+  border-radius: 50%;
+  content: "";
+  background: rgba(83, 72, 44, 0.18);
+  filter: blur(6px);
+}
+
+.salad-premium-home .premium-jar-lid {
+  position: absolute !important;
+  left: 50% !important;
+  top: -8px !important;
+  z-index: 6 !important;
+  width: 86% !important;
+  height: 23px !important;
+  border-radius: 8px 8px 5px 5px !important;
+  background:
+    repeating-linear-gradient(90deg, rgba(87, 70, 28, 0.22) 0 2px, transparent 2px 5px),
+    linear-gradient(180deg, #f1dfad 0%, #b89346 48%, #e9d193 100%) !important;
+  border: 1px solid rgba(103, 78, 32, 0.32) !important;
+  box-shadow:
+    inset 0 4px 5px rgba(255, 255, 255, 0.44),
+    0 4px 8px rgba(84, 66, 32, 0.16) !important;
+  transform: translateX(-50%) !important;
+}
+
+.salad-premium-home .premium-jar-glass-shine {
+  position: absolute !important;
+  z-index: 7 !important;
+  left: 12px !important;
+  top: 29px !important;
+  width: 11px !important;
+  height: 82px !important;
+  border-radius: 999px !important;
+  pointer-events: none !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), transparent) !important;
+  opacity: 0.6 !important;
+}
+
+.salad-premium-home .premium-jar-content {
+  position: absolute !important;
+  left: 7px !important;
+  right: 7px !important;
+  top: 18px !important;
+  bottom: 7px !important;
+  z-index: 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  overflow: hidden !important;
+  border-radius: 10px 10px 18px 18px !important;
+  background: rgba(255, 255, 255, 0.26) !important;
+}
+
+.salad-premium-home .premium-jar-layer {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  flex: 0 0 auto !important;
+}
+
+.salad-premium-home .premium-jar-layer.greens { height: 39%; background: radial-gradient(circle at 26% 25%, #315d25 0 7px, transparent 8px), radial-gradient(circle at 62% 18%, #629b3d 0 10px, transparent 11px), radial-gradient(circle at 76% 48%, #254f1f 0 9px, transparent 10px), radial-gradient(circle at 43% 60%, #7eb553 0 10px, transparent 11px), linear-gradient(180deg, #57923f, #2f6529); }
+.salad-premium-home .premium-jar-layer.tomatoCorn { height: 15%; background: radial-gradient(circle at 26% 50%, #d9432d 0 5px, transparent 6px), radial-gradient(circle at 62% 48%, #f0c944 0 5px, transparent 6px), linear-gradient(90deg, #ffd54d, #e15431); }
+.salad-premium-home .premium-jar-layer.corn { height: 13%; background: radial-gradient(circle at 20% 45%, #f5c43c 0 4px, transparent 5px), radial-gradient(circle at 44% 45%, #ffd861 0 4px, transparent 5px), radial-gradient(circle at 68% 48%, #eeb328 0 4px, transparent 5px), #f7c43d; }
+.salad-premium-home .premium-jar-layer.chickpea { height: 17%; background: radial-gradient(circle at 21% 42%, #d19b48 0 5px, transparent 6px), radial-gradient(circle at 48% 52%, #e0b660 0 6px, transparent 7px), radial-gradient(circle at 72% 41%, #b98539 0 5px, transparent 6px), #cf9a4a; }
+.salad-premium-home .premium-jar-layer.cream { height: 16%; background: linear-gradient(180deg, #efe0bd, #f9efd7); }
+.salad-premium-home .premium-jar-layer.carrot { height: 16%; background: repeating-linear-gradient(-10deg, #f07c23 0 4px, #d95e15 4px 7px, transparent 7px 13px), #ed8a2d; }
+.salad-premium-home .premium-jar-layer.cucumber { height: 14%; background: radial-gradient(circle at 32% 50%, #9ec065 0 6px, transparent 7px), radial-gradient(circle at 68% 48%, #6e9944 0 6px, transparent 7px), #abd476; }
+.salad-premium-home .premium-jar-layer.grains { height: 15%; background: radial-gradient(circle at 15% 50%, #c8a96c 0 3px, transparent 4px), radial-gradient(circle at 33% 44%, #80643b 0 3px, transparent 4px), radial-gradient(circle at 52% 55%, #d7bd80 0 3px, transparent 4px), radial-gradient(circle at 74% 45%, #927241 0 3px, transparent 4px), #c8a56c; }
+.salad-premium-home .premium-jar-layer.whiteSauce { height: 16%; background: radial-gradient(circle at 30% 38%, rgba(61, 92, 42, 0.4) 0 2px, transparent 3px), radial-gradient(circle at 59% 48%, rgba(61, 92, 42, 0.35) 0 2px, transparent 3px), #f9f3e3; }
+.salad-premium-home .premium-jar-layer.onion { height: 15%; background: repeating-linear-gradient(-14deg, #7d3f70 0 5px, #d7a0c8 5px 8px, transparent 8px 14px), #8c4a7b; }
+.salad-premium-home .premium-jar-layer.cheeseTomato { height: 18%; background: radial-gradient(circle at 18% 30%, #fff0c9 0 5px, transparent 6px), radial-gradient(circle at 43% 55%, #d73b2e 0 7px, transparent 8px), radial-gradient(circle at 72% 34%, #fff0c9 0 6px, transparent 7px), linear-gradient(90deg, #d83c2b, #f4e3b8); }
+.salad-premium-home .premium-jar-layer.avocado { height: 15%; background: radial-gradient(circle at 20% 45%, #91b950 0 5px, transparent 6px), radial-gradient(circle at 55% 55%, #638e3c 0 6px, transparent 7px), #95bf5d; }
+.salad-premium-home .premium-jar-layer.greenSauce { height: 13%; background: #c8dca5; }
+.salad-premium-home .premium-jar-layer.carrotRibbon { height: 17%; background: repeating-linear-gradient(-18deg, #ee8124 0 5px, #c85414 5px 8px, transparent 8px 15px), #ef7c23; }
+.salad-premium-home .premium-jar-layer.lentils { height: 16%; background: radial-gradient(circle at 18% 40%, #805c35 0 4px, transparent 5px), radial-gradient(circle at 39% 58%, #a07340 0 4px, transparent 5px), radial-gradient(circle at 64% 43%, #76532f 0 4px, transparent 5px), #8c6338; }
+.salad-premium-home .premium-jar-layer.mustardSauce { height: 15%; background: #e5cf8f; }
+
+.salad-premium-home .premium-welcome {
+  position: relative !important;
+  z-index: 4 !important;
+  padding: 22px 20px 20px !important;
+  text-align: center !important;
+  background: linear-gradient(180deg, rgba(255, 251, 243, 0.98), rgba(255, 250, 240, 0.92)) !important;
+}
+
+.salad-premium-home .premium-welcome h1 {
+  margin: 0 0 9px !important;
+  color: #466b39 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(30px, 8.4vw, 38px) !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -1px !important;
+}
+
+.salad-premium-home .premium-welcome h1::before { display: inline-block; margin-right: 6px; color: #4e7b3f; font-size: 20px; content: "‹"; transform: rotate(-38deg) translateY(-7px); }
+
+.salad-premium-home .premium-welcome p {
+  max-width: 315px !important;
+  margin: 0 auto !important;
+  color: #32412e !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.28 !important;
+}
+
+.salad-premium-home .premium-explore-wrap { position: relative !important; z-index: 3 !important; padding: 0 18px 28px !important; }
+.salad-premium-home .premium-explore-divider { height: 1px !important; margin: 0 0 24px !important; background: linear-gradient(90deg, transparent, rgba(80, 111, 58, 0.15), transparent) !important; }
+.salad-premium-home .premium-section-row { position: relative !important; display: flex !important; align-items: center !important; justify-content: space-between !important; min-height: 60px !important; margin-bottom: 12px !important; }
+.salad-premium-home .premium-section-row h2 { display: inline-flex !important; align-items: center !important; gap: 8px !important; margin: 0 !important; color: #506f3a !important; font-family: Georgia, "Times New Roman", serif !important; font-size: clamp(25px, 7vw, 33px) !important; font-weight: 800 !important; line-height: 1 !important; letter-spacing: -0.7px !important; }
+.salad-premium-home .premium-section-row h2 span { color: #6f9560 !important; font-size: 22px !important; }
+
+.salad-premium-home .premium-custom-badge {
+  position: absolute !important;
+  top: -42px !important;
+  right: -2px !important;
+  z-index: 9 !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 86px !important;
+  height: 86px !important;
+  padding: 9px !important;
+  border: 5px solid rgba(255, 255, 255, 0.78) !important;
+  border-radius: 999px !important;
+  color: #506f3a !important;
+  background: radial-gradient(circle, #e5f2d3 0 55%, #d8edc4 56% 100%) !important;
+  box-shadow: inset 0 0 0 2px rgba(88, 123, 65, 0.18), inset 0 0 0 7px rgba(255, 255, 255, 0.22), 0 11px 22px rgba(72, 88, 54, 0.16) !important;
+  font-family: Inter, Manrope, system-ui, sans-serif !important;
+  text-align: center !important;
+}
+
+.salad-premium-home .premium-custom-badge::after { position: absolute; inset: 7px; border: 1px dashed rgba(80, 111, 58, 0.36); border-radius: inherit; content: ""; }
+.salad-premium-home .premium-custom-badge svg, .salad-premium-home .premium-custom-badge strong, .salad-premium-home .premium-custom-badge small { position: relative; z-index: 1; }
+.salad-premium-home .premium-custom-badge strong { margin-top: 2px !important; font-size: 8.5px !important; font-weight: 900 !important; line-height: 1 !important; }
+.salad-premium-home .premium-custom-badge small { font-size: 7.6px !important; font-weight: 900 !important; line-height: 1 !important; }
+
+.salad-premium-home .premium-explore-grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px 10px !important; width: 100% !important; }
+.salad-premium-home .premium-explore-card { position: relative !important; display: grid !important; align-content: center !important; justify-items: center !important; min-width: 0 !important; min-height: 92px !important; padding: 11px 5px 12px !important; overflow: hidden !important; border: 1px solid rgba(76, 94, 55, 0.13) !important; border-radius: 12px !important; color: #506f3a !important; background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 253, 248, 0.9)) !important; box-shadow: 0 8px 18px rgba(73, 70, 47, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.92) !important; }
+.salad-premium-home .premium-icon-orb { display: grid !important; place-items: center !important; width: 42px !important; height: 42px !important; margin-bottom: 9px !important; border-radius: 999px !important; color: #416734 !important; background: #e9f4d8 !important; }
+.salad-premium-home .premium-explore-card.tone-cream .premium-icon-orb { background: #fbedd6 !important; }
+.salad-premium-home .premium-explore-card.tone-pink .premium-icon-orb { background: #fde7df !important; }
+.salad-premium-home .premium-icon-orb svg { width: 25px !important; height: 25px !important; }
+.salad-premium-home .premium-card-label { display: block !important; max-width: 100% !important; color: #4c6d38 !important; font-family: Georgia, "Times New Roman", serif !important; font-size: clamp(12px, 3.3vw, 14px) !important; font-weight: 800 !important; line-height: 1.05 !important; text-align: center !important; letter-spacing: -0.15px !important; white-space: normal !important; word-break: normal !important; overflow-wrap: anywhere !important; }
+.salad-premium-home .premium-card-arrow { position: absolute !important; right: 7px !important; bottom: 8px !important; display: grid !important; place-items: center !important; width: 20px !important; height: 20px !important; border-radius: 999px !important; color: #4d703a !important; background: #dcebbb !important; }
+.salad-premium-home .premium-card-arrow svg { width: 14px !important; height: 14px !important; }
+
+.bottom-nav.salad-premium-bottom-nav { position: fixed !important; left: 50% !important; bottom: calc(12px + env(safe-area-inset-bottom)) !important; z-index: 80 !important; display: grid !important; grid-template-columns: repeat(4, 1fr) !important; width: min(calc(100% - 36px), 394px) !important; height: 74px !important; padding: 7px 9px !important; transform: translateX(-50%) !important; border: 1px solid rgba(80, 111, 58, 0.13) !important; border-radius: 23px !important; background: rgba(255, 253, 247, 0.94) !important; box-shadow: 0 14px 34px rgba(57, 62, 41, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(18px) !important; }
+.bottom-nav.salad-premium-bottom-nav button { display: grid !important; grid-template-rows: 24px 14px !important; align-content: center !important; justify-items: center !important; gap: 5px !important; min-width: 0 !important; min-height: 56px !important; padding: 0 !important; border: 0 !important; border-radius: 17px !important; color: #4e514b !important; background: transparent !important; font-family: Inter, Manrope, system-ui, sans-serif !important; font-size: 9px !important; font-weight: 650 !important; line-height: 1 !important; }
+.bottom-nav.salad-premium-bottom-nav button svg { width: 21px !important; height: 21px !important; }
+.bottom-nav.salad-premium-bottom-nav button.active { color: #416d32 !important; background: transparent !important; box-shadow: none !important; }
+.bottom-nav.salad-premium-bottom-nav button.active span { color: #416d32 !important; font-weight: 850 !important; }
+
+@media (max-width: 380px) {
+  .salad-premium-home .premium-salad-header { min-height: 88px !important; padding-inline: 16px !important; }
+  .salad-premium-home .premium-jars-hero { min-height: 198px !important; }
+  .salad-premium-home .premium-jars-row { width: calc(100% - 28px) !important; gap: 6px !important; }
+  .salad-premium-home .premium-jar { height: 132px !important; }
+  .salad-premium-home .premium-explore-wrap { padding-inline: 16px !important; }
+  .salad-premium-home .premium-explore-grid { gap: 10px 8px !important; }
+  .salad-premium-home .premium-explore-card { min-height: 88px !important; }
+  .salad-premium-home .premium-icon-orb { width: 38px !important; height: 38px !important; }
+  .salad-premium-home .premium-card-label { font-size: 11.5px !important; }
+  .salad-premium-home .premium-custom-badge { width: 78px !important; height: 78px !important; top: -36px !important; }
+}

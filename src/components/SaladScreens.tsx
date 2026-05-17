@@ -13,19 +13,32 @@ interface AppContext {
 export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeScreen: ScreenId; readonly openScreen: (screen: ScreenId) => void }) {
   const navItems = [
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
-    { key: "search", label: "Recetas", icon: Search, screen: "recipes" as ScreenId },
+    { key: "search", label: "Buscar", icon: Search, screen: "recipes" as ScreenId },
     { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId },
-    { key: "guide", label: "Mi guía", icon: BookOpen, screen: "guide" as ScreenId }
+    { key: "guide", label: "Mi gu\u00eda", icon: BookOpen, screen: "guide" as ScreenId }
   ];
 
   return (
-    <nav className="bottom-nav" aria-label="Navegacion principal">
+    <nav className="bottom-nav salad-premium-bottom-nav" aria-label="Navegaci\u00f3n principal">
       {navItems.map((item) => {
         const Icon = item.icon;
-        const active = item.key === "home" ? activeScreen === "home" : item.key === "guide" ? activeScreen === "guide" : item.key === "search" ? activeScreen === "recipes" : false;
+        const active =
+          item.key === "home"
+            ? activeScreen === "home"
+            : item.key === "guide"
+              ? activeScreen === "guide"
+              : item.key === "search"
+                ? activeScreen === "recipes"
+                : false;
+
         return (
-          <button className={active ? "active" : ""} key={item.key} type="button" onClick={() => openScreen(item.screen)}>
-            <Icon size={20} />
+          <button
+            className={active ? "active" : ""}
+            key={item.key}
+            type="button"
+            onClick={() => openScreen(item.screen)}
+          >
+            <Icon size={25} strokeWidth={active ? 2.8 : 2.2} fill={active && item.key === "home" ? "currentColor" : "none"} />
             <span>{item.label}</span>
           </button>
         );
@@ -100,56 +113,120 @@ export function SaladOnboarding({ onComplete }: { readonly onComplete: (profile:
   );
 }
 
-export function SaladHomeScreen({ active, state, openScreen }: AppContext & { readonly active: boolean }) {
+export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly active: boolean }) {
   const exploreCards = [
-    { title: "Recetas", subtitle: "60 frascos listos", icon: Salad, screen: "recipes" as ScreenId },
-    { title: "Aderezos", subtitle: "Sabor sin complicarte", icon: Utensils, screen: "guide" as ScreenId },
-    { title: "Combinaciones", subtitle: "Capas que duran", icon: Layers3, screen: "guide" as ScreenId },
-    { title: "Menús", subtitle: "3, 5 o 7 días", icon: ShoppingBasket, screen: "week" as ScreenId },
-    { title: "Consejos", subtitle: "Conservación fácil", icon: Sparkles, screen: "guide" as ScreenId },
-    { title: "Favoritos", subtitle: "Tus ideas guardadas", icon: Heart, screen: "recipes" as ScreenId }
+    { title: "Recetas", icon: Salad, screen: "recipes" as ScreenId, tone: "green" },
+    { title: "Aderezos", icon: Utensils, screen: "guide" as ScreenId, tone: "cream" },
+    { title: "Combinaciones", icon: Layers3, screen: "guide" as ScreenId, tone: "green" },
+    { title: "Men\u00fas", icon: ShoppingBasket, screen: "week" as ScreenId, tone: "cream" },
+    { title: "Consejos", icon: Sparkles, screen: "guide" as ScreenId, tone: "green" },
+    { title: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, tone: "pink" }
   ];
-  const weekRecipes = state.weekRecipeIds.map(recipeById);
-  const completed = weekRecipes.filter((recipe) => state.completedRecipeIds.includes(recipe.id)).length;
-  const weekPercent = weekRecipes.length ? Math.round((completed / weekRecipes.length) * 100) : 0;
-  const preparedToday = state.preparedLog.some((entry) => entry.date === getTodayKey());
-  const nextRecipe = weekRecipes.find((recipe) => !state.completedRecipeIds.includes(recipe.id)) ?? weekRecipes[0] ?? recipes[0];
+
+  const jars = [
+    {
+      key: "jar-one",
+      layers: ["greens", "tomatoCorn", "corn", "chickpea", "cream"]
+    },
+    {
+      key: "jar-two",
+      layers: ["greens", "carrot", "cucumber", "grains", "whiteSauce"]
+    },
+    {
+      key: "jar-three",
+      layers: ["greens", "onion", "cheeseTomato", "avocado", "greenSauce"]
+    },
+    {
+      key: "jar-four",
+      layers: ["greens", "carrotRibbon", "avocado", "lentils", "mustardSauce"]
+    }
+  ];
 
   return (
-    <section className={`screen salad-home ${active ? "active" : ""}`}>
-      <header className="salad-header">
-        <button className="salad-header-btn" type="button" aria-label="Abrir menu"><Menu size={21} /></button>
-        <div className="salad-brand"><strong>Ensaladas</strong><span>EN FRASCO</span></div>
-        <button className="salad-header-btn" type="button" aria-label="Notificaciones"><Bell size={19} /></button>
+    <section className={`screen salad-home salad-premium-home ${active ? "active" : ""}`}>
+      <header className="premium-salad-header">
+        <button className="premium-header-button" type="button" aria-label="Abrir men\u00fa">
+          <Menu size={34} strokeWidth={2.5} />
+        </button>
+
+        <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
+          <span className="premium-brand-leaf">{"\u2661"}</span>
+          <strong>ensaladas</strong>
+          <small>EN FRASCO</small>
+        </div>
+
+        <button className="premium-header-button" type="button" aria-label="Notificaciones">
+          <Bell size={31} strokeWidth={2.3} />
+        </button>
       </header>
-      <section className="salad-hero">
-        <div className="salad-hero-copy">
-          <span className="salad-app-badge"><Sparkles size={14} /> Aplicación personalizada</span>
-          <h1>Organiza tu semana en frascos bonitos y listos.</h1>
-          <p>Recetas, aderezos, capas y lista de compras para preparar sin pensar demasiado.</p>
-          <div className="salad-hero-actions">
-            <button className="salad-main-cta" type="button" onClick={() => openScreen("recipes")}><Salad size={19} /> Ver recetas</button>
-            <button className="salad-ghost-cta" type="button" onClick={() => openScreen("week")}>Crear menú</button>
-          </div>
-        </div>
-        <div className="salad-jars" aria-label="Potes de ensalada">
-          {[0, 1, 2, 3].map((item) => <span key={item}><i /><b /><em /><small /></span>)}
+
+      <section className="premium-jars-hero" aria-label="Ensaladas en frasco listas">
+        <div className="premium-hero-kitchen-blur premium-left-blur" />
+        <div className="premium-hero-kitchen-blur premium-right-blur" />
+
+        <div className="premium-jars-row" aria-hidden="true">
+          {jars.map((jar) => (
+            <div className={`premium-jar ${jar.key}`} key={jar.key}>
+              <span className="premium-jar-lid" />
+              <span className="premium-jar-glass-shine" />
+
+              <div className="premium-jar-content">
+                {jar.layers.map((layer) => (
+                  <span className={`premium-jar-layer ${layer}`} key={layer} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
-      <section className="salad-week-card">
-        <div>
-          <span><Flame size={15} /> Próximo paso</span>
-          <strong>{preparedToday ? "Ya preparaste algo hoy" : nextRecipe?.nombre ?? "Elige tu primer frasco"}</strong>
-          <small>{completed}/{weekRecipes.length} recetas de tu semana · {state.points} puntos</small>
-        </div>
-        <div className="salad-week-ring" style={{ "--score": `${weekPercent * 3.6}deg` } as CSSProperties}><b>{weekPercent}%</b></div>
+
+      <section className="premium-welcome">
+        <h1>{"\u00a1Bienvenida!"}</h1>
+        <p>
+          Tu gu\u00eda completa para preparar ensaladas
+          <br />
+          en frasco deliciosas, saludables y pr\u00e1cticas.
+        </p>
       </section>
-      <section className="salad-explore">
-        <div className="section-inline-head"><h3>Explorar</h3></div>
-        <div className="salad-explore-grid">
+
+      <section className="premium-explore-wrap">
+        <div className="premium-explore-divider" />
+
+        <div className="premium-section-row">
+          <h2>
+            <span>{"\u2667"}</span>
+            Explorar
+          </h2>
+
+          <button className="premium-custom-badge" type="button" onClick={() => openScreen("guide")}>
+            <Sparkles size={24} strokeWidth={2.4} />
+            <strong>APLICACI\u00d3N</strong>
+            <small>PERSONALIZADA</small>
+          </button>
+        </div>
+
+        <div className="premium-explore-grid">
           {exploreCards.map((card) => {
             const Icon = card.icon;
-            return <button className="salad-explore-card" key={card.title} type="button" onClick={() => openScreen(card.screen)}><Icon size={25} /><strong>{card.title}</strong><span>{card.subtitle}</span></button>;
+
+            return (
+              <button
+                className={`premium-explore-card tone-${card.tone}`}
+                key={card.title}
+                type="button"
+                onClick={() => openScreen(card.screen)}
+              >
+                <span className="premium-icon-orb">
+                  <Icon size={39} strokeWidth={2.25} />
+                </span>
+
+                <span className="premium-card-label">{card.title}</span>
+
+                <span className="premium-card-arrow" aria-hidden="true">
+                  <ChevronRight size={21} strokeWidth={3} />
+                </span>
+              </button>
+            );
           })}
         </div>
       </section>

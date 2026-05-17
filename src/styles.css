@@ -8224,3 +8224,836 @@ body {
   }
 }
 
+
+/* ============================================================
+   HOME PREMIUM - ENSALADAS EN FRASCO
+   Objetivo: deixar a home igual à referência premium enviada.
+   ============================================================ */
+
+.screen.salad-premium-home {
+  min-height: 100dvh;
+  padding: 0 0 calc(112px + env(safe-area-inset-bottom));
+  overflow: hidden;
+  background:
+    radial-gradient(circle at -8% 72%, rgba(139, 166, 106, 0.18), transparent 120px),
+    radial-gradient(circle at 104% 82%, rgba(139, 166, 106, 0.16), transparent 110px),
+    linear-gradient(180deg, #fffaf0 0%, #fbf4e4 46%, #fff9ee 100%);
+  font-family: Inter, Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.salad-premium-home::before,
+.salad-premium-home::after {
+  position: absolute;
+  z-index: 0;
+  width: 132px;
+  height: 210px;
+  pointer-events: none;
+  content: "";
+  opacity: 0.36;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.salad-premium-home::before {
+  left: -68px;
+  bottom: 94px;
+  background-image:
+    radial-gradient(ellipse at 48% 8%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 34% 24%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 61% 31%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 41% 48%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 65% 58%, #8cab70 0 12px, transparent 13px);
+  transform: rotate(-22deg);
+}
+
+.salad-premium-home::after {
+  right: -78px;
+  bottom: 70px;
+  background-image:
+    radial-gradient(ellipse at 48% 8%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 34% 24%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 61% 31%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 41% 48%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 65% 58%, #8cab70 0 12px, transparent 13px);
+  transform: rotate(24deg);
+}
+
+/* Header verde superior */
+.premium-salad-header {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 58px 1fr 58px;
+  align-items: center;
+  min-height: 105px;
+  padding: calc(8px + env(safe-area-inset-top)) 23px 16px;
+  color: #fffef6;
+  background:
+    radial-gradient(circle at 50% -40%, rgba(255, 255, 255, 0.12), transparent 170px),
+    linear-gradient(180deg, #506f3a 0%, #3f6031 100%);
+  border-radius: 0 0 0 0;
+  box-shadow: 0 16px 34px rgba(47, 68, 38, 0.18);
+}
+
+.premium-header-button {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  color: #fffef6;
+  background: transparent;
+  cursor: pointer;
+}
+
+.premium-salad-brand {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  line-height: 1;
+  text-align: center;
+}
+
+.premium-salad-brand strong {
+  color: #fffef6;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 11vw, 56px);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: -2.3px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
+}
+
+.premium-salad-brand small {
+  margin-top: 10px;
+  color: #fffef6;
+  font-size: clamp(18px, 4.8vw, 25px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 5.5px;
+}
+
+.premium-brand-leaf {
+  position: absolute;
+  top: -17px;
+  left: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 23px;
+  transform: rotate(-28deg);
+}
+
+/* Hero com potes */
+.premium-jars-hero {
+  position: relative;
+  z-index: 2;
+  min-height: 277px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(90, 122, 63, 0.2), transparent 92px),
+    radial-gradient(circle at 92% 62%, rgba(102, 133, 73, 0.18), transparent 84px),
+    linear-gradient(180deg, #fff3de 0%, #fffaf1 72%, #fff8ed 100%);
+  border-bottom: 1px solid rgba(80, 111, 58, 0.1);
+}
+
+.premium-jars-hero::before {
+  position: absolute;
+  left: -22px;
+  bottom: 30px;
+  width: 110px;
+  height: 58px;
+  border-radius: 999px;
+  content: "";
+  background: rgba(191, 168, 127, 0.25);
+  filter: blur(10px);
+  transform: rotate(-18deg);
+}
+
+.premium-jars-hero::after {
+  position: absolute;
+  right: -18px;
+  bottom: 41px;
+  width: 102px;
+  height: 72px;
+  border-radius: 50%;
+  content: "";
+  background:
+    radial-gradient(circle at 34% 36%, #4d7b38 0 8px, transparent 9px),
+    radial-gradient(circle at 54% 48%, #6e9c4d 0 9px, transparent 10px),
+    radial-gradient(circle at 67% 33%, #4d7b38 0 7px, transparent 8px),
+    rgba(203, 180, 133, 0.23);
+  filter: blur(0.1px);
+}
+
+.premium-hero-kitchen-blur {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.32;
+  filter: blur(1px);
+}
+
+.premium-left-blur {
+  left: -23px;
+  top: 19px;
+  width: 90px;
+  height: 118px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 24% 20%, #6d934d 0 10px, transparent 11px),
+    radial-gradient(circle at 56% 32%, #7ca95a 0 12px, transparent 13px),
+    radial-gradient(circle at 38% 70%, #89b465 0 10px, transparent 11px);
+}
+
+.premium-right-blur {
+  right: 4px;
+  top: 96px;
+  width: 66px;
+  height: 78px;
+  border-radius: 50%;
+  background: rgba(105, 137, 71, 0.24);
+}
+
+.premium-jars-row {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 26px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(8px, 2.1vw, 13px);
+  width: calc(100% - 44px);
+  max-width: 388px;
+  transform: translateX(-50%);
+}
+
+.premium-jar {
+  position: relative;
+  height: clamp(176px, 44vw, 204px);
+  min-width: 0;
+  border-radius: 18px 18px 23px 23px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.34), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.22)),
+    rgba(255, 255, 255, 0.22);
+  border: 2px solid rgba(255, 255, 255, 0.74);
+  box-shadow:
+    inset 7px 0 10px rgba(255, 255, 255, 0.34),
+    inset -7px 0 12px rgba(89, 93, 68, 0.1),
+    0 18px 26px rgba(85, 76, 50, 0.18);
+  overflow: visible;
+}
+
+.premium-jar::before {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 17px;
+  bottom: 7px;
+  z-index: 3;
+  border-radius: 12px 12px 20px 20px;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.26), transparent 16%, transparent 76%, rgba(255, 255, 255, 0.18)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 30%);
+}
+
+.premium-jar::after {
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  bottom: -11px;
+  height: 16px;
+  border-radius: 50%;
+  content: "";
+  background: rgba(83, 72, 44, 0.2);
+  filter: blur(7px);
+}
+
+.premium-jar-lid {
+  position: absolute;
+  left: 50%;
+  top: -9px;
+  z-index: 5;
+  width: 86%;
+  height: 27px;
+  border-radius: 9px 9px 5px 5px;
+  background:
+    repeating-linear-gradient(90deg, rgba(87, 70, 28, 0.22) 0 2px, transparent 2px 5px),
+    linear-gradient(180deg, #f1dfad 0%, #b89346 48%, #e9d193 100%);
+  border: 1px solid rgba(103, 78, 32, 0.32);
+  box-shadow:
+    inset 0 4px 5px rgba(255, 255, 255, 0.44),
+    0 4px 8px rgba(84, 66, 32, 0.18);
+  transform: translateX(-50%);
+}
+
+.premium-jar-glass-shine {
+  position: absolute;
+  z-index: 6;
+  left: 14px;
+  top: 33px;
+  width: 15px;
+  height: 105px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent);
+  opacity: 0.62;
+  filter: blur(0.4px);
+}
+
+.premium-jar-content {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 20px;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: 12px 12px 20px 20px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.premium-jar-layer {
+  position: relative;
+  display: block;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+/* Camadas dos potes */
+.premium-jar-layer.greens {
+  height: 39%;
+  background:
+    radial-gradient(circle at 26% 25%, #315d25 0 8px, transparent 9px),
+    radial-gradient(circle at 62% 18%, #629b3d 0 12px, transparent 13px),
+    radial-gradient(circle at 76% 48%, #254f1f 0 11px, transparent 12px),
+    radial-gradient(circle at 43% 60%, #7eb553 0 13px, transparent 14px),
+    linear-gradient(180deg, #57923f, #2f6529);
+}
+
+.premium-jar-layer.tomatoCorn {
+  height: 15%;
+  background:
+    radial-gradient(circle at 26% 50%, #d9432d 0 6px, transparent 7px),
+    radial-gradient(circle at 62% 48%, #f0c944 0 6px, transparent 7px),
+    linear-gradient(90deg, #ffd54d, #e15431);
+}
+
+.premium-jar-layer.corn {
+  height: 13%;
+  background:
+    radial-gradient(circle at 20% 45%, #f5c43c 0 4px, transparent 5px),
+    radial-gradient(circle at 44% 45%, #ffd861 0 4px, transparent 5px),
+    radial-gradient(circle at 68% 48%, #eeb328 0 4px, transparent 5px),
+    #f7c43d;
+}
+
+.premium-jar-layer.chickpea {
+  height: 17%;
+  background:
+    radial-gradient(circle at 21% 42%, #d19b48 0 6px, transparent 7px),
+    radial-gradient(circle at 48% 52%, #e0b660 0 7px, transparent 8px),
+    radial-gradient(circle at 72% 41%, #b98539 0 6px, transparent 7px),
+    #cf9a4a;
+}
+
+.premium-jar-layer.cream {
+  height: 16%;
+  background: linear-gradient(180deg, #efe0bd, #f9efd7);
+}
+
+.premium-jar-layer.carrot {
+  height: 16%;
+  background:
+    repeating-linear-gradient(-10deg, #f07c23 0 4px, #d95e15 4px 7px, transparent 7px 13px),
+    #ed8a2d;
+}
+
+.premium-jar-layer.cucumber {
+  height: 14%;
+  background:
+    radial-gradient(circle at 32% 50%, #9ec065 0 7px, transparent 8px),
+    radial-gradient(circle at 68% 48%, #6e9944 0 7px, transparent 8px),
+    #abd476;
+}
+
+.premium-jar-layer.grains {
+  height: 15%;
+  background:
+    radial-gradient(circle at 15% 50%, #c8a96c 0 3px, transparent 4px),
+    radial-gradient(circle at 33% 44%, #80643b 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 55%, #d7bd80 0 3px, transparent 4px),
+    radial-gradient(circle at 74% 45%, #927241 0 3px, transparent 4px),
+    #c8a56c;
+}
+
+.premium-jar-layer.whiteSauce {
+  height: 16%;
+  background:
+    radial-gradient(circle at 30% 38%, rgba(61, 92, 42, 0.4) 0 2px, transparent 3px),
+    radial-gradient(circle at 59% 48%, rgba(61, 92, 42, 0.35) 0 2px, transparent 3px),
+    #f9f3e3;
+}
+
+.premium-jar-layer.onion {
+  height: 15%;
+  background:
+    repeating-linear-gradient(-14deg, #7d3f70 0 5px, #d7a0c8 5px 8px, transparent 8px 14px),
+    #8c4a7b;
+}
+
+.premium-jar-layer.cheeseTomato {
+  height: 18%;
+  background:
+    radial-gradient(circle at 18% 30%, #fff0c9 0 6px, transparent 7px),
+    radial-gradient(circle at 43% 55%, #d73b2e 0 8px, transparent 9px),
+    radial-gradient(circle at 72% 34%, #fff0c9 0 7px, transparent 8px),
+    linear-gradient(90deg, #d83c2b, #f4e3b8);
+}
+
+.premium-jar-layer.avocado {
+  height: 15%;
+  background:
+    radial-gradient(circle at 20% 45%, #91b950 0 6px, transparent 7px),
+    radial-gradient(circle at 55% 55%, #638e3c 0 7px, transparent 8px),
+    #95bf5d;
+}
+
+.premium-jar-layer.greenSauce {
+  height: 13%;
+  background: #c8dca5;
+}
+
+.premium-jar-layer.carrotRibbon {
+  height: 17%;
+  background:
+    repeating-linear-gradient(-18deg, #ee8124 0 5px, #c85414 5px 8px, transparent 8px 15px),
+    #ef7c23;
+}
+
+.premium-jar-layer.lentils {
+  height: 16%;
+  background:
+    radial-gradient(circle at 18% 40%, #805c35 0 4px, transparent 5px),
+    radial-gradient(circle at 39% 58%, #a07340 0 4px, transparent 5px),
+    radial-gradient(circle at 64% 43%, #76532f 0 4px, transparent 5px),
+    #8c6338;
+}
+
+.premium-jar-layer.mustardSauce {
+  height: 15%;
+  background: #e5cf8f;
+}
+
+/* Welcome */
+.premium-welcome {
+  position: relative;
+  z-index: 4;
+  padding: 24px 24px 22px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255, 251, 243, 0.98), rgba(255, 250, 240, 0.92));
+}
+
+.premium-welcome h1 {
+  margin: 0 0 9px;
+  color: #466b39;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 9vw, 47px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1.1px;
+}
+
+.premium-welcome h1::before {
+  display: inline-block;
+  margin-right: 7px;
+  color: #4e7b3f;
+  font-size: 25px;
+  content: "‹";
+  transform: rotate(-38deg) translateY(-8px);
+}
+
+.premium-welcome p {
+  margin: 0;
+  color: #32412e;
+  font-size: clamp(15px, 3.9vw, 19px);
+  font-weight: 500;
+  line-height: 1.28;
+}
+
+/* Explorar */
+.premium-explore-wrap {
+  position: relative;
+  z-index: 3;
+  padding: 0 28px 28px;
+}
+
+.premium-explore-divider {
+  height: 1px;
+  margin: 0 0 28px;
+  background: linear-gradient(90deg, transparent, rgba(80, 111, 58, 0.18), transparent);
+}
+
+.premium-section-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 74px;
+  margin-bottom: 10px;
+}
+
+.premium-section-row h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: #506f3a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(28px, 7vw, 39px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.8px;
+}
+
+.premium-section-row h2 span {
+  color: #6f9560;
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* Selo circular */
+.premium-custom-badge {
+  position: absolute;
+  top: -42px;
+  right: -4px;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: clamp(104px, 28vw, 128px);
+  height: clamp(104px, 28vw, 128px);
+  padding: 12px;
+  border: 7px solid rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  color: #506f3a;
+  background:
+    radial-gradient(circle, #e5f2d3 0 55%, #d8edc4 56% 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(88, 123, 65, 0.2),
+    inset 0 0 0 9px rgba(255, 255, 255, 0.25),
+    0 15px 30px rgba(72, 88, 54, 0.18);
+  font-family: Inter, Manrope, system-ui, sans-serif;
+  text-align: center;
+  cursor: pointer;
+}
+
+.premium-custom-badge::after {
+  position: absolute;
+  inset: 10px;
+  border: 1.5px dashed rgba(80, 111, 58, 0.38);
+  border-radius: inherit;
+  content: "";
+}
+
+.premium-custom-badge svg,
+.premium-custom-badge strong,
+.premium-custom-badge small {
+  position: relative;
+  z-index: 1;
+}
+
+.premium-custom-badge strong {
+  margin-top: 3px;
+  font-size: clamp(10px, 2.8vw, 13px);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.premium-custom-badge small {
+  font-size: clamp(9px, 2.5vw, 12px);
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Grid dos cards */
+.premium-explore-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 14px;
+}
+
+.premium-explore-card {
+  position: relative;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: clamp(118px, 31vw, 137px);
+  padding: 17px 10px 15px;
+  border: 1px solid rgba(76, 94, 55, 0.13);
+  border-radius: 18px;
+  color: #506f3a;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 253, 248, 0.88));
+  box-shadow:
+    0 11px 25px rgba(73, 70, 47, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+}
+
+.premium-explore-card:active {
+  transform: scale(0.985);
+}
+
+.premium-icon-orb {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 15px;
+  border-radius: 999px;
+  color: #416734;
+  background: #e9f4d8;
+}
+
+.premium-explore-card.tone-cream .premium-icon-orb {
+  background: #fbedd6;
+}
+
+.premium-explore-card.tone-pink .premium-icon-orb {
+  background: #fde7df;
+}
+
+.premium-card-label {
+  display: block;
+  color: #4c6d38;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(18px, 4.8vw, 26px);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  letter-spacing: -0.45px;
+}
+
+.premium-card-arrow {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 999px;
+  color: #4d703a;
+  background: #dcebbb;
+}
+
+/* Bottom nav premium */
+.bottom-nav.salad-premium-bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 80;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: min(calc(100% - 36px), 394px);
+  height: 86px;
+  padding: 8px 10px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(80, 111, 58, 0.13);
+  border-radius: 28px;
+  background: rgba(255, 253, 247, 0.94);
+  box-shadow:
+    0 14px 34px rgba(57, 62, 41, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(18px);
+}
+
+.bottom-nav.salad-premium-bottom-nav button {
+  display: grid;
+  grid-template-rows: 32px 18px;
+  align-content: center;
+  justify-items: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 68px;
+  border: 0;
+  border-radius: 20px;
+  color: #4e514b;
+  background: transparent;
+  font-family: Inter, Manrope, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bottom-nav.salad-premium-bottom-nav button svg {
+  width: 31px;
+  height: 31px;
+}
+
+.bottom-nav.salad-premium-bottom-nav button.active {
+  color: #416d32;
+  background: transparent;
+  box-shadow: none;
+}
+
+.bottom-nav.salad-premium-bottom-nav button.active span {
+  color: #416d32;
+  font-weight: 850;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 390px) {
+  .premium-salad-header {
+    min-height: 98px;
+    padding-inline: 18px;
+  }
+
+  .premium-header-button {
+    width: 46px;
+    height: 46px;
+  }
+
+  .premium-jars-hero {
+    min-height: 254px;
+  }
+
+  .premium-jars-row {
+    width: calc(100% - 30px);
+    gap: 7px;
+  }
+
+  .premium-explore-wrap {
+    padding-inline: 20px;
+  }
+
+  .premium-explore-grid {
+    gap: 12px 10px;
+  }
+
+  .premium-explore-card {
+    border-radius: 16px;
+  }
+
+  .premium-icon-orb {
+    width: 51px;
+    height: 51px;
+    margin-bottom: 12px;
+  }
+
+  .premium-icon-orb svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .premium-card-arrow {
+    right: 10px;
+    bottom: 10px;
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media (max-width: 360px) {
+  .premium-explore-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .premium-custom-badge {
+    top: -34px;
+    right: -2px;
+    width: 96px;
+    height: 96px;
+  }
+}
+
+/* Compatibility reset: old Home overrides used !important, so premium Home must explicitly win. */
+.app-shell:has(.screen.salad-premium-home.active) {
+  width: min(100%, 430px) !important;
+  max-width: 430px !important;
+  display: block !important;
+  place-items: initial !important;
+  overflow-x: hidden !important;
+  background: #fffaf0 !important;
+  box-shadow: 0 0 0 1px rgba(79, 98, 66, 0.08), 0 32px 80px rgba(46, 60, 36, 0.16) !important;
+}
+
+.screen.salad-premium-home.active {
+  display: block !important;
+  min-height: 100dvh !important;
+  padding: 0 0 calc(112px + env(safe-area-inset-bottom)) !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(circle at -8% 72%, rgba(139, 166, 106, 0.18), transparent 120px),
+    radial-gradient(circle at 104% 82%, rgba(139, 166, 106, 0.16), transparent 110px),
+    linear-gradient(180deg, #fffaf0 0%, #fbf4e4 46%, #fff9ee 100%) !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.screen.salad-premium-home.active > .premium-salad-header {
+  display: grid !important;
+}
+
+.screen.salad-premium-home.active > .premium-jars-hero,
+.screen.salad-premium-home.active > .premium-welcome,
+.screen.salad-premium-home.active > .premium-explore-wrap {
+  display: block !important;
+}
+
+.screen.salad-premium-home.active .home-reference-wrap,
+.screen.salad-premium-home.active .salad-header,
+.screen.salad-premium-home.active .salad-hero,
+.screen.salad-premium-home.active .salad-week-card,
+.screen.salad-premium-home.active .salad-explore {
+  display: none !important;
+}
+
+.app-shell:has(.screen.salad-premium-home.active) .bottom-nav.salad-premium-bottom-nav {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  width: min(calc(100% - 36px), 394px) !important;
+  height: 86px !important;
+  padding: 8px 10px !important;
+  border: 1px solid rgba(80, 111, 58, 0.13) !important;
+  border-radius: 28px !important;
+  background: rgba(255, 253, 247, 0.94) !important;
+  box-shadow:
+    0 14px 34px rgba(57, 62, 41, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+.app-shell:has(.screen.salad-premium-home.active) .bottom-nav.salad-premium-bottom-nav button {
+  display: grid !important;
+  grid-template-rows: 32px 18px !important;
+  align-content: center !important;
+  justify-items: center !important;
+  gap: 7px !important;
+  min-height: 68px !important;
+  border: 0 !important;
+  border-radius: 20px !important;
+  color: #4e514b !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.app-shell:has(.screen.salad-premium-home.active) .bottom-nav.salad-premium-bottom-nav button::after {
+  display: none !important;
+}
+
+.app-shell:has(.screen.salad-premium-home.active) .bottom-nav.salad-premium-bottom-nav button.active {
+  color: #416d32 !important;
+  background: transparent !important;
+}
+
+.app-shell:has(.screen.salad-premium-home.active) .bottom-nav.salad-premium-bottom-nav button.active span {
+  color: #416d32 !important;
+  font-weight: 850 !important;
+}

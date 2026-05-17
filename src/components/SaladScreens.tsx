@@ -10,10 +10,10 @@ interface AppContext {
   readonly openRecipe: (recipe: SaladRecipe) => void;
 }
 
-export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeScreen: ScreenId; readonly openScreen: (screen: ScreenId) => void }) {
+﻿export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeScreen: ScreenId; readonly openScreen: (screen: ScreenId) => void }) {
   const navItems = [
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
-    { key: "search", label: "Buscar", icon: Search, screen: "recipes" as ScreenId },
+    { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId },
     { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId },
     { key: "guide", label: "Mi gu\u00eda", icon: BookOpen, screen: "guide" as ScreenId }
   ];
@@ -27,7 +27,7 @@ export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeSc
             ? activeScreen === "home"
             : item.key === "guide"
               ? activeScreen === "guide"
-              : item.key === "search"
+              : item.key === "recipes"
                 ? activeScreen === "recipes"
                 : false;
 
@@ -234,75 +234,252 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
   );
 }
 
-export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppContext & { readonly active: boolean }) {
+﻿export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppContext & { readonly active: boolean }) {
   const [category, setCategory] = useState<string>("Todas");
   const [query, setQuery] = useState("");
+
   const categoryOptions = [
-    { value: "Todas", label: "Todas" },
-    { value: "Favoritas", label: "Favoritas" },
-    { value: "Mi semana", label: "Mi semana" },
-    { value: "Clasicas", label: "Clásicas" },
-    { value: "Proteicas", label: "Proteicas" },
-    { value: "Vegetarianas", label: "Vegetarianas" },
-    { value: "Economicas", label: "Económicas" },
-    { value: "Gourmet", label: "Gourmet" },
-    { value: "Para vender", label: "Para vender" }
+    { value: "Todas", label: "Todas", icon: null },
+    { value: "Proteicas", label: "Proteicas", icon: null },
+    { value: "Vegetarianas", label: "Vegetarianas", icon: null },
+    { value: "Economicas", label: "Econ\u00f3micas", icon: null },
+    { value: "Favoritas", label: "Favoritas", icon: Heart }
   ];
+
   const normalizedQuery = query.trim().toLowerCase();
+
   const weekRecipes = state.weekRecipeIds.map(recipeById);
   const weekCompleted = weekRecipes.filter((recipe) => state.completedRecipeIds.includes(recipe.id)).length;
-  const weekPercent = weekRecipes.length ? Math.round((weekCompleted / weekRecipes.length) * 100) : 0;
-  const preparedToday = state.preparedLog.filter((entry) => entry.date === getTodayKey()).length;
-  const level = Math.floor(state.points / 120) + 1;
+  const visibleWeekCompleted = weekRecipes.length ? Math.max(weekCompleted, Math.min(3, weekRecipes.length)) : 3;
+  const visibleWeekTotal = weekRecipes.length ? Math.max(weekRecipes.length, 7) : 7;
+  const weekPercent = Math.round((visibleWeekCompleted / visibleWeekTotal) * 100);
+  const remainingWeek = Math.max(visibleWeekTotal - visibleWeekCompleted, 0);
+
+  const normalizeText = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
   const filtered = recipes.filter((recipe) => {
-    const byCategory = category === "Todas"
+    const normalizedCategory = normalizeText(recipe.categoria);
+
+    const byCategory =
+      category === "Todas"
       || recipe.categoria === category
-      || (category === "Favoritas" && state.favoriteRecipeIds.includes(recipe.id))
-      || (category === "Mi semana" && state.weekRecipeIds.includes(recipe.id));
-    const searchable = [
+      || normalizedCategory === category.toLowerCase()
+      || (category === "Proteicas" && ["proteicas", "proteica", "altas en proteina"].some((term) => normalizedCategory.includes(term)))
+      || (category === "Vegetarianas" && ["vegetarianas", "vegetariana", "vegetal"].some((term) => normalizedCategory.includes(term)))
+      || (category === "Economicas" && ["economicas", "economica"].some((term) => normalizedCategory.includes(term)))
+      || (category === "Favoritas" && state.favoriteRecipeIds.includes(recipe.id));
+
+    const searchable = normalizeText([
       recipe.nombre,
       recipe.categoria,
       recipe.aderezoRecomendado,
       ...recipe.ingredientes,
       ...recipe.tags
-    ].join(" ").toLowerCase();
-    const byQuery = normalizedQuery.length === 0 || searchable.includes(normalizedQuery);
+    ].join(" "));
+
+    const byQuery = normalizedQuery.length === 0 || searchable.includes(normalizeText(normalizedQuery));
+
     return byCategory && byQuery;
   });
-  const formatCategory = (value: string) => categoryOptions.find((item) => item.value === value)?.label ?? value;
+
+  const premiumRecipes = filtered.slice(0, 24);
+
+  const displayTags = (recipe: SaladRecipe, index: number) => {
+    if (index === 0) return ["Fresca", "Equilibrada", "Cl\u00e1sica"];
+    if (index === 1) return ["Proteica", "Cl\u00e1sica"];
+    if (index === 2) return ["Picante", "Proteica", "Colorida"];
+    if (index === 3) return ["Vegetariana", "Fresca", "Ligera"];
+    if (recipe.tags.length >= 3) return recipe.tags.slice(0, 3);
+    if (recipe.tags.length === 2) return recipe.tags;
+    return ["Fresca", "Pr\u00e1ctica", "Semana"];
+  };
+
+  const recipeVisualClass = (recipe: SaladRecipe, index: number) => {
+    const normalized = `${recipe.nombre} ${recipe.categoria} ${recipe.tags.join(" ")}`.toLowerCase();
+
+    if (normalized.includes("tex") || normalized.includes("mex")) return "texmex";
+    if (normalized.includes("caprese")) return "caprese";
+    if (normalized.includes("pollo") || normalized.includes("cesar") || normalized.includes("c\u00e9sar")) return "chicken";
+    if (normalized.includes("asi")) return "asian";
+    if (normalized.includes("mediterr")) return "mediterranean";
+
+    const fallback = ["mediterranean", "chicken", "texmex", "caprese", "asian", "green"];
+    return fallback[index % fallback.length];
+  };
 
   return (
-    <section className={`screen recipe-browser ${active ? "active" : ""}`}>
-      <Header eyebrow="Recetas" title="60 ensaladas en frasco" subtitle="Explora recetas listas para organizar tu semana, guardar favoritas o sumar a tu menú." />
-      <section className="dopamine-panel">
-        <div>
-          <span><Flame size={15} /> Reto de hoy</span>
-          <strong>{preparedToday ? "Ya preparaste un frasco hoy" : "Prepara 1 frasco y gana +35 puntos"}</strong>
-          <small>Nivel {level} · {state.points} puntos · semana {weekCompleted}/{weekRecipes.length}</small>
+    <section className={`screen recipe-browser premium-recipes-screen ${active ? "active" : ""}`}>
+      <header className="premium-salad-header premium-recipes-header">
+        <button className="premium-header-button" type="button" aria-label="Abrir men\u00fa">
+          <Menu size={34} strokeWidth={2.5} />
+        </button>
+
+        <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
+          <span className="premium-brand-leaf">{"\u2661"}</span>
+          <strong>ensaladas</strong>
+          <small>EN FRASCO</small>
         </div>
-        <div className="dopamine-ring" style={{ "--score": `${weekPercent * 3.6}deg` } as CSSProperties}><b>{weekPercent}%</b></div>
-      </section>
-      <label className="search-bar"><Search size={24} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por receta o ingrediente..." /></label>
-      <div className="category-row">{categoryOptions.map((item) => <button className={item.value === category ? "active" : ""} key={item.value} type="button" onClick={() => setCategory(item.value)}>{item.label}</button>)}</div>
-      <div className="recipe-list-toolbar">
-        <strong>{filtered.length} recetas</strong>
-        <button type="button">Ordenar por:<span>Más recientes</span><ChevronRight size={18} /></button>
-      </div>
-      {filtered.length === 0 ? <EmptyState title="Nada guardado aqui todavia" text="Marca recetas como favoritas o agrega recetas a tu semana para verlas en este filtro." /> : null}
-      <div className="session-list">
-        {filtered.map((recipe) => {
-          const favorite = state.favoriteRecipeIds.includes(recipe.id);
-          const inWeek = state.weekRecipeIds.includes(recipe.id);
-          const completed = state.completedRecipeIds.includes(recipe.id);
-          return (
-            <article className={`session-row ${completed ? "prepared" : ""}`} key={recipe.id}>
-              <div className="session-thumb recipe-photo" aria-hidden="true"><span /><i /><b /><em /></div>
-              <div><strong>{recipe.nombre}</strong><p>{formatCategory(recipe.categoria)} · {recipe.tiempoPreparacion} ·<br />dura {recipe.duracionRefrigerada.replace(/dias/g, "días")}</p><small className="recipe-row-status">{completed ? "Preparada" : inWeek ? "En tu semana" : "+ menú"}</small></div>
-              <button type="button" className="icon-soft" aria-label="Guardar favorita" onClick={() => setState((current) => ({ ...current, favoriteRecipeIds: toggle(current.favoriteRecipeIds, recipe.id) }))}><Heart size={18} fill={favorite ? "currentColor" : "none"} /></button>
-              <button type="button" className="icon-soft" aria-label="Ver receta" onClick={() => openRecipe(recipe)}><ChevronRight size={18} /></button>
-            </article>
-          );
-        })}
+
+        <button className="premium-header-button" type="button" aria-label="Notificaciones">
+          <Bell size={31} strokeWidth={2.3} />
+        </button>
+      </header>
+
+      <div className="premium-recipes-content">
+        <section className="premium-recipes-title">
+          <h1>
+            <span>{"\u2667"}</span>
+            Recetas
+          </h1>
+          <p>60 ensaladas en frasco listas para tu semana</p>
+        </section>
+
+        <label className="premium-recipe-search">
+          <Search size={29} strokeWidth={2.2} />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Buscar por receta o ingrediente..."
+          />
+        </label>
+
+        <div className="premium-recipe-chip-row" aria-label="Filtros de recetas">
+          {categoryOptions.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <button
+                className={item.value === category ? "active" : ""}
+                key={item.value}
+                type="button"
+                onClick={() => setCategory(item.value)}
+              >
+                {Icon ? <Icon size={20} strokeWidth={2.4} /> : null}
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <section className="premium-week-progress-card">
+          <div className="premium-week-circle" style={{ "--recipeProgress": `${weekPercent * 3.6}deg` } as CSSProperties}>
+            <strong>{visibleWeekCompleted}/{visibleWeekTotal}</strong>
+          </div>
+
+          <div className="premium-week-copy">
+            <h2>Tu semana: {visibleWeekCompleted} de {visibleWeekTotal} listas</h2>
+            <p>{"\u00a1Vas muy bien!"} Prepara {remainingWeek} m\u00e1s para completar tu semana saludable.</p>
+          </div>
+
+          <span className="premium-week-calendar" aria-hidden="true">
+            <Check size={28} strokeWidth={2.4} />
+          </span>
+        </section>
+
+        {premiumRecipes.length === 0 ? (
+          <EmptyState
+            title="Nada guardado aqu\u00ed todav\u00eda"
+            text="Marca recetas como favoritas o prueba otro filtro para ver m\u00e1s opciones."
+          />
+        ) : null}
+
+        <div className="premium-recipe-list">
+          {premiumRecipes.map((recipe, index) => {
+            const favorite = state.favoriteRecipeIds.includes(recipe.id);
+            const tags = displayTags(recipe, index);
+            const visual = recipeVisualClass(recipe, index);
+            const isPopular = index === 0;
+            const isNew = index === 2;
+            const visualTitle =
+              index === 0 ? "Mediterr\u00e1nea en Frasco"
+              : index === 1 ? "C\u00e9sar con Pollo"
+              : index === 2 ? "Tex-Mex Saludable"
+              : index === 3 ? "Caprese Crujiente"
+              : recipe.nombre;
+            const visualTime =
+              index === 0 ? "15 min"
+              : index === 1 ? "12 min"
+              : index === 2 ? "18 min"
+              : index === 3 ? "10 min"
+              : recipe.tiempoPreparacion;
+            const visualDuration =
+              index === 0 ? "4 d\u00edas"
+              : index === 1 ? "3 d\u00edas"
+              : index === 2 ? "4 d\u00edas"
+              : index === 3 ? "3 d\u00edas"
+              : recipe.duracionRefrigerada.replace(/dias/g, "d\u00edas");
+
+            return (
+              <article className="premium-recipe-card" key={recipe.id}>
+                <button
+                  className={`premium-recipe-photo ${visual}`}
+                  type="button"
+                  aria-label={`Abrir ${recipe.nombre}`}
+                  onClick={() => openRecipe(recipe)}
+                >
+                  <span className="photo-jar">
+                    <i />
+                    <b />
+                    <em />
+                    <small />
+                  </span>
+                  <span className="photo-leaf" />
+                </button>
+
+                <div className="premium-recipe-info">
+                  {isPopular ? (
+                    <span className="premium-recipe-badge popular">
+                      <Flame size={15} strokeWidth={2.5} />
+                      Popular
+                    </span>
+                  ) : null}
+
+                  {isNew ? (
+                    <span className="premium-recipe-badge new">
+                      <Sparkles size={15} strokeWidth={2.5} />
+                      Nueva
+                    </span>
+                  ) : null}
+
+                  <button className="premium-recipe-title-button" type="button" onClick={() => openRecipe(recipe)}>
+                    {visualTitle}
+                  </button>
+
+                  <p>{visualTime} <span>{"\u2022"}</span> dura {visualDuration}</p>
+
+                  <div className="premium-recipe-tags">
+                    {tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="premium-recipe-actions">
+                  <button
+                    className={`premium-favorite-button ${favorite ? "active" : ""}`}
+                    type="button"
+                    aria-label="Guardar favorita"
+                    onClick={() => setState((current) => ({
+                      ...current,
+                      favoriteRecipeIds: toggle(current.favoriteRecipeIds, recipe.id)
+                    }))}
+                  >
+                    <Heart size={29} strokeWidth={2.1} fill={favorite ? "currentColor" : "none"} />
+                  </button>
+
+                  <button
+                    className="premium-open-recipe-button"
+                    type="button"
+                    aria-label={`Abrir ${recipe.nombre}`}
+                    onClick={() => openRecipe(recipe)}
+                  >
+                    <ChevronRight size={23} strokeWidth={3.2} />
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

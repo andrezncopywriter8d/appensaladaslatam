@@ -9057,3 +9057,581 @@ body {
   color: #416d32 !important;
   font-weight: 850 !important;
 }
+
+/* ============================================================
+   RECIPES TAB PREMIUM - ENSALADAS EN FRASCO
+   Objetivo: deixar a aba Recetas igual à referência enviada.
+   ============================================================ */
+
+.screen.premium-recipes-screen {
+  position: relative;
+  min-height: 100dvh;
+  padding: 0 0 calc(114px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at -7% 73%, rgba(139, 166, 106, 0.2), transparent 128px),
+    radial-gradient(circle at 108% 79%, rgba(139, 166, 106, 0.18), transparent 122px),
+    linear-gradient(180deg, #fffaf0 0%, #fbf4e4 48%, #fff9ee 100%);
+  font-family: Inter, Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.screen.premium-recipes-screen::before,
+.screen.premium-recipes-screen::after {
+  position: fixed;
+  z-index: 0;
+  width: 138px;
+  height: 220px;
+  pointer-events: none;
+  content: "";
+  opacity: 0.35;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.screen.premium-recipes-screen::before {
+  left: calc(50% - 276px);
+  bottom: 102px;
+  background-image:
+    radial-gradient(ellipse at 48% 8%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 34% 24%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 61% 31%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 41% 48%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 65% 58%, #8cab70 0 12px, transparent 13px);
+  transform: rotate(-22deg);
+}
+
+.screen.premium-recipes-screen::after {
+  right: calc(50% - 286px);
+  bottom: 76px;
+  background-image:
+    radial-gradient(ellipse at 48% 8%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 34% 24%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 61% 31%, #8cab70 0 12px, transparent 13px),
+    radial-gradient(ellipse at 41% 48%, #8cab70 0 13px, transparent 14px),
+    radial-gradient(ellipse at 65% 58%, #8cab70 0 12px, transparent 13px);
+  transform: rotate(24deg);
+}
+
+.premium-recipes-header {
+  position: relative;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 58px 1fr 58px;
+  align-items: center;
+  min-height: 105px;
+  padding: calc(8px + env(safe-area-inset-top)) 23px 16px;
+  color: #fffef6;
+  background:
+    radial-gradient(circle at 50% -40%, rgba(255, 255, 255, 0.12), transparent 170px),
+    linear-gradient(180deg, #506f3a 0%, #3f6031 100%);
+  border-radius: 0;
+  box-shadow: 0 16px 34px rgba(47, 68, 38, 0.18);
+}
+
+.premium-recipes-content {
+  position: relative;
+  z-index: 2;
+  padding: 48px 28px 24px;
+}
+
+.premium-recipes-title {
+  margin-bottom: 30px;
+}
+
+.premium-recipes-title h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 9px;
+  color: #345f2d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 11vw, 58px);
+  font-weight: 800;
+  line-height: 0.96;
+  letter-spacing: -1.2px;
+}
+
+.premium-recipes-title h1 span {
+  color: #618c52;
+  font-size: clamp(27px, 7vw, 36px);
+  transform: translateY(-2px);
+}
+
+.premium-recipes-title p {
+  margin: 0;
+  color: #6d6f62;
+  font-size: clamp(18px, 4.8vw, 27px);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: -0.3px;
+}
+
+.premium-recipe-search {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  align-items: center;
+  min-height: 81px;
+  margin: 0 0 28px;
+  padding: 0 26px;
+  border: 1px solid rgba(79, 94, 63, 0.16);
+  border-radius: 999px;
+  color: #565d50;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 253, 248, 0.92));
+  box-shadow: 0 12px 26px rgba(64, 64, 46, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.premium-recipe-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #33402d;
+  background: transparent;
+  font-size: clamp(18px, 5vw, 27px);
+  font-weight: 400;
+}
+
+.premium-recipe-search input::placeholder {
+  color: #777b70;
+}
+
+.premium-recipe-chip-row {
+  display: flex;
+  gap: 15px;
+  margin: 0 -28px 30px 0;
+  padding: 0 28px 0 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.premium-recipe-chip-row::-webkit-scrollbar {
+  display: none;
+}
+
+.premium-recipe-chip-row button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 64px;
+  padding: 0 27px;
+  border: 1px solid rgba(79, 94, 63, 0.12);
+  border-radius: 999px;
+  color: #355f2e;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 252, 245, 0.91));
+  box-shadow: 0 10px 22px rgba(64, 64, 46, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  font-size: clamp(15px, 4.2vw, 22px);
+  font-weight: 750;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.premium-recipe-chip-row button.active {
+  color: #fffef6;
+  border-color: transparent;
+  background: radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.16), transparent 55%), linear-gradient(180deg, #4d7a3c, #2f6b2d);
+  box-shadow: 0 13px 26px rgba(47, 107, 45, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.premium-week-progress-card {
+  display: grid;
+  grid-template-columns: 104px 1fr 82px;
+  align-items: center;
+  gap: 18px;
+  min-height: 142px;
+  margin-bottom: 28px;
+  padding: 22px 25px;
+  border: 1px solid rgba(87, 130, 64, 0.21);
+  border-radius: 24px;
+  background: radial-gradient(circle at 7% 38%, rgba(176, 211, 124, 0.2), transparent 120px), linear-gradient(180deg, rgba(248, 255, 237, 0.82), rgba(255, 253, 245, 0.92));
+  box-shadow: 0 10px 26px rgba(69, 77, 48, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.premium-week-circle {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+  background: radial-gradient(circle at center, #fffdf7 0 51%, transparent 52%), conic-gradient(#47833a 0 var(--recipeProgress), #e3efd1 var(--recipeProgress) 360deg);
+  box-shadow: inset 0 0 0 1px rgba(71, 131, 58, 0.08), 0 9px 20px rgba(71, 101, 53, 0.1);
+}
+
+.premium-week-circle strong {
+  color: #345f2d;
+  font-size: clamp(20px, 5.3vw, 31px);
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.premium-week-copy h2 {
+  margin: 0 0 8px;
+  color: #345f2d;
+  font-size: clamp(18px, 5vw, 28px);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -0.6px;
+}
+
+.premium-week-copy p {
+  margin: 0;
+  color: #686c61;
+  font-size: clamp(13px, 3.8vw, 19px);
+  font-weight: 450;
+  line-height: 1.3;
+}
+
+.premium-week-calendar {
+  display: grid;
+  place-items: center;
+  justify-self: end;
+  width: 70px;
+  height: 70px;
+  border-radius: 999px;
+  color: #34672e;
+  background: #e2f0d0;
+}
+
+.premium-recipe-list {
+  display: grid;
+  gap: 18px;
+  padding-bottom: 12px;
+}
+
+.premium-recipe-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 153px minmax(0, 1fr) 54px;
+  gap: 18px;
+  align-items: center;
+  min-height: 205px;
+  padding: 9px 14px 9px 9px;
+  border: 1px solid rgba(79, 94, 63, 0.1);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 253, 248, 0.92));
+  box-shadow: 0 14px 30px rgba(66, 62, 41, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.premium-recipe-photo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 185px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+  background: radial-gradient(circle at 86% 90%, rgba(87, 128, 57, 0.16), transparent 48px), linear-gradient(180deg, #fff9ed, #f1e4cd);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94), 0 8px 16px rgba(63, 56, 36, 0.08);
+  cursor: pointer;
+}
+
+.premium-recipe-photo::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.66), transparent 78px), linear-gradient(90deg, rgba(255, 255, 255, 0.32), transparent);
+}
+
+.photo-jar {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 82px;
+  height: 137px;
+  border: 2px solid rgba(255, 255, 255, 0.82);
+  border-radius: 14px 14px 20px 20px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent 20%, transparent 77%, rgba(255, 255, 255, 0.22)), rgba(255, 255, 255, 0.18);
+  box-shadow: inset 6px 0 8px rgba(255, 255, 255, 0.28), inset -6px 0 10px rgba(74, 72, 48, 0.12), 0 14px 18px rgba(68, 58, 34, 0.17);
+  overflow: visible;
+}
+
+.photo-jar::before {
+  position: absolute;
+  left: 50%;
+  top: -11px;
+  z-index: 3;
+  width: 76px;
+  height: 23px;
+  border-radius: 8px 8px 5px 5px;
+  content: "";
+  background: repeating-linear-gradient(90deg, rgba(86, 70, 31, 0.22) 0 2px, transparent 2px 5px), linear-gradient(180deg, #f0ddab 0%, #b89247 48%, #e9d192 100%);
+  border: 1px solid rgba(103, 78, 32, 0.3);
+  box-shadow: inset 0 4px 5px rgba(255, 255, 255, 0.38), 0 4px 8px rgba(84, 66, 32, 0.15);
+  transform: translateX(-50%);
+}
+
+.photo-jar::after {
+  position: absolute;
+  left: 10px;
+  top: 18px;
+  z-index: 4;
+  width: 12px;
+  height: 90px;
+  border-radius: 999px;
+  content: "";
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), transparent);
+  opacity: 0.58;
+}
+
+.photo-jar i,
+.photo-jar b,
+.photo-jar em,
+.photo-jar small {
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  display: block;
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.photo-jar i {
+  top: 17px;
+  height: 43px;
+  background: radial-gradient(circle at 28% 31%, #305c25 0 8px, transparent 9px), radial-gradient(circle at 66% 22%, #6da148 0 10px, transparent 11px), radial-gradient(circle at 76% 60%, #214d1d 0 9px, transparent 10px), linear-gradient(180deg, #5e9743, #2e6629);
+}
+
+.photo-jar b {
+  top: 57px;
+  height: 28px;
+  background: radial-gradient(circle at 26% 50%, #d9432d 0 6px, transparent 7px), radial-gradient(circle at 58% 48%, #f0c944 0 6px, transparent 7px), linear-gradient(90deg, #ffd54d, #e15431);
+}
+
+.photo-jar em {
+  top: 82px;
+  height: 25px;
+  background: radial-gradient(circle at 20% 50%, #91b950 0 6px, transparent 7px), radial-gradient(circle at 52% 54%, #638e3c 0 7px, transparent 8px), #9dc766;
+}
+
+.photo-jar small {
+  top: 105px;
+  height: 25px;
+  background: radial-gradient(circle at 18% 40%, #805c35 0 4px, transparent 5px), radial-gradient(circle at 39% 58%, #a07340 0 4px, transparent 5px), radial-gradient(circle at 64% 43%, #76532f 0 4px, transparent 5px), #ead6a6;
+}
+
+.photo-leaf {
+  position: absolute;
+  right: 13px;
+  bottom: 12px;
+  width: 38px;
+  height: 21px;
+  border-radius: 100% 0 100% 0;
+  background: #76a94c;
+  box-shadow: -15px 5px 0 rgba(93, 135, 60, 0.42), inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  transform: rotate(-22deg);
+}
+
+.premium-recipe-photo.chicken .photo-jar b {
+  background: radial-gradient(circle at 24% 50%, #deb470 0 7px, transparent 8px), radial-gradient(circle at 56% 52%, #c98d4a 0 8px, transparent 9px), #ead7a7;
+}
+
+.premium-recipe-photo.chicken .photo-jar em {
+  background: radial-gradient(circle at 24% 50%, #d8bd70 0 6px, transparent 7px), radial-gradient(circle at 59% 52%, #f4e3b8 0 8px, transparent 9px), #fff0cb;
+}
+
+.premium-recipe-photo.chicken .photo-jar small {
+  background: radial-gradient(circle at 30% 38%, rgba(61, 92, 42, 0.4) 0 2px, transparent 3px), radial-gradient(circle at 59% 48%, rgba(61, 92, 42, 0.35) 0 2px, transparent 3px), #f9f3e3;
+}
+
+.premium-recipe-photo.texmex .photo-jar b {
+  background: radial-gradient(circle at 22% 50%, #f5c43c 0 5px, transparent 6px), radial-gradient(circle at 47% 50%, #2c1f1d 0 6px, transparent 7px), radial-gradient(circle at 72% 50%, #f0ae28 0 5px, transparent 6px), #ed7e23;
+}
+
+.premium-recipe-photo.texmex .photo-jar em {
+  background: repeating-linear-gradient(-16deg, #f1c540 0 5px, #d88b20 5px 8px, transparent 8px 14px), #ef7c23;
+}
+
+.premium-recipe-photo.texmex .photo-jar small {
+  background: #d57831;
+}
+
+.premium-recipe-photo.caprese .photo-jar b {
+  background: radial-gradient(circle at 25% 50%, #f7f3db 0 8px, transparent 9px), radial-gradient(circle at 53% 50%, #d94232 0 8px, transparent 9px), radial-gradient(circle at 75% 45%, #f7f3db 0 8px, transparent 9px), #d94232;
+}
+
+.premium-recipe-photo.caprese .photo-jar em { background: #9bc76a; }
+.premium-recipe-photo.caprese .photo-jar small { background: #c9dea4; }
+.premium-recipe-photo.asian .photo-jar b { background: radial-gradient(circle at 22% 50%, #73a948 0 6px, transparent 7px), radial-gradient(circle at 54% 50%, #f3c34c 0 5px, transparent 6px), #d88f3c; }
+.premium-recipe-photo.asian .photo-jar em { background: repeating-linear-gradient(-18deg, #a77b42 0 4px, #e0c18a 4px 7px, transparent 7px 13px), #caa56a; }
+.premium-recipe-photo.green .photo-jar b { background: radial-gradient(circle at 25% 50%, #87af48 0 7px, transparent 8px), radial-gradient(circle at 59% 53%, #f3e0ae 0 7px, transparent 8px), #acd172; }
+
+.premium-recipe-info {
+  min-width: 0;
+  align-self: center;
+}
+
+.premium-recipe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  margin: 0 0 10px;
+  padding: 0 17px;
+  border-radius: 999px;
+  font-size: clamp(13px, 3.7vw, 18px);
+  font-weight: 850;
+  line-height: 1;
+}
+
+.premium-recipe-badge.popular { color: #9a5a16; background: #fff0dc; }
+.premium-recipe-badge.new { color: #4c7b36; background: #eaf4dc; }
+
+.premium-recipe-title-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  color: #194e25;
+  background: transparent;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 5.9vw, 33px);
+  font-weight: 850;
+  line-height: 1.04;
+  letter-spacing: -0.7px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.premium-recipe-info p {
+  margin: 14px 0 13px;
+  color: #686c61;
+  font-size: clamp(15px, 4.2vw, 22px);
+  font-weight: 450;
+  line-height: 1;
+}
+
+.premium-recipe-info p span { margin: 0 12px; }
+
+.premium-recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.premium-recipe-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 31px;
+  padding: 0 14px;
+  border: 1px solid rgba(80, 111, 58, 0.1);
+  border-radius: 999px;
+  color: #496839;
+  background: #eef5e3;
+  font-size: clamp(12px, 3.5vw, 16px);
+  font-weight: 750;
+  line-height: 1;
+}
+
+.premium-recipe-actions {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 27px;
+  height: 100%;
+}
+
+.premium-favorite-button,
+.premium-open-recipe-button {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+.premium-favorite-button {
+  width: 45px;
+  height: 45px;
+  color: #4e514b;
+  background: transparent;
+}
+
+.premium-favorite-button.active { color: #3f7d34; }
+
+.premium-open-recipe-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  color: #3d6b31;
+  background: #e5f1d3;
+}
+
+.premium-recipes-screen .empty-state {
+  margin: 0 0 18px;
+  border: 1px solid rgba(87, 130, 64, 0.16);
+  border-radius: 22px;
+  background: rgba(255, 253, 247, 0.9);
+}
+
+.bottom-nav.salad-premium-bottom-nav button.active {
+  color: #2f7d32;
+  background: radial-gradient(circle at 50% 18%, rgba(166, 217, 106, 0.2), transparent 68%), rgba(232, 242, 214, 0.55);
+  box-shadow: none;
+}
+
+.bottom-nav.salad-premium-bottom-nav button.active span {
+  color: #2f7d32;
+  font-weight: 850;
+}
+
+/* Compatibility reset for older recipe rows and screen rules */
+.app-shell:has(.screen.premium-recipes-screen.active) {
+  width: min(100%, 430px) !important;
+  max-width: 430px !important;
+  display: block !important;
+  overflow-x: hidden !important;
+  background: #fffaf0 !important;
+}
+
+.screen.premium-recipes-screen.active {
+  display: block !important;
+  min-height: 100dvh !important;
+  padding: 0 0 calc(114px + env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+  background: radial-gradient(circle at -7% 73%, rgba(139, 166, 106, 0.2), transparent 128px), radial-gradient(circle at 108% 79%, rgba(139, 166, 106, 0.18), transparent 122px), linear-gradient(180deg, #fffaf0 0%, #fbf4e4 48%, #fff9ee 100%) !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.screen.premium-recipes-screen.active > .premium-recipes-header { display: grid !important; }
+.screen.premium-recipes-screen.active > .premium-recipes-content { display: block !important; }
+
+@media (max-width: 430px) {
+  .screen.premium-recipes-screen::before { left: -70px; }
+  .screen.premium-recipes-screen::after { right: -78px; }
+}
+
+@media (max-width: 400px) {
+  .premium-recipes-content { padding: 42px 22px 24px; }
+  .premium-recipe-search { min-height: 74px; padding: 0 22px; }
+  .premium-recipe-chip-row { margin-right: -22px; padding-right: 22px; gap: 11px; }
+  .premium-recipe-chip-row button { min-height: 58px; padding: 0 22px; }
+  .premium-week-progress-card { grid-template-columns: 88px 1fr 58px; gap: 12px; min-height: 126px; padding: 18px; border-radius: 22px; }
+  .premium-week-circle { width: 74px; height: 74px; }
+  .premium-week-calendar { width: 54px; height: 54px; }
+  .premium-recipe-card { grid-template-columns: 132px minmax(0, 1fr) 44px; gap: 13px; min-height: 184px; padding: 8px 11px 8px 8px; }
+  .premium-recipe-photo { height: 168px; }
+  .photo-jar { width: 72px; height: 122px; }
+  .photo-jar::before { width: 66px; }
+  .premium-recipe-actions { gap: 21px; }
+  .premium-favorite-button { width: 39px; height: 39px; }
+  .premium-open-recipe-button { width: 41px; height: 41px; }
+  .premium-recipe-tags span { padding: 0 10px; }
+}
+
+@media (max-width: 360px) {
+  .premium-salad-header,
+  .premium-recipes-header { min-height: 98px; padding-inline: 18px; grid-template-columns: 48px 1fr 48px; }
+  .premium-header-button { width: 46px; height: 46px; }
+  .premium-recipes-content { padding: 36px 16px 22px; }
+  .premium-recipe-card { grid-template-columns: 108px minmax(0, 1fr) 38px; gap: 10px; }
+  .premium-recipe-photo { height: 150px; }
+  .photo-jar { width: 62px; height: 108px; }
+  .photo-jar::before { width: 58px; height: 19px; }
+  .premium-week-progress-card { grid-template-columns: 76px 1fr; }
+  .premium-week-calendar { display: none; }
+  .premium-recipe-tags span:nth-child(3) { display: none; }
+}

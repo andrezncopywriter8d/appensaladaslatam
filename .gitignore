@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.skills/
+
+*.log
+.env
+.env.local
+.env.*.local
+preview-current-*.png
+preview-*.png
+audiowave-stitch-preview.html
+
+vinciule-meu-projeto-mcp-do-stitch/
+ensaladas-en-frasco-v2/

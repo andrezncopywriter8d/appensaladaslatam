@@ -14,6 +14,12 @@ export interface SaladState {
   readonly onboardingCompleted: boolean;
   readonly onboardingUserId: string | null;
   readonly profile: SaladProfile | null;
+  readonly points: number;
+  readonly preparedLog: readonly { readonly id: string; readonly recipeId: string; readonly date: string }[];
+  readonly recipeProgress: Record<string, {
+    readonly checkedIngredients: readonly string[];
+    readonly checkedSteps: readonly string[];
+  }>;
   readonly favoriteRecipeIds: readonly string[];
   readonly favoriteDressingIds: readonly string[];
   readonly favoriteMenuIds: readonly string[];
@@ -34,6 +40,9 @@ export const defaultSaladState: SaladState = {
   onboardingCompleted: false,
   onboardingUserId: null,
   profile: null,
+  points: 0,
+  preparedLog: [],
+  recipeProgress: {},
   favoriteRecipeIds: [],
   favoriteDressingIds: [],
   favoriteMenuIds: [],
@@ -63,10 +72,25 @@ export function normalizeState(partial: Partial<SaladState>): SaladState {
   const safeWeekRecipeIds = (partial.weekRecipeIds ?? defaultSaladState.weekRecipeIds).filter((id) => validRecipeIds.has(id));
   const safeCompletedRecipeIds = (partial.completedRecipeIds ?? defaultSaladState.completedRecipeIds).filter((id) => validRecipeIds.has(id));
   const safeFavoriteRecipeIds = (partial.favoriteRecipeIds ?? defaultSaladState.favoriteRecipeIds).filter((id) => validRecipeIds.has(id));
+  const safePreparedLog = (partial.preparedLog ?? defaultSaladState.preparedLog).filter((entry) => validRecipeIds.has(entry.recipeId));
+  const safeRecipeProgress = Object.fromEntries(
+    Object.entries(partial.recipeProgress ?? {})
+      .filter(([recipeId]) => validRecipeIds.has(recipeId))
+      .map(([recipeId, progress]) => [
+        recipeId,
+        {
+          checkedIngredients: Array.from(new Set(progress.checkedIngredients ?? [])),
+          checkedSteps: Array.from(new Set(progress.checkedSteps ?? []))
+        }
+      ])
+  );
 
   return {
     ...defaultSaladState,
     ...partial,
+    points: Number.isFinite(partial.points) ? Math.max(0, Number(partial.points)) : defaultSaladState.points,
+    preparedLog: Array.from(new Map(safePreparedLog.map((entry) => [entry.id, entry])).values()),
+    recipeProgress: safeRecipeProgress,
     weekRecipeIds: safeWeekRecipeIds.length ? Array.from(new Set(safeWeekRecipeIds)) : defaultSaladState.weekRecipeIds,
     completedRecipeIds: Array.from(new Set(safeCompletedRecipeIds)),
     favoriteRecipeIds: Array.from(new Set(safeFavoriteRecipeIds)),

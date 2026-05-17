@@ -1,5 +1,5 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
-import { ArrowLeft, Bell, BookOpen, Check, ChevronRight, Copy, Heart, Home, Layers3, Menu, Plus, Salad, Search, ShoppingBasket, Sparkles, Star, Trash2, Utensils } from "lucide-react";
+import { useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
+import { ArrowLeft, Award, Bell, BookOpen, Check, ChevronRight, Copy, Flame, Heart, Home, Layers3, Menu, Plus, Salad, Search, ShoppingBasket, Sparkles, Star, Trash2, Utensils } from "lucide-react";
 import { conservationTips, dressings, faq, homeCards, layerSteps, navigationItems, recipes, sellingTips, weeklyMenus, type Dressing, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
 
@@ -13,9 +13,9 @@ interface AppContext {
 export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeScreen: ScreenId; readonly openScreen: (screen: ScreenId) => void }) {
   const navItems = [
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
-    { key: "search", label: "Buscar", icon: Search, screen: "recipes" as ScreenId },
+    { key: "search", label: "Recetas", icon: Search, screen: "recipes" as ScreenId },
     { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId },
-    { key: "guide", label: "Mi guia", icon: BookOpen, screen: "guide" as ScreenId }
+    { key: "guide", label: "Mi guía", icon: BookOpen, screen: "guide" as ScreenId }
   ];
 
   return (
@@ -100,39 +100,56 @@ export function SaladOnboarding({ onComplete }: { readonly onComplete: (profile:
   );
 }
 
-export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly active: boolean }) {
+export function SaladHomeScreen({ active, state, openScreen }: AppContext & { readonly active: boolean }) {
   const exploreCards = [
-    { title: "Recetas", icon: Salad, screen: "recipes" as ScreenId },
-    { title: "Aderezos", icon: Utensils, screen: "guide" as ScreenId },
-    { title: "Combinaciones", icon: Layers3, screen: "guide" as ScreenId },
-    { title: "Menús", icon: ShoppingBasket, screen: "week" as ScreenId },
-    { title: "Consejos", icon: Sparkles, screen: "guide" as ScreenId },
-    { title: "Favoritos", icon: Heart, screen: "recipes" as ScreenId }
+    { title: "Recetas", subtitle: "60 frascos listos", icon: Salad, screen: "recipes" as ScreenId },
+    { title: "Aderezos", subtitle: "Sabor sin complicarte", icon: Utensils, screen: "guide" as ScreenId },
+    { title: "Combinaciones", subtitle: "Capas que duran", icon: Layers3, screen: "guide" as ScreenId },
+    { title: "Menús", subtitle: "3, 5 o 7 días", icon: ShoppingBasket, screen: "week" as ScreenId },
+    { title: "Consejos", subtitle: "Conservación fácil", icon: Sparkles, screen: "guide" as ScreenId },
+    { title: "Favoritos", subtitle: "Tus ideas guardadas", icon: Heart, screen: "recipes" as ScreenId }
   ];
+  const weekRecipes = state.weekRecipeIds.map(recipeById);
+  const completed = weekRecipes.filter((recipe) => state.completedRecipeIds.includes(recipe.id)).length;
+  const weekPercent = weekRecipes.length ? Math.round((completed / weekRecipes.length) * 100) : 0;
+  const preparedToday = state.preparedLog.some((entry) => entry.date === getTodayKey());
+  const nextRecipe = weekRecipes.find((recipe) => !state.completedRecipeIds.includes(recipe.id)) ?? weekRecipes[0] ?? recipes[0];
 
   return (
     <section className={`screen salad-home ${active ? "active" : ""}`}>
       <header className="salad-header">
-        <button className="salad-header-btn" type="button" aria-label="Abrir menu"><Menu size={22} /></button>
+        <button className="salad-header-btn" type="button" aria-label="Abrir menu"><Menu size={21} /></button>
         <div className="salad-brand"><strong>Ensaladas</strong><span>EN FRASCO</span></div>
-        <button className="salad-header-btn" type="button" aria-label="Notificaciones"><Bell size={20} /></button>
+        <button className="salad-header-btn" type="button" aria-label="Notificaciones"><Bell size={19} /></button>
       </header>
       <section className="salad-hero">
+        <div className="salad-hero-copy">
+          <span className="salad-app-badge"><Sparkles size={14} /> Aplicación personalizada</span>
+          <h1>Organiza tu semana en frascos bonitos y listos.</h1>
+          <p>Recetas, aderezos, capas y lista de compras para preparar sin pensar demasiado.</p>
+          <div className="salad-hero-actions">
+            <button className="salad-main-cta" type="button" onClick={() => openScreen("recipes")}><Salad size={19} /> Ver recetas</button>
+            <button className="salad-ghost-cta" type="button" onClick={() => openScreen("week")}>Crear menú</button>
+          </div>
+        </div>
         <div className="salad-jars" aria-label="Potes de ensalada">
           {[0, 1, 2, 3].map((item) => <span key={item}><i /><b /><em /><small /></span>)}
         </div>
-        <div className="salad-welcome">
-          <h1>¡Bienvenida!</h1>
-          <p>Tu guía completa para preparar ensaladas en frasco deliciosas, saludables y prácticas.</p>
+      </section>
+      <section className="salad-week-card">
+        <div>
+          <span><Flame size={15} /> Próximo paso</span>
+          <strong>{preparedToday ? "Ya preparaste algo hoy" : nextRecipe?.nombre ?? "Elige tu primer frasco"}</strong>
+          <small>{completed}/{weekRecipes.length} recetas de tu semana · {state.points} puntos</small>
         </div>
-        <div className="salad-personal-badge"><Sparkles size={15} /><strong>Aplicación personalizada</strong></div>
+        <div className="salad-week-ring" style={{ "--score": `${weekPercent * 3.6}deg` } as CSSProperties}><b>{weekPercent}%</b></div>
       </section>
       <section className="salad-explore">
         <div className="section-inline-head"><h3>Explorar</h3></div>
         <div className="salad-explore-grid">
           {exploreCards.map((card) => {
             const Icon = card.icon;
-            return <button className="salad-explore-card" key={card.title} type="button" onClick={() => openScreen(card.screen)}><Icon size={25} /><strong>{card.title}</strong></button>;
+            return <button className="salad-explore-card" key={card.title} type="button" onClick={() => openScreen(card.screen)}><Icon size={25} /><strong>{card.title}</strong><span>{card.subtitle}</span></button>;
           })}
         </div>
       </section>
@@ -143,7 +160,23 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
 export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppContext & { readonly active: boolean }) {
   const [category, setCategory] = useState<string>("Todas");
   const [query, setQuery] = useState("");
+  const categoryOptions = [
+    { value: "Todas", label: "Todas" },
+    { value: "Favoritas", label: "Favoritas" },
+    { value: "Mi semana", label: "Mi semana" },
+    { value: "Clasicas", label: "Clásicas" },
+    { value: "Proteicas", label: "Proteicas" },
+    { value: "Vegetarianas", label: "Vegetarianas" },
+    { value: "Economicas", label: "Económicas" },
+    { value: "Gourmet", label: "Gourmet" },
+    { value: "Para vender", label: "Para vender" }
+  ];
   const normalizedQuery = query.trim().toLowerCase();
+  const weekRecipes = state.weekRecipeIds.map(recipeById);
+  const weekCompleted = weekRecipes.filter((recipe) => state.completedRecipeIds.includes(recipe.id)).length;
+  const weekPercent = weekRecipes.length ? Math.round((weekCompleted / weekRecipes.length) * 100) : 0;
+  const preparedToday = state.preparedLog.filter((entry) => entry.date === getTodayKey()).length;
+  const level = Math.floor(state.points / 120) + 1;
   const filtered = recipes.filter((recipe) => {
     const byCategory = category === "Todas"
       || recipe.categoria === category
@@ -159,21 +192,35 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
     const byQuery = normalizedQuery.length === 0 || searchable.includes(normalizedQuery);
     return byCategory && byQuery;
   });
-  const categories = ["Todas", "Favoritas", "Mi semana", "Clasicas", "Proteicas", "Vegetarianas", "Economicas", "Gourmet", "Para vender"];
+  const formatCategory = (value: string) => categoryOptions.find((item) => item.value === value)?.label ?? value;
 
   return (
-    <section className={`screen ${active ? "active" : ""}`}>
-      <Header eyebrow="Recetas" title="60 ensaladas en frasco" subtitle="Explora recetas listas para organizar tu semana, guardar favoritas o sumar a tu menu." />
-      <label className="search-bar"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por receta o ingrediente..." /></label>
-      <div className="category-row">{categories.map((item) => <button className={item === category ? "active" : ""} key={item} type="button" onClick={() => setCategory(item)}>{item}</button>)}</div>
+    <section className={`screen recipe-browser ${active ? "active" : ""}`}>
+      <Header eyebrow="Recetas" title="60 ensaladas en frasco" subtitle="Explora recetas listas para organizar tu semana, guardar favoritas o sumar a tu menú." />
+      <section className="dopamine-panel">
+        <div>
+          <span><Flame size={15} /> Reto de hoy</span>
+          <strong>{preparedToday ? "Ya preparaste un frasco hoy" : "Prepara 1 frasco y gana +35 puntos"}</strong>
+          <small>Nivel {level} · {state.points} puntos · semana {weekCompleted}/{weekRecipes.length}</small>
+        </div>
+        <div className="dopamine-ring" style={{ "--score": `${weekPercent * 3.6}deg` } as CSSProperties}><b>{weekPercent}%</b></div>
+      </section>
+      <label className="search-bar"><Search size={24} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por receta o ingrediente..." /></label>
+      <div className="category-row">{categoryOptions.map((item) => <button className={item.value === category ? "active" : ""} key={item.value} type="button" onClick={() => setCategory(item.value)}>{item.label}</button>)}</div>
+      <div className="recipe-list-toolbar">
+        <strong>{filtered.length} recetas</strong>
+        <button type="button">Ordenar por:<span>Más recientes</span><ChevronRight size={18} /></button>
+      </div>
       {filtered.length === 0 ? <EmptyState title="Nada guardado aqui todavia" text="Marca recetas como favoritas o agrega recetas a tu semana para verlas en este filtro." /> : null}
       <div className="session-list">
         {filtered.map((recipe) => {
           const favorite = state.favoriteRecipeIds.includes(recipe.id);
+          const inWeek = state.weekRecipeIds.includes(recipe.id);
+          const completed = state.completedRecipeIds.includes(recipe.id);
           return (
-            <article className="session-row" key={recipe.id}>
-              <div className="session-thumb">{recipe.imagenPlaceholder || "🥗"}</div>
-              <div><strong>{recipe.nombre}</strong><p>{recipe.categoria} · {recipe.tiempoPreparacion} · dura {recipe.duracionRefrigerada}</p></div>
+            <article className={`session-row ${completed ? "prepared" : ""}`} key={recipe.id}>
+              <div className="session-thumb recipe-photo" aria-hidden="true"><span /><i /><b /><em /></div>
+              <div><strong>{recipe.nombre}</strong><p>{formatCategory(recipe.categoria)} · {recipe.tiempoPreparacion} ·<br />dura {recipe.duracionRefrigerada.replace(/dias/g, "días")}</p><small className="recipe-row-status">{completed ? "Preparada" : inWeek ? "En tu semana" : "+ menú"}</small></div>
               <button type="button" className="icon-soft" aria-label="Guardar favorita" onClick={() => setState((current) => ({ ...current, favoriteRecipeIds: toggle(current.favoriteRecipeIds, recipe.id) }))}><Heart size={18} fill={favorite ? "currentColor" : "none"} /></button>
               <button type="button" className="icon-soft" aria-label="Ver receta" onClick={() => openRecipe(recipe)}><ChevronRight size={18} /></button>
             </article>
@@ -188,29 +235,88 @@ export function SaladRecipeDetail({ active, recipe, state, setState, openScreen 
   const favorite = state.favoriteRecipeIds.includes(recipe.id);
   const inWeek = state.weekRecipeIds.includes(recipe.id);
   const completed = state.completedRecipeIds.includes(recipe.id);
+  const [winMessage, setWinMessage] = useState("");
+  const progress = state.recipeProgress[recipe.id] ?? { checkedIngredients: [], checkedSteps: [] };
+  const ingredientPercent = Math.round((progress.checkedIngredients.length / recipe.ingredientes.length) * 100);
+  const stepPercent = Math.round((progress.checkedSteps.length / recipe.instrucciones.length) * 100);
+  const readyToFinish = progress.checkedIngredients.length >= Math.min(3, recipe.ingredientes.length) && progress.checkedSteps.length >= Math.min(2, recipe.instrucciones.length);
+
+  function toggleRecipeProgress(kind: "checkedIngredients" | "checkedSteps", value: string) {
+    setState((current) => {
+      const currentProgress = current.recipeProgress[recipe.id] ?? { checkedIngredients: [], checkedSteps: [] };
+      return {
+        ...current,
+        recipeProgress: {
+          ...current.recipeProgress,
+          [recipe.id]: {
+            ...currentProgress,
+            [kind]: toggle(currentProgress[kind], value)
+          }
+        }
+      };
+    });
+  }
+
+  function completeRecipe() {
+    setState((current) => {
+      const alreadyDone = current.completedRecipeIds.includes(recipe.id);
+      if (alreadyDone) {
+        return { ...current, completedRecipeIds: current.completedRecipeIds.filter((id) => id !== recipe.id) };
+      }
+      return {
+        ...current,
+        points: current.points + 35,
+        completedRecipeIds: [...current.completedRecipeIds, recipe.id],
+        preparedLog: [
+          ...current.preparedLog,
+          { id: `${recipe.id}-${Date.now()}`, recipeId: recipe.id, date: getTodayKey() }
+        ]
+      };
+    });
+    setWinMessage(completed ? "Receta marcada como pendiente." : "¡+35 puntos! Tu frasco quedó registrado.");
+    window.setTimeout(() => setWinMessage(""), 2600);
+  }
 
   return (
-    <section className={`screen ${active ? "active" : ""}`}>
+    <section className={`screen recipe-detail-screen ${active ? "active" : ""}`}>
       <button className="detail-back" type="button" onClick={() => openScreen("recipes")}><ArrowLeft size={18} /> Volver a recetas</button>
       <Header eyebrow="Receta" title={recipe.nombre} subtitle={recipe.descripcion} />
       <article className="ritual-player banana-recipe-card recipe-delivery">
+        {winMessage ? <div className="win-toast"><Award size={18} /> {winMessage}</div> : null}
         <div className="recipe-hero-card">
           <div><span className="recipe-mini-kicker"><Salad size={14} /> En frasco</span><h2>{recipe.categoria}</h2><p>{recipe.objetivo}</p></div>
           <div className="banana-bowl-visual" aria-hidden="true"><span>{recipe.imagenPlaceholder || "🥗"}</span><i /></div>
         </div>
+        <section className="recipe-game-card">
+          <div>
+            <span><Sparkles size={15} /> Misión rápida</span>
+            <strong>{completed ? "Frasco registrado" : readyToFinish ? "Listo para marcar como preparada" : "Sigue el checklist y desbloquea puntos"}</strong>
+          </div>
+          <div className="mission-grid">
+            <div><b>{ingredientPercent}%</b><small>ingredientes</small></div>
+            <div><b>{stepPercent}%</b><small>preparación</small></div>
+            <div><b>+35</b><small>puntos</small></div>
+          </div>
+        </section>
         <div className="recipe-detail-grid">
           <Info label="Tiempo" value={recipe.tiempoPreparacion} />
           <Info label="Porciones" value={`${recipe.porciones}`} />
           <Info label="Duracion" value={recipe.duracionRefrigerada} />
           <Info label="Dificultad" value={recipe.dificultad} />
         </div>
-        <section className="recipe-block"><h3>Ingredientes</h3><ul>{recipe.ingredientes.map((item) => <li key={item}>{item}</li>)}</ul></section>
+        <section className="recipe-block interactive-block"><h3>Ingredientes</h3><ul>{recipe.ingredientes.map((item) => {
+          const checked = progress.checkedIngredients.includes(item);
+          return <li className={checked ? "checked" : ""} key={item}><button type="button" onClick={() => toggleRecipeProgress("checkedIngredients", item)}>{checked ? <Check size={15} /> : <Plus size={15} />}{item}</button></li>;
+        })}</ul></section>
         <section className="recipe-block"><h3>Aderezo recomendado</h3><p>{recipe.aderezoRecomendado}</p></section>
-        <section className="recipe-block"><h3>Capas del frasco</h3><ol>{recipe.capas.map((item) => <li key={item}>{item}</li>)}</ol></section>
-        <section className="recipe-block"><h3>Instrucciones</h3><ol>{recipe.instrucciones.map((item) => <li key={item}>{item}</li>)}</ol></section>
+        <section className="recipe-block layer-builder"><h3>Capas del frasco</h3><ol>{recipe.capas.map((item, index) => <li key={item}><span>{index + 1}</span>{item}</li>)}</ol></section>
+        <section className="recipe-block interactive-block"><h3>Preparación guiada</h3><ol>{recipe.instrucciones.map((item) => {
+          const checked = progress.checkedSteps.includes(item);
+          return <li className={checked ? "checked" : ""} key={item}><button type="button" onClick={() => toggleRecipeProgress("checkedSteps", item)}>{checked ? <Check size={15} /> : <Plus size={15} />}{item}</button></li>;
+        })}</ol></section>
         <section className="recipe-block"><h3>Consejo de uso</h3>{recipe.consejos.map((item) => <p key={item}>{item}</p>)}</section>
         <div className="action-stack">
-          <button className="protocol-primary full" type="button" onClick={() => setState((current) => ({ ...current, completedRecipeIds: toggle(current.completedRecipeIds, recipe.id) }))}>{completed ? "Marcar como pendiente" : "Marcar como preparada"}</button>
+          <button className="protocol-primary full dopamine-button" type="button" onClick={completeRecipe}>{completed ? "Marcar como pendiente" : readyToFinish ? "Registrar frasco preparado" : "Registrar de todos modos"}</button>
           <button className="protocol-secondary full" type="button" onClick={() => setState((current) => ({ ...current, weekRecipeIds: inWeek ? current.weekRecipeIds : [...current.weekRecipeIds, recipe.id] }))}>{inWeek ? "Ya esta en mi semana" : "Agregar a mi semana"}</button>
           <button className="protocol-secondary full" type="button" onClick={() => setState((current) => ({ ...current, favoriteRecipeIds: toggle(current.favoriteRecipeIds, recipe.id) }))}>{favorite ? "Quitar de favoritas" : "Marcar como favorita"}</button>
         </div>
@@ -339,4 +445,8 @@ function PriceField({ label, value, onChange }: { readonly label: string; readon
 
 function EmptyState({ title, text }: { readonly title: string; readonly text: string }) {
   return <div className="empty-state"><strong>{title}</strong><p>{text}</p></div>;
+}
+
+function getTodayKey() {
+  return new Date().toISOString().slice(0, 10);
 }

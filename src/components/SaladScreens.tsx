@@ -133,7 +133,9 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
         </button>
 
         <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
-          <span className="premium-brand-leaf">?</span>
+          <span className="premium-brand-leaf" aria-hidden="true">
+            <Leaf size={18} strokeWidth={2.2} />
+          </span>
           <strong>ensaladas</strong>
           <small>EN FRASCO</small>
         </div>
@@ -182,7 +184,9 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
 
         <div className="premium-section-row">
           <h2>
-            <span>?</span>
+            <span aria-hidden="true">
+              <Leaf size={22} strokeWidth={2.2} />
+            </span>
             Explorar
           </h2>
 
@@ -230,7 +234,7 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
     { value: "Todas", label: "Todas", icon: null },
     { value: "Proteicas", label: "Proteicas", icon: null },
     { value: "Vegetarianas", label: "Vegetarianas", icon: null },
-    { value: "Economicas", label: "Econ\u00f3micas", icon: null },
+    { value: "Economicas", label: "Económicas", icon: null },
     { value: "Favoritas", label: "Favoritas", icon: Heart }
   ];
 
@@ -275,24 +279,26 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
   const premiumRecipes = filtered.slice(0, 24);
 
   const displayTags = (recipe: SaladRecipe, index: number) => {
-    if (index === 0) return ["Fresca", "Equilibrada", "Cl\u00e1sica"];
-    if (index === 1) return ["Proteica", "Cl\u00e1sica"];
+    if (index === 0) return ["Fresca", "Equilibrada", "Clásica"];
+    if (index === 1) return ["Proteica", "Clásica"];
     if (index === 2) return ["Picante", "Proteica", "Colorida"];
     if (index === 3) return ["Vegetariana", "Fresca", "Ligera"];
     if (recipe.tags.length >= 3) return recipe.tags.slice(0, 3);
     if (recipe.tags.length === 2) return recipe.tags;
-    return ["Fresca", "Pr\u00e1ctica", "Semana"];
+    return ["Fresca", "Práctica", "Semana"];
   };
 
   return (
     <section className={`screen recipe-browser premium-recipes-screen ${active ? "active" : ""}`}>
       <header className="premium-salad-header premium-recipes-header">
-        <button className="premium-header-button" type="button" aria-label="Abrir men\u00fa">
+        <button className="premium-header-button" type="button" aria-label="Abrir menú">
           <Menu size={34} strokeWidth={2.5} />
         </button>
 
         <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
-          <span className="premium-brand-leaf">{"\u2661"}</span>
+          <span className="premium-brand-leaf" aria-hidden="true">
+            <Leaf size={18} strokeWidth={2.2} />
+          </span>
           <strong>ensaladas</strong>
           <small>EN FRASCO</small>
         </div>
@@ -310,7 +316,7 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
 
           <div className="premium-week-copy">
             <h2>Tu semana: {visibleWeekCompleted} de {visibleWeekTotal} listas</h2>
-            <p>{"\u00a1Vas muy bien!"} Prepara {remainingWeek} m\u00e1s para completar tu semana saludable.</p>
+            <p>¡Vas muy bien! Prepara {remainingWeek} más para completar tu semana saludable.</p>
           </div>
 
           <span className="premium-week-calendar" aria-hidden="true">
@@ -321,7 +327,9 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
         <section className="premium-recipes-title recipe-gallery-title">
           <div>
             <h1>
-              <span>{"\u2667"}</span>
+              <span aria-hidden="true">
+                <Leaf size={30} strokeWidth={2.2} />
+              </span>
               60 recetas
             </h1>
             <p>Elige tu próxima ensalada en frasco</p>
@@ -362,8 +370,8 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
 
         {premiumRecipes.length === 0 ? (
           <EmptyState
-            title="Nada guardado aqu\u00ed todav\u00eda"
-            text="Marca recetas como favoritas o prueba otro filtro para ver m\u00e1s opciones."
+            title="Nada guardado aquí todavía"
+            text="Marca recetas como favoritas o prueba otro filtro para ver más opciones."
           />
         ) : null}
 

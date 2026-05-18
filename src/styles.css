@@ -9607,3 +9607,81 @@ body {
     font-size: 12px !important;
   }
 }
+
+/* ============================================================
+   FINAL TYPOGRAPHY + RECIPE IMAGE BUGFIX
+   This final override wins over earlier recipe/home styles.
+   ============================================================ */
+
+:root {
+  --app-font: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html,
+body,
+#root,
+.app-shell,
+.app-shell *,
+button,
+input,
+textarea,
+select {
+  font-family: var(--app-font) !important;
+}
+
+.premium-salad-brand strong,
+.premium-salad-brand small,
+.premium-welcome h1,
+.premium-section-row h2,
+.premium-card-label,
+.premium-recipes-title h1,
+.premium-recipe-title-button,
+.recipe-weekly-banner strong {
+  font-family: var(--app-font) !important;
+}
+
+.premium-brand-leaf,
+.premium-section-row h2 span,
+.premium-recipes-title h1 span {
+  display: inline-grid !important;
+  place-items: center !important;
+}
+
+.premium-recipes-screen .recipe-gallery-photo {
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+.premium-recipes-screen .recipe-gallery-photo img {
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center 46% !important;
+  transform: scale(1.015) !important;
+}
+
+.premium-recipes-screen .recipe-gallery-info {
+  position: relative !important;
+  z-index: 2 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  background: rgba(255, 253, 247, 0.96) !important;
+}
+
+.premium-recipes-screen .recipe-gallery-info .premium-recipe-title-button {
+  display: -webkit-box !important;
+  min-height: 2.16em !important;
+  overflow: hidden !important;
+  font-size: clamp(16px, 4.35vw, 21px) !important;
+  line-height: 1.08 !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+.premium-recipes-screen .recipe-gallery-tag,
+.premium-recipes-screen .recipe-gallery-meta {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}

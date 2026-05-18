@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LoginScreen } from "./components/LoginScreen";
 import { SaladBottomNav, SaladGuideScreen, SaladHomeScreen, SaladOnboarding, SaladRecipeDetail, SaladRecipesScreen, SaladShoppingScreen, SaladWeekScreen } from "./components/SaladScreens";
 import { recipes, type SaladRecipe, type ScreenId } from "./data/saladData";
@@ -17,10 +17,16 @@ export function App() {
   const [activeScreen, setActiveScreen] = useState<ScreenId>("home");
   const [selectedRecipe, setSelectedRecipe] = useState<SaladRecipe>(recipes[0]);
   const [recipeDetailOpen, setRecipeDetailOpen] = useState(false);
+  const [screenTransitioning, setScreenTransitioning] = useState(false);
+  const transitionTimer = useRef<number | null>(null);
 
   useEffect(() => {
     saveSaladState(state);
   }, [state]);
+
+  useEffect(() => () => {
+    if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
+  }, []);
 
   const hasOnboarding = state.onboardingCompleted && state.profile && state.onboardingUserId === authSession?.userId;
 
@@ -32,16 +38,27 @@ export function App() {
   }), [state]);
 
   function openScreen(screen: ScreenId) {
+    beginScreenTransition();
     setRecipeDetailOpen(false);
     setActiveScreen(screen);
-    window.scrollTo({ top: 0, behavior: "auto" });
+    window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
   }
 
   function openRecipe(recipe: SaladRecipe) {
+    beginScreenTransition();
     setSelectedRecipe(recipe);
     setActiveScreen("recipes");
     setRecipeDetailOpen(true);
-    window.scrollTo({ top: 0, behavior: "auto" });
+    window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
+  }
+
+  function beginScreenTransition() {
+    if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
+    setScreenTransitioning(true);
+    transitionTimer.current = window.setTimeout(() => {
+      setScreenTransitioning(false);
+      transitionTimer.current = null;
+    }, 320);
   }
 
   function completeOnboarding(profile: SaladProfile) {
@@ -67,7 +84,7 @@ export function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${screenTransitioning ? "screen-is-transitioning" : ""}`}>
       <div className="status-glow" />
       <SaladHomeScreen {...context} active={activeScreen === "home"} />
       <SaladRecipesScreen {...context} active={activeScreen === "recipes" && !recipeDetailOpen} />

@@ -36,6 +36,8 @@ export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeSc
             className={active ? "active" : ""}
             key={item.key}
             type="button"
+            data-screen-target={item.screen}
+            aria-current={active ? "page" : undefined}
             onClick={() => openScreen(item.screen)}
           >
             <Icon size={25} strokeWidth={active ? 2.8 : 2.2} fill={active && item.key === "home" ? "currentColor" : "none"} />

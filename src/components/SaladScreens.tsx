@@ -144,13 +144,28 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
       </header>
 
       <section className="premium-jars-hero" aria-label="Ensaladas en frasco listas">
-        <img
-          className="premium-jars-photo"
-          src="/assets/salad-jars-hero.png"
-          alt="Cuatro ensaladas en frasco preparadas con verduras frescas"
-          loading="eager"
-          decoding="async"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcSet="/assets/salad-jars-hero-430.webp 430w, /assets/salad-jars-hero-860.webp 860w, /assets/salad-jars-hero-1290.webp 1290w"
+            sizes="(max-width: 430px) 100vw, 430px"
+          />
+          <source
+            type="image/jpeg"
+            srcSet="/assets/salad-jars-hero-430.jpg 430w, /assets/salad-jars-hero-860.jpg 860w, /assets/salad-jars-hero-1290.jpg 1290w"
+            sizes="(max-width: 430px) 100vw, 430px"
+          />
+          <img
+            className="premium-jars-photo"
+            src="/assets/salad-jars-hero-860.jpg"
+            width="860"
+            height="484"
+            alt="Cuatro ensaladas en frasco preparadas con verduras frescas"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
       </section>
 
       <section className="premium-welcome">

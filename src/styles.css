@@ -9167,6 +9167,12 @@ body {
   object-position: center center !important;
 }
 
+.salad-premium-home .premium-jars-hero picture {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 @media (max-width: 390px) {
   .salad-premium-home .premium-jars-hero {
     height: 216px !important;

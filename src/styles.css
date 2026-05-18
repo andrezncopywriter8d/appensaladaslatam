@@ -9135,3 +9135,41 @@ body {
   .salad-premium-home .premium-card-label { font-size: 12.5px !important; }
   .salad-premium-home .premium-custom-badge { width: 84px !important; height: 84px !important; top: -38px !important; }
 }
+
+/* ============================================================
+   REAL HERO IMAGE - ENSALADAS EN FRASCO
+   Replaces the generated jar mock with the supplied real photo.
+   ============================================================ */
+
+.salad-premium-home .premium-jars-hero {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: clamp(216px, 58vw, 250px) !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: #fff3de !important;
+  border-bottom: 1px solid rgba(80, 111, 58, 0.08) !important;
+}
+
+.salad-premium-home .premium-jars-hero::before,
+.salad-premium-home .premium-jars-hero::after,
+.salad-premium-home .premium-hero-kitchen-blur,
+.salad-premium-home .premium-jars-row {
+  display: none !important;
+}
+
+.salad-premium-home .premium-jars-photo {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+@media (max-width: 390px) {
+  .salad-premium-home .premium-jars-hero {
+    height: 216px !important;
+    min-height: 0 !important;
+  }
+}

@@ -123,25 +123,6 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
     { title: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, tone: "pink" }
   ];
 
-  const jars = [
-    {
-      key: "jar-one",
-      layers: ["greens", "tomatoCorn", "corn", "chickpea", "cream"]
-    },
-    {
-      key: "jar-two",
-      layers: ["greens", "carrot", "cucumber", "grains", "whiteSauce"]
-    },
-    {
-      key: "jar-three",
-      layers: ["greens", "onion", "cheeseTomato", "avocado", "greenSauce"]
-    },
-    {
-      key: "jar-four",
-      layers: ["greens", "carrotRibbon", "avocado", "lentils", "mustardSauce"]
-    }
-  ];
-
   return (
     <section className={`screen salad-home salad-premium-home ${active ? "active" : ""}`}>
       <header className="premium-salad-header">
@@ -161,23 +142,13 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
       </header>
 
       <section className="premium-jars-hero" aria-label="Ensaladas en frasco listas">
-        <div className="premium-hero-kitchen-blur premium-left-blur" />
-        <div className="premium-hero-kitchen-blur premium-right-blur" />
-
-        <div className="premium-jars-row" aria-hidden="true">
-          {jars.map((jar) => (
-            <div className={`premium-jar ${jar.key}`} key={jar.key}>
-              <span className="premium-jar-lid" />
-              <span className="premium-jar-glass-shine" />
-
-              <div className="premium-jar-content">
-                {jar.layers.map((layer) => (
-                  <span className={`premium-jar-layer ${layer}`} key={layer} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <img
+          className="premium-jars-photo"
+          src="/assets/salad-jars-hero.png"
+          alt="Cuatro ensaladas en frasco preparadas con verduras frescas"
+          loading="eager"
+          decoding="async"
+        />
       </section>
 
       <section className="premium-welcome">

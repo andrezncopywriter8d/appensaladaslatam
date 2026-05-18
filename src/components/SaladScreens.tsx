@@ -15,11 +15,11 @@ export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeSc
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
     { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId },
     { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId },
-    { key: "guide", label: "Mi guÃ­a", icon: BookOpen, screen: "guide" as ScreenId }
+    { key: "guide", label: "Mi guía", icon: BookOpen, screen: "guide" as ScreenId }
   ];
 
   return (
-    <nav className="bottom-nav salad-premium-bottom-nav" aria-label="NavegaciÃ³n principal">
+    <nav className="bottom-nav salad-premium-bottom-nav" aria-label="Navegación principal">
       {navItems.map((item) => {
         const Icon = item.icon;
         const active =
@@ -88,7 +88,7 @@ export function SaladOnboarding({ onComplete }: { readonly onComplete: (profile:
         <p>Creamos una seleccion de recetas, aderezos y consejos para ayudarte a organizar tu semana.</p>
         <div className="result-card">
           <strong>{profile.profileName}</strong>
-          <span>{profile.days} Â· {profile.preferences.length ? profile.preferences.join(", ") : "recetas variadas"}</span>
+          <span>{profile.days} · {profile.preferences.length ? profile.preferences.join(", ") : "recetas variadas"}</span>
         </div>
         <button className="protocol-primary full" type="button" onClick={() => onComplete(profile)}>Entrar a mi app</button>
       </section>
@@ -118,7 +118,7 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
     { title: "Recetas", icon: Salad, screen: "recipes" as ScreenId, tone: "green" },
     { title: "Aderezos", icon: Utensils, screen: "guide" as ScreenId, tone: "cream" },
     { title: "Combinaciones", icon: Layers3, screen: "guide" as ScreenId, tone: "green" },
-    { title: "MenÃºs", icon: ShoppingBasket, screen: "week" as ScreenId, tone: "cream" },
+    { title: "Menús", icon: ShoppingBasket, screen: "week" as ScreenId, tone: "cream" },
     { title: "Consejos", icon: Sparkles, screen: "guide" as ScreenId, tone: "green" },
     { title: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, tone: "pink" }
   ];
@@ -145,12 +145,12 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
   return (
     <section className={`screen salad-home salad-premium-home ${active ? "active" : ""}`}>
       <header className="premium-salad-header">
-        <button className="premium-header-button" type="button" aria-label="Abrir menÃº">
+        <button className="premium-header-button" type="button" aria-label="Abrir menú">
           <Menu size={28} strokeWidth={2.5} />
         </button>
 
         <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
-          <span className="premium-brand-leaf">â™¡</span>
+          <span className="premium-brand-leaf">?</span>
           <strong>ensaladas</strong>
           <small>EN FRASCO</small>
         </div>
@@ -181,11 +181,11 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
       </section>
 
       <section className="premium-welcome">
-        <h1>Â¡Bienvenida!</h1>
+        <h1>¡Bienvenida!</h1>
         <p>
-          Tu guÃ­a completa para preparar ensaladas
+          Tu guía completa para preparar ensaladas
           <br />
-          en frasco deliciosas, saludables y prÃ¡cticas.
+          en frasco deliciosas, saludables y prácticas.
         </p>
       </section>
 
@@ -194,13 +194,13 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
 
         <div className="premium-section-row">
           <h2>
-            <span>â™§</span>
+            <span>?</span>
             Explorar
           </h2>
 
           <button className="premium-custom-badge" type="button" onClick={() => openScreen("guide")}>
             <Sparkles size={18} strokeWidth={2.4} />
-            <strong>APLICACIÃ“N</strong>
+            <strong>APLICACIÓN</strong>
             <small>PERSONALIZADA</small>
           </button>
         </div>
@@ -527,7 +527,7 @@ export function SaladRecipeDetail({ active, recipe, state, setState, openScreen 
         ]
       };
     });
-    setWinMessage(completed ? "Receta marcada como pendiente." : "Â¡+35 puntos! Tu frasco quedÃ³ registrado.");
+    setWinMessage(completed ? "Receta marcada como pendiente." : "¡+35 puntos! Tu frasco quedó registrado.");
     window.setTimeout(() => setWinMessage(""), 2600);
   }
 
@@ -539,16 +539,16 @@ export function SaladRecipeDetail({ active, recipe, state, setState, openScreen 
         {winMessage ? <div className="win-toast"><Award size={18} /> {winMessage}</div> : null}
         <div className="recipe-hero-card">
           <div><span className="recipe-mini-kicker"><Salad size={14} /> En frasco</span><h2>{recipe.categoria}</h2><p>{recipe.objetivo}</p></div>
-          <div className="banana-bowl-visual" aria-hidden="true"><span>{recipe.imagenPlaceholder || "ðŸ¥—"}</span><i /></div>
+          <div className="banana-bowl-visual" aria-hidden="true"><span>{recipe.imagenPlaceholder || "salad"}</span><i /></div>
         </div>
         <section className="recipe-game-card">
           <div>
-            <span><Sparkles size={15} /> MisiÃ³n rÃ¡pida</span>
+            <span><Sparkles size={15} /> Misión rápida</span>
             <strong>{completed ? "Frasco registrado" : readyToFinish ? "Listo para marcar como preparada" : "Sigue el checklist y desbloquea puntos"}</strong>
           </div>
           <div className="mission-grid">
             <div><b>{ingredientPercent}%</b><small>ingredientes</small></div>
-            <div><b>{stepPercent}%</b><small>preparaciÃ³n</small></div>
+            <div><b>{stepPercent}%</b><small>preparación</small></div>
             <div><b>+35</b><small>puntos</small></div>
           </div>
         </section>
@@ -564,7 +564,7 @@ export function SaladRecipeDetail({ active, recipe, state, setState, openScreen 
         })}</ul></section>
         <section className="recipe-block"><h3>Aderezo recomendado</h3><p>{recipe.aderezoRecomendado}</p></section>
         <section className="recipe-block layer-builder"><h3>Capas del frasco</h3><ol>{recipe.capas.map((item, index) => <li key={item}><span>{index + 1}</span>{item}</li>)}</ol></section>
-        <section className="recipe-block interactive-block"><h3>PreparaciÃ³n guiada</h3><ol>{recipe.instrucciones.map((item) => {
+        <section className="recipe-block interactive-block"><h3>Preparación guiada</h3><ol>{recipe.instrucciones.map((item) => {
           const checked = progress.checkedSteps.includes(item);
           return <li className={checked ? "checked" : ""} key={item}><button type="button" onClick={() => toggleRecipeProgress("checkedSteps", item)}>{checked ? <Check size={15} /> : <Plus size={15} />}{item}</button></li>;
         })}</ol></section>
@@ -607,7 +607,7 @@ export function SaladWeekScreen({ active, state, setState, openRecipe, openScree
         <div className="section-inline-head"><h3>Recetas en tu semana</h3><button type="button" onClick={() => openScreen("shopping")}>Ver lista</button></div>
         {weekRecipes.map((recipe) => {
           const done = state.completedRecipeIds.includes(recipe.id);
-          return <button className={`quick-card ${done ? "selected" : ""}`} key={recipe.id} type="button" onClick={() => openRecipe(recipe)}><span>{done ? <Check size={18} /> : recipe.imagenPlaceholder || "ðŸ¥—"}</span><div><strong>{recipe.nombre}</strong><small>{recipe.aderezoRecomendado}</small></div><ChevronRight size={18} /></button>;
+          return <button className={`quick-card ${done ? "selected" : ""}`} key={recipe.id} type="button" onClick={() => openRecipe(recipe)}><span>{done ? <Check size={18} /> : recipe.imagenPlaceholder || "salad"}</span><div><strong>{recipe.nombre}</strong><small>{recipe.aderezoRecomendado}</small></div><ChevronRight size={18} /></button>;
         })}
       </section>
     </section>

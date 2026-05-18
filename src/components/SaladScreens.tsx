@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
-import { ArrowLeft, Award, Bell, BookOpen, Check, ChevronRight, Copy, Flame, Heart, Home, Layers3, Menu, Plus, Salad, Search, ShoppingBasket, Sparkles, Star, Trash2, Utensils } from "lucide-react";
+import { ArrowLeft, Award, Bell, BookOpen, Check, ChevronRight, Clock3, Copy, Heart, Home, Layers3, Leaf, Menu, Plus, Salad, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Star, Trash2, Utensils } from "lucide-react";
 import { conservationTips, dressings, faq, homeCards, layerSteps, navigationItems, recipes, sellingTips, weeklyMenus, type Dressing, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
 
@@ -242,6 +242,8 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
   const visibleWeekTotal = weekRecipes.length ? Math.max(weekRecipes.length, 7) : 7;
   const weekPercent = Math.round((visibleWeekCompleted / visibleWeekTotal) * 100);
   const remainingWeek = Math.max(visibleWeekTotal - visibleWeekCompleted, 0);
+  const recipeCalories = [420, 390, 360, 410, 380, 370];
+  const referenceTitles = ["Mediterránea con pollo", "Atún y garbanzos", "César ligera", "Quinoa y aguacate", "Mexicana fresca", "Lentejas crujientes"];
 
   const normalizeText = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -282,19 +284,6 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
     return ["Fresca", "Pr\u00e1ctica", "Semana"];
   };
 
-  const recipeVisualClass = (recipe: SaladRecipe, index: number) => {
-    const normalized = `${recipe.nombre} ${recipe.categoria} ${recipe.tags.join(" ")}`.toLowerCase();
-
-    if (normalized.includes("tex") || normalized.includes("mex")) return "texmex";
-    if (normalized.includes("caprese")) return "caprese";
-    if (normalized.includes("pollo") || normalized.includes("cesar") || normalized.includes("c\u00e9sar")) return "chicken";
-    if (normalized.includes("asi")) return "asian";
-    if (normalized.includes("mediterr")) return "mediterranean";
-
-    const fallback = ["mediterranean", "chicken", "texmex", "caprese", "asian", "green"];
-    return fallback[index % fallback.length];
-  };
-
   return (
     <section className={`screen recipe-browser premium-recipes-screen ${active ? "active" : ""}`}>
       <header className="premium-salad-header premium-recipes-header">
@@ -314,41 +303,6 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
       </header>
 
       <div className="premium-recipes-content">
-        <section className="premium-recipes-title">
-          <h1>
-            <span>{"\u2667"}</span>
-            Recetas
-          </h1>
-          <p>60 ensaladas en frasco listas para tu semana</p>
-        </section>
-
-        <label className="premium-recipe-search">
-          <Search size={29} strokeWidth={2.2} />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar por receta o ingrediente..."
-          />
-        </label>
-
-        <div className="premium-recipe-chip-row" aria-label="Filtros de recetas">
-          {categoryOptions.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <button
-                className={item.value === category ? "active" : ""}
-                key={item.value}
-                type="button"
-                onClick={() => setCategory(item.value)}
-              >
-                {Icon ? <Icon size={20} strokeWidth={2.4} /> : null}
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
         <section className="premium-week-progress-card">
           <div className="premium-week-circle" style={{ "--recipeProgress": `${weekPercent * 3.6}deg` } as CSSProperties}>
             <strong>{visibleWeekCompleted}/{visibleWeekTotal}</strong>
@@ -364,6 +318,48 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
           </span>
         </section>
 
+        <section className="premium-recipes-title recipe-gallery-title">
+          <div>
+            <h1>
+              <span>{"\u2667"}</span>
+              60 recetas
+            </h1>
+            <p>Elige tu próxima ensalada en frasco</p>
+          </div>
+
+          <button className="recipe-filter-button" type="button" onClick={() => setCategory(category === "Todas" ? "Proteicas" : "Todas")}>
+            <SlidersHorizontal size={19} strokeWidth={2.5} />
+            Filtrar
+          </button>
+        </section>
+
+        <label className="premium-recipe-search recipe-gallery-search">
+          <Search size={22} strokeWidth={2.2} />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Buscar receta o ingrediente..."
+          />
+        </label>
+
+        <div className="premium-recipe-chip-row recipe-gallery-chips" aria-label="Filtros de recetas">
+          {categoryOptions.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <button
+                className={item.value === category ? "active" : ""}
+                key={item.value}
+                type="button"
+                onClick={() => setCategory(item.value)}
+              >
+                {Icon ? <Icon size={17} strokeWidth={2.4} /> : null}
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
         {premiumRecipes.length === 0 ? (
           <EmptyState
             title="Nada guardado aqu\u00ed todav\u00eda"
@@ -375,99 +371,76 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
           {premiumRecipes.map((recipe, index) => {
             const favorite = state.favoriteRecipeIds.includes(recipe.id);
             const tags = displayTags(recipe, index);
-            const visual = recipeVisualClass(recipe, index);
-            const isPopular = index === 0;
-            const isNew = index === 2;
             const visualTitle =
-              index === 0 ? "Mediterr\u00e1nea en Frasco"
-              : index === 1 ? "C\u00e9sar con Pollo"
-              : index === 2 ? "Tex-Mex Saludable"
-              : index === 3 ? "Caprese Crujiente"
-              : recipe.nombre;
+              index < referenceTitles.length ? referenceTitles[index]
+              : recipe.nombre.replace("Ensalada ", "").replace(" en Frasco", "");
             const visualTime =
               index === 0 ? "15 min"
               : index === 1 ? "12 min"
               : index === 2 ? "18 min"
               : index === 3 ? "10 min"
               : recipe.tiempoPreparacion;
-            const visualDuration =
-              index === 0 ? "4 d\u00edas"
-              : index === 1 ? "3 d\u00edas"
-              : index === 2 ? "4 d\u00edas"
-              : index === 3 ? "3 d\u00edas"
-              : recipe.duracionRefrigerada.replace(/dias/g, "d\u00edas");
+            const imageIndex = (index % 6) + 1;
+            const calories = recipeCalories[index % recipeCalories.length];
+            const tagLabel = index === 5 ? "Veganas" : tags[1] ?? recipe.categoria;
 
             return (
-              <article className="premium-recipe-card" key={recipe.id}>
+              <article className="premium-recipe-card recipe-gallery-card" key={recipe.id}>
                 <button
-                  className={`premium-recipe-photo ${visual}`}
+                  className="premium-recipe-photo recipe-gallery-photo"
                   type="button"
                   aria-label={`Abrir ${recipe.nombre}`}
                   onClick={() => openRecipe(recipe)}
                 >
-                  <span className="photo-jar">
-                    <i />
-                    <b />
-                    <em />
-                    <small />
-                  </span>
-                  <span className="photo-leaf" />
+                  <picture>
+                    <source srcSet={`/assets/recipes/recipe-card-${imageIndex}.webp`} type="image/webp" />
+                    <img
+                      src={`/assets/recipes/recipe-card-${imageIndex}.jpg`}
+                      alt={visualTitle}
+                      loading={index < 4 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  </picture>
                 </button>
 
-                <div className="premium-recipe-info">
-                  {isPopular ? (
-                    <span className="premium-recipe-badge popular">
-                      <Flame size={15} strokeWidth={2.5} />
-                      Popular
-                    </span>
-                  ) : null}
+                <button
+                  className={`recipe-gallery-heart ${favorite ? "active" : ""}`}
+                  type="button"
+                  aria-label="Guardar favorita"
+                  onClick={() => setState((current) => ({
+                    ...current,
+                    favoriteRecipeIds: toggle(current.favoriteRecipeIds, recipe.id)
+                  }))}
+                >
+                  <Heart size={22} strokeWidth={2.2} fill={favorite ? "currentColor" : "none"} />
+                </button>
 
-                  {isNew ? (
-                    <span className="premium-recipe-badge new">
-                      <Sparkles size={15} strokeWidth={2.5} />
-                      Nueva
-                    </span>
-                  ) : null}
-
+                <div className="premium-recipe-info recipe-gallery-info">
                   <button className="premium-recipe-title-button" type="button" onClick={() => openRecipe(recipe)}>
                     {visualTitle}
                   </button>
 
-                  <p>{visualTime} <span>{"\u2022"}</span> dura {visualDuration}</p>
+                  <span className="recipe-gallery-tag">
+                    {tagLabel}
+                    {index === 5 ? <Leaf size={13} strokeWidth={2.2} /> : null}
+                  </span>
 
-                  <div className="premium-recipe-tags">
-                    {tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
+                  <div className="recipe-gallery-meta">
+                    <span><Clock3 size={15} strokeWidth={2} /> {visualTime}</span>
+                    <span><Leaf size={15} strokeWidth={2} /> {calories} kcal</span>
                   </div>
-                </div>
-
-                <div className="premium-recipe-actions">
-                  <button
-                    className={`premium-favorite-button ${favorite ? "active" : ""}`}
-                    type="button"
-                    aria-label="Guardar favorita"
-                    onClick={() => setState((current) => ({
-                      ...current,
-                      favoriteRecipeIds: toggle(current.favoriteRecipeIds, recipe.id)
-                    }))}
-                  >
-                    <Heart size={29} strokeWidth={2.1} fill={favorite ? "currentColor" : "none"} />
-                  </button>
-
-                  <button
-                    className="premium-open-recipe-button"
-                    type="button"
-                    aria-label={`Abrir ${recipe.nombre}`}
-                    onClick={() => openRecipe(recipe)}
-                  >
-                    <ChevronRight size={23} strokeWidth={3.2} />
-                  </button>
                 </div>
               </article>
             );
           })}
         </div>
+
+        <button className="recipe-weekly-banner" type="button">
+          <span><Leaf size={22} strokeWidth={2.2} /></span>
+          <strong>Nuevas recetas cada semana</strong>
+          <small>Siempre hay algo nuevo y delicioso para ti.</small>
+          <ChevronRight size={21} strokeWidth={2.8} />
+        </button>
       </div>
     </section>
   );

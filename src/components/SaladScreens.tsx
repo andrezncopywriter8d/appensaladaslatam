@@ -253,11 +253,24 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe, recipe
   const normalizedQuery = query.trim().toLowerCase();
 
   const weekRecipes = state.weekRecipeIds.map(recipeById);
-  const weekCompleted = weekRecipes.filter((recipe) => state.completedRecipeIds.includes(recipe.id)).length;
-  const visibleWeekCompleted = weekRecipes.length ? Math.max(weekCompleted, Math.min(3, weekRecipes.length)) : 3;
-  const visibleWeekTotal = weekRecipes.length ? Math.max(weekRecipes.length, 7) : 7;
-  const weekPercent = Math.round((visibleWeekCompleted / visibleWeekTotal) * 100);
-  const remainingWeek = Math.max(visibleWeekTotal - visibleWeekCompleted, 0);
+  const visibleWeekTotal = 7;
+  const trackedWeekRecipes = weekRecipes.slice(0, visibleWeekTotal);
+  const weekCompleted = trackedWeekRecipes.filter((recipe) => state.completedRecipeIds.includes(recipe.id)).length;
+  const partialWeekProgress = trackedWeekRecipes.reduce((total, recipe) => {
+    if (state.completedRecipeIds.includes(recipe.id)) return total + 1;
+    const progress = state.recipeProgress[recipe.id];
+    if (!progress) return total;
+    const ingredientRatio = recipe.ingredientes.length ? progress.checkedIngredients.length / recipe.ingredientes.length : 0;
+    const stepRatio = recipe.instrucciones.length ? progress.checkedSteps.length / recipe.instrucciones.length : 0;
+    return total + Math.min(1, (ingredientRatio + stepRatio) / 2);
+  }, 0);
+  const weekPercent = Math.round((Math.min(partialWeekProgress, visibleWeekTotal) / visibleWeekTotal) * 100);
+  const remainingWeek = Math.max(visibleWeekTotal - weekCompleted, 0);
+  const weekProgressMessage = weekCompleted >= visibleWeekTotal
+    ? "¡Semana completa! Ya tienes tus 7 ensaladas listas."
+    : weekCompleted === 0
+      ? "Empieza preparando tu primera ensalada para activar tu semana."
+      : `¡Vas muy bien! Prepara ${remainingWeek} más para completar tu semana saludable.`;
 
   const normalizeText = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -321,12 +334,12 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe, recipe
       <div className="premium-recipes-content">
         <section className="premium-week-progress-card">
           <div className="premium-week-circle" style={{ "--recipeProgress": `${weekPercent * 3.6}deg` } as CSSProperties}>
-            <strong>{visibleWeekCompleted}/{visibleWeekTotal}</strong>
+            <strong>{weekCompleted}/{visibleWeekTotal}</strong>
           </div>
 
           <div className="premium-week-copy">
-            <h2>Tu semana: {visibleWeekCompleted} de {visibleWeekTotal} listas</h2>
-            <p>¡Vas muy bien! Prepara {remainingWeek} más para completar tu semana saludable.</p>
+            <h2>Tu semana: {weekCompleted} de {visibleWeekTotal} listas</h2>
+            <p>{weekProgressMessage}</p>
           </div>
 
           <span className="premium-week-calendar" aria-hidden="true">
@@ -495,6 +508,7 @@ export function SaladRecipeDetail({ active, recipe, state, setState, openScreen 
         ...current,
         points: current.points + 35,
         completedRecipeIds: [...current.completedRecipeIds, recipe.id],
+        weekRecipeIds: current.weekRecipeIds.includes(recipe.id) ? current.weekRecipeIds : [...current.weekRecipeIds, recipe.id].slice(0, 7),
         preparedLog: [
           ...current.preparedLog,
           { id: `${recipe.id}-${Date.now()}`, recipeId: recipe.id, date: getTodayKey() }

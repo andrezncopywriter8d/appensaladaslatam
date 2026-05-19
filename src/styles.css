@@ -12061,3 +12061,50 @@ textarea,
 .bonus-combo-hotspot svg {
   opacity: 0 !important;
 }
+
+/* Proportion hotfix: keep the bonus hero title inside the text column on 390-430px. */
+.bonus-screen .bonus-hero-card {
+  grid-template-columns: minmax(0, 52%) minmax(0, 48%) !important;
+}
+
+.bonus-screen .bonus-hero-copy {
+  min-width: 0 !important;
+  padding: 22px 8px 22px 24px !important;
+}
+
+.bonus-screen .bonus-hero-copy h1 {
+  max-width: 178px !important;
+  font-size: clamp(34px, 9.2vw, 43px) !important;
+  line-height: 1.03 !important;
+  letter-spacing: -1.6px !important;
+  overflow-wrap: normal !important;
+}
+
+.bonus-screen .bonus-hero-copy p {
+  max-width: 158px !important;
+  font-size: clamp(13px, 3.55vw, 15px) !important;
+  line-height: 1.42 !important;
+}
+
+.bonus-screen .bonus-title-line {
+  margin: 17px 0 14px !important;
+}
+
+@media (max-width: 400px) {
+  .bonus-screen .bonus-hero-card {
+    grid-template-columns: minmax(0, 53%) minmax(0, 47%) !important;
+  }
+
+  .bonus-screen .bonus-hero-copy {
+    padding: 20px 7px 20px 21px !important;
+  }
+
+  .bonus-screen .bonus-hero-copy h1 {
+    max-width: 170px !important;
+    font-size: 34px !important;
+  }
+
+  .bonus-screen .bonus-hero-copy p {
+    max-width: 150px !important;
+  }
+}

@@ -278,7 +278,7 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
     return byCategory && byQuery;
   });
 
-  const premiumRecipes = filtered.slice(0, 24);
+  const premiumRecipes = filtered;
 
   const displayTags = (recipe: SaladRecipe, index: number) => {
     if (index === 0) return ["Fresca", "Equilibrada", "Clásica"];

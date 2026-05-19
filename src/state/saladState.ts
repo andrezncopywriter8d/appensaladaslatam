@@ -2,6 +2,7 @@ import { recipes, type SaladRecipe } from "../data/saladData";
 import { saladDressings } from "../data/saladDressings";
 
 export const SALAD_STORAGE_KEY = "ensaladasEnFrascoStateV2";
+const userSaladStorageKey = (userId: string) => `${SALAD_STORAGE_KEY}:${userId}`;
 
 export interface SaladProfile {
   readonly objective: string;
@@ -57,20 +58,37 @@ export const defaultSaladState: SaladState = {
   priceCalculator: { ingredients: 3.5, packaging: 0.8, extra: 0.5, margin: 45 }
 };
 
-export function loadSaladState(): SaladState {
+export function loadSaladState(userId?: string | null): SaladState {
   try {
+    if (userId) {
+      const userRaw = localStorage.getItem(userSaladStorageKey(userId));
+      if (userRaw) return normalizeState(JSON.parse(userRaw) as Partial<SaladState>, userId);
+
+      const legacyRaw = localStorage.getItem(SALAD_STORAGE_KEY);
+      if (legacyRaw) return normalizeState(JSON.parse(legacyRaw) as Partial<SaladState>, userId);
+    }
+
     const raw = localStorage.getItem(SALAD_STORAGE_KEY);
-    return raw ? normalizeState(JSON.parse(raw) as Partial<SaladState>) : defaultSaladState;
+    return raw ? normalizeState(JSON.parse(raw) as Partial<SaladState>, userId) : defaultSaladState;
   } catch {
     return defaultSaladState;
   }
 }
 
-export function saveSaladState(state: SaladState) {
-  localStorage.setItem(SALAD_STORAGE_KEY, JSON.stringify(state));
+export function saveSaladState(state: SaladState, userId?: string | null) {
+  const stateToSave = userId && state.onboardingCompleted
+    ? { ...state, onboardingUserId: state.onboardingUserId ?? userId }
+    : state;
+
+  if (userId) {
+    localStorage.setItem(userSaladStorageKey(userId), JSON.stringify(stateToSave));
+    return;
+  }
+
+  localStorage.setItem(SALAD_STORAGE_KEY, JSON.stringify(stateToSave));
 }
 
-export function normalizeState(partial: Partial<SaladState>): SaladState {
+export function normalizeState(partial: Partial<SaladState>, userId?: string | null): SaladState {
   const validRecipeIds = new Set(recipes.map((recipe) => recipe.id));
   const validDressingIds = new Set(saladDressings.map((dressing) => dressing.id));
   const safeWeekRecipeIds = (partial.weekRecipeIds ?? defaultSaladState.weekRecipeIds).filter((id) => validRecipeIds.has(id));
@@ -91,9 +109,12 @@ export function normalizeState(partial: Partial<SaladState>): SaladState {
       ])
   );
 
+  const onboardingUserId = partial.onboardingUserId ?? (partial.onboardingCompleted && userId ? userId : null);
+
   return {
     ...defaultSaladState,
     ...partial,
+    onboardingUserId,
     points: Number.isFinite(partial.points) ? Math.max(0, Number(partial.points)) : defaultSaladState.points,
     preparedLog: Array.from(new Map(safePreparedLog.map((entry) => [entry.id, entry])).values()),
     recipeProgress: safeRecipeProgress,

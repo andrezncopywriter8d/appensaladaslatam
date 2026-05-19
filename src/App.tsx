@@ -21,8 +21,8 @@ export interface RecipeCategoryRequest {
 }
 
 export function App() {
-  const [state, setState] = useState<SaladState>(() => loadSaladState());
   const [authSession, setAuthSession] = useState<AuthSession | null>(() => loadAuthSession());
+  const [state, setState] = useState<SaladState>(() => loadSaladState(authSession?.userId));
   const [activeScreen, setActiveScreen] = useState<ScreenId>("home");
   const [selectedRecipe, setSelectedRecipe] = useState<SaladRecipe>(recipes[0]);
   const [recipeDetailOpen, setRecipeDetailOpen] = useState(false);
@@ -31,8 +31,8 @@ export function App() {
   const transitionTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    saveSaladState(state);
-  }, [state]);
+    saveSaladState(state, authSession?.userId);
+  }, [state, authSession?.userId]);
 
   useEffect(() => () => {
     if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
@@ -41,11 +41,17 @@ export function App() {
   useEffect(() => {
     let mounted = true;
     getCurrentAuthSession().then((session) => {
-      if (mounted) setAuthSession(session);
+      if (mounted) {
+        setAuthSession(session);
+        setState(loadSaladState(session?.userId));
+      }
     });
 
     const unsubscribe = onAuthSessionChange((session) => {
-      if (mounted) setAuthSession(session);
+      if (mounted) {
+        setAuthSession(session);
+        setState(loadSaladState(session?.userId));
+      }
     });
 
     return () => {

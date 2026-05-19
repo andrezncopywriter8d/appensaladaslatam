@@ -15,6 +15,7 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
   const navItems = [
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
     { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId, recipeCategory: "Todas" },
+    { key: "dressings", label: "Aderezos", icon: Utensils, screen: "dressings" as ScreenId },
     { key: "bonus", label: "Bonos", icon: Gift, screen: "guide" as ScreenId },
     { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, recipeCategory: "Favoritas" }
   ];
@@ -28,6 +29,8 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
             ? activeScreen === "home"
             : item.key === "bonus"
               ? activeScreen === "guide"
+              : item.key === "dressings"
+                ? activeScreen === "dressings"
               : item.key === "recipes"
                 ? activeScreen === "recipes" && activeRecipeCategory !== "Favoritas"
                 : item.key === "favorites"

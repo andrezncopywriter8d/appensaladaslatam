@@ -12514,3 +12514,58 @@ textarea,
     padding: 10px;
   }
 }
+
+/* ============================================================
+   BOTTOM NAV 5 ITEMS - INICIO / RECETAS / ADEREZOS / BONOS / FAVORITOS
+   Keeps the new sauces section accessible from the main app bar.
+   ============================================================ */
+
+.bottom-nav.salad-premium-bottom-nav {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  width: min(calc(100% - 24px), 408px) !important;
+  height: 78px !important;
+  padding: 8px 8px !important;
+}
+
+.bottom-nav.salad-premium-bottom-nav button {
+  grid-template-rows: 24px 14px !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  min-height: 58px !important;
+  border-radius: 16px !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+}
+
+.bottom-nav.salad-premium-bottom-nav button svg {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.bottom-nav.salad-premium-bottom-nav button span {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.bottom-nav.salad-premium-bottom-nav button.active {
+  color: #2f7d32 !important;
+  background: rgba(232, 242, 214, 0.62) !important;
+}
+
+@media (max-width: 370px) {
+  .bottom-nav.salad-premium-bottom-nav {
+    width: min(calc(100% - 16px), 408px) !important;
+    padding-inline: 6px !important;
+  }
+
+  .bottom-nav.salad-premium-bottom-nav button {
+    font-size: 8px !important;
+  }
+
+  .bottom-nav.salad-premium-bottom-nav button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}

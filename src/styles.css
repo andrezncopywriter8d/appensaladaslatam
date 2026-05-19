@@ -10111,15 +10111,15 @@ select {
   }
 
   .salad-premium-home .premium-explore-card {
-    min-height: 108px !important;
-    padding: 8px 6px 15px !important;
+    min-height: 114px !important;
+    padding: 9px 6px 15px !important;
   }
 
   .salad-premium-home .premium-icon-orb,
   .salad-premium-home .premium-icon-orb picture,
   .salad-premium-home .premium-icon-orb img {
-    width: 43px !important;
-    height: 43px !important;
+    width: 52px !important;
+    height: 52px !important;
   }
 
   .salad-premium-home .premium-card-label {

@@ -466,6 +466,8 @@ export function SaladRecipeDetail({ active, recipe, state, setState, openScreen 
   const ingredientPercent = Math.round((progress.checkedIngredients.length / recipe.ingredientes.length) * 100);
   const stepPercent = Math.round((progress.checkedSteps.length / recipe.instrucciones.length) * 100);
   const readyToFinish = progress.checkedIngredients.length >= Math.min(3, recipe.ingredientes.length) && progress.checkedSteps.length >= Math.min(2, recipe.instrucciones.length);
+  const recipeIndex = Math.max(0, recipes.findIndex((item) => item.id === recipe.id));
+  const imageIndex = (recipeIndex % 6) + 1;
 
   function toggleRecipeProgress(kind: "checkedIngredients" | "checkedSteps", value: string) {
     setState((current) => {
@@ -505,42 +507,47 @@ export function SaladRecipeDetail({ active, recipe, state, setState, openScreen 
 
   return (
     <section className={`screen recipe-detail-screen ${active ? "active" : ""}`}>
-      <button className="detail-back" type="button" onClick={() => openScreen("recipes")}><ArrowLeft size={18} /> Volver a recetas</button>
-      <Header eyebrow="Receta" title={recipe.nombre} subtitle={recipe.descripcion} />
-      <article className="ritual-player banana-recipe-card recipe-delivery">
+      <button className="detail-back kitchen-back" type="button" onClick={() => openScreen("recipes")}><ArrowLeft size={18} /> Volver a recetas</button>
+      <article className="kitchen-recipe-card">
         {winMessage ? <div className="win-toast"><Award size={18} /> {winMessage}</div> : null}
-        <div className="recipe-hero-card">
-          <div><span className="recipe-mini-kicker"><Salad size={14} /> En frasco</span><h2>{recipe.categoria}</h2><p>{recipe.objetivo}</p></div>
-          <div className="banana-bowl-visual" aria-hidden="true"><span>{recipe.imagenPlaceholder || "salad"}</span><i /></div>
-        </div>
-        <section className="recipe-game-card">
+        <header className="kitchen-hero">
+          <picture className="kitchen-hero-photo">
+            <source srcSet={`/assets/recipes/recipe-card-${imageIndex}.webp`} type="image/webp" />
+            <img src={`/assets/recipes/recipe-card-${imageIndex}.jpg`} alt={recipe.nombre} loading="eager" decoding="async" />
+          </picture>
           <div>
-            <span><Sparkles size={15} /> Misión rápida</span>
-            <strong>{completed ? "Frasco registrado" : readyToFinish ? "Listo para marcar como preparada" : "Sigue el checklist y desbloquea puntos"}</strong>
+            <span className="kitchen-eyebrow"><Salad size={15} /> Receta guiada</span>
+            <h1>{recipe.nombre}</h1>
+            <p>{recipe.descripcion}</p>
           </div>
-          <div className="mission-grid">
+        </header>
+        <section className="kitchen-progress-card">
+          <div>
+            <span><Sparkles size={15} /> Preparación paso a paso</span>
+            <strong>{completed ? "Ya registraste esta receta" : readyToFinish ? "Lista para preparar y registrar" : "Marca ingredientes y pasos mientras cocinas"}</strong>
+          </div>
+          <div className="kitchen-progress-grid">
             <div><b>{ingredientPercent}%</b><small>ingredientes</small></div>
-            <div><b>{stepPercent}%</b><small>preparación</small></div>
-            <div><b>+35</b><small>puntos</small></div>
+            <div><b>{stepPercent}%</b><small>pasos</small></div>
           </div>
         </section>
-        <div className="recipe-detail-grid">
+        <div className="recipe-detail-grid kitchen-summary">
           <Info label="Tiempo" value={recipe.tiempoPreparacion} />
-          <Info label="Porciones" value={`${recipe.porciones}`} />
-          <Info label="Duracion" value={recipe.duracionRefrigerada} />
-          <Info label="Dificultad" value={recipe.dificultad} />
+          <Info label="Porciones" value={`${recipe.porciones} frasco`} />
+          <Info label="Duración" value={recipe.duracionRefrigerada} />
+          <Info label="Nivel" value={recipe.dificultad} />
         </div>
-        <section className="recipe-block interactive-block"><h3>Ingredientes</h3><ul>{recipe.ingredientes.map((item) => {
+        <section className="recipe-block interactive-block kitchen-section kitchen-check-section"><h3>Ingredientes</h3><ul>{recipe.ingredientes.map((item) => {
           const checked = progress.checkedIngredients.includes(item);
           return <li className={checked ? "checked" : ""} key={item}><button type="button" onClick={() => toggleRecipeProgress("checkedIngredients", item)}>{checked ? <Check size={15} /> : <Plus size={15} />}{item}</button></li>;
         })}</ul></section>
-        <section className="recipe-block"><h3>Aderezo recomendado</h3><p>{recipe.aderezoRecomendado}</p></section>
-        <section className="recipe-block layer-builder"><h3>Capas del frasco</h3><ol>{recipe.capas.map((item, index) => <li key={item}><span>{index + 1}</span>{item}</li>)}</ol></section>
-        <section className="recipe-block interactive-block"><h3>Preparación guiada</h3><ol>{recipe.instrucciones.map((item) => {
+        <section className="recipe-block kitchen-section kitchen-dressing-card"><h3>Aderezo recomendado</h3><p>{recipe.aderezoRecomendado}</p><small>Colócalo al fondo del frasco o llévalo separado si prefieres las hojas más crujientes.</small></section>
+        <section className="recipe-block layer-builder kitchen-section kitchen-layer-section"><h3>Capas del frasco</h3><ol>{recipe.capas.map((item, index) => <li key={item}><span>{index + 1}</span>{item}</li>)}</ol></section>
+        <section className="recipe-block interactive-block kitchen-section kitchen-step-section"><h3>Preparación guiada</h3><ol>{recipe.instrucciones.map((item) => {
           const checked = progress.checkedSteps.includes(item);
           return <li className={checked ? "checked" : ""} key={item}><button type="button" onClick={() => toggleRecipeProgress("checkedSteps", item)}>{checked ? <Check size={15} /> : <Plus size={15} />}{item}</button></li>;
         })}</ol></section>
-        <section className="recipe-block"><h3>Consejo de uso</h3>{recipe.consejos.map((item) => <p key={item}>{item}</p>)}</section>
+        <section className="recipe-block kitchen-section kitchen-tip-card"><h3>Consejo para que dure más</h3>{recipe.consejos.map((item) => <p key={item}>{item}</p>)}</section>
         <div className="action-stack">
           <button className="protocol-primary full dopamine-button" type="button" onClick={completeRecipe}>{completed ? "Marcar como pendiente" : readyToFinish ? "Registrar frasco preparado" : "Registrar de todos modos"}</button>
           <button className="protocol-secondary full" type="button" onClick={() => setState((current) => ({ ...current, weekRecipeIds: inWeek ? current.weekRecipeIds : [...current.weekRecipeIds, recipe.id] }))}>{inWeek ? "Ya esta en mi semana" : "Agregar a mi semana"}</button>

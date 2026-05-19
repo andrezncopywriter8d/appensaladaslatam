@@ -81,7 +81,10 @@ export function App() {
     setSelectedRecipe(recipe);
     setActiveScreen("recipes");
     setRecipeDetailOpen(true);
-    window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      document.querySelector(".app-shell")?.scrollTo({ top: 0, behavior: "auto" });
+    });
   }
 
   function beginScreenTransition() {

@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
-import { ArrowLeft, Award, Bell, BookOpen, Check, ChevronRight, Clock3, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShieldCheck, ShoppingBasket, SlidersHorizontal, Sparkles, Trash2, Utensils } from "lucide-react";
+import { ArrowLeft, Award, Bell, Check, ChevronRight, Clock3, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShieldCheck, ShoppingBasket, SlidersHorizontal, Sparkles, Trash2, Utensils } from "lucide-react";
 import { recipes, weeklyMenus, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
 
@@ -15,8 +15,7 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
     { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId, recipeCategory: "Todas" },
     { key: "bonus", label: "Bonos", icon: Gift, screen: "guide" as ScreenId },
-    { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, recipeCategory: "Favoritas" },
-    { key: "guide", label: "Mi guía", icon: BookOpen, screen: "guide" as ScreenId }
+    { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, recipeCategory: "Favoritas" }
   ];
 
   return (
@@ -28,9 +27,7 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
             ? activeScreen === "home"
             : item.key === "bonus"
               ? activeScreen === "guide"
-              : item.key === "guide"
-                ? false
-                : item.key === "recipes"
+              : item.key === "recipes"
                 ? activeScreen === "recipes" && activeRecipeCategory !== "Favoritas"
                 : item.key === "favorites"
                   ? activeScreen === "recipes" && activeRecipeCategory === "Favoritas"

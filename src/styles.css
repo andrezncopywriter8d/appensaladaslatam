@@ -11922,7 +11922,7 @@ textarea,
 }
 
 .app-shell:has(.bonus-screen.active) .bottom-nav.salad-premium-bottom-nav {
-  grid-template-columns: repeat(5, 1fr) !important;
+  grid-template-columns: repeat(4, 1fr) !important;
   width: min(calc(100% - 28px), 392px) !important;
   height: 74px !important;
   bottom: calc(10px + env(safe-area-inset-bottom)) !important;

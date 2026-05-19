@@ -28,6 +28,7 @@ export interface SaladState {
   readonly checkedShoppingItems: readonly string[];
   readonly customShoppingItems: readonly string[];
   readonly completedGuides: readonly string[];
+  readonly unlockedBonusIds: readonly string[];
   readonly priceCalculator: {
     readonly ingredients: number;
     readonly packaging: number;
@@ -51,6 +52,7 @@ export const defaultSaladState: SaladState = {
   checkedShoppingItems: [],
   customShoppingItems: [],
   completedGuides: [],
+  unlockedBonusIds: [],
   priceCalculator: { ingredients: 3.5, packaging: 0.8, extra: 0.5, margin: 45 }
 };
 
@@ -73,6 +75,7 @@ export function normalizeState(partial: Partial<SaladState>): SaladState {
   const safeCompletedRecipeIds = (partial.completedRecipeIds ?? defaultSaladState.completedRecipeIds).filter((id) => validRecipeIds.has(id));
   const safeFavoriteRecipeIds = (partial.favoriteRecipeIds ?? defaultSaladState.favoriteRecipeIds).filter((id) => validRecipeIds.has(id));
   const safePreparedLog = (partial.preparedLog ?? defaultSaladState.preparedLog).filter((entry) => validRecipeIds.has(entry.recipeId));
+  const safeUnlockedBonusIds = (partial.unlockedBonusIds ?? defaultSaladState.unlockedBonusIds).filter((id) => typeof id === "string" && id.length > 0);
   const safeRecipeProgress = Object.fromEntries(
     Object.entries(partial.recipeProgress ?? {})
       .filter(([recipeId]) => validRecipeIds.has(recipeId))
@@ -94,6 +97,7 @@ export function normalizeState(partial: Partial<SaladState>): SaladState {
     weekRecipeIds: safeWeekRecipeIds.length ? Array.from(new Set(safeWeekRecipeIds)) : defaultSaladState.weekRecipeIds,
     completedRecipeIds: Array.from(new Set(safeCompletedRecipeIds)),
     favoriteRecipeIds: Array.from(new Set(safeFavoriteRecipeIds)),
+    unlockedBonusIds: Array.from(new Set(safeUnlockedBonusIds)),
     priceCalculator: {
       ...defaultSaladState.priceCalculator,
       ...(partial.priceCalculator ?? {})

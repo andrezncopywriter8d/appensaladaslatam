@@ -10853,3 +10853,569 @@ textarea,
     font-size: 14px;
   }
 }
+
+/* ============================================================
+   BONOS ESPECIALES STOREFRONT
+   ============================================================ */
+
+.app-shell:has(.bonus-screen.active) {
+  width: min(100%, 430px) !important;
+  min-height: 100dvh !important;
+  margin: 0 auto !important;
+  overflow-x: hidden !important;
+  background: #fffaf0 !important;
+  box-shadow: 0 0 0 1px rgba(47, 93, 32, 0.08), 0 22px 70px rgba(47, 93, 32, 0.16) !important;
+}
+
+.app-shell:has(.bonus-screen.active) .status-glow {
+  display: none !important;
+}
+
+.screen.bonus-screen {
+  display: none;
+  min-height: 100dvh;
+  padding: 0 0 calc(112px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at -10% 72%, rgba(139, 166, 106, 0.18), transparent 118px),
+    radial-gradient(circle at 108% 84%, rgba(139, 166, 106, 0.16), transparent 118px),
+    linear-gradient(180deg, #fffaf0 0%, #fbf4e4 52%, #fff9ee 100%);
+  color: #173d22;
+}
+
+.screen.bonus-screen.active {
+  display: block !important;
+}
+
+.bonus-screen .bonus-topbar {
+  border-radius: 0 0 24px 24px !important;
+  background:
+    radial-gradient(circle at 50% -40%, rgba(255, 255, 255, 0.13), transparent 165px),
+    linear-gradient(180deg, #506f3a 0%, #3f6031 100%) !important;
+}
+
+.bonus-content {
+  position: relative;
+  z-index: 2;
+  padding: 28px 18px 0;
+}
+
+.bonus-page-head > h1 {
+  margin: 0 0 10px;
+  color: #184b27;
+  font-family: Poppins, Montserrat, Inter, system-ui, sans-serif;
+  font-size: clamp(34px, 9.2vw, 44px);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -1.4px;
+}
+
+.bonus-page-head > p {
+  max-width: 350px;
+  margin: 0 0 22px;
+  color: #4f5d4d;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.bonus-hero-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42%;
+  min-height: 246px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(93, 139, 68, 0.2);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(126, 165, 91, 0.22), transparent 96px),
+    radial-gradient(circle at 10% 100%, rgba(145, 177, 111, 0.2), transparent 120px),
+    linear-gradient(135deg, #f5faeb 0%, #fffdf7 62%, #e8f4db 100%);
+  box-shadow: 0 18px 36px rgba(61, 83, 44, 0.1);
+}
+
+.bonus-hero-copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 22px 8px 22px 22px;
+}
+
+.bonus-pill {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 7px;
+  min-height: 33px;
+  padding: 0 13px;
+  border: 1px solid rgba(73, 130, 55, 0.2);
+  border-radius: 999px;
+  color: #2f7d32;
+  background: rgba(229, 243, 214, 0.92);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+}
+
+.bonus-pill.hot {
+  color: #fffef6;
+  background: linear-gradient(180deg, #5b9a43, #31762f);
+}
+
+.bonus-hero-card h2 {
+  max-width: 235px;
+  margin: 18px 0 16px;
+  color: #184b27;
+  font-size: clamp(21px, 6.2vw, 28px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.8px;
+}
+
+.bonus-hero-card ul,
+.bonus-store-card ul,
+.bonus-combo-card ul {
+  display: grid;
+  gap: 9px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.bonus-hero-card li,
+.bonus-store-card li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #3f4b3d;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.bonus-hero-card li svg,
+.bonus-store-card li svg {
+  flex: 0 0 auto;
+  color: #fff;
+  background: #5ca84d;
+  border-radius: 999px;
+  padding: 2px;
+}
+
+.bonus-hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-height: 38px;
+  margin-top: 18px;
+  padding: 0 15px;
+  border-radius: 999px;
+  color: #fffef6;
+  background: linear-gradient(180deg, #4f823b, #225d2a);
+  box-shadow: 0 10px 20px rgba(47, 107, 45, 0.22);
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.bonus-hero-card picture {
+  position: relative;
+  align-self: stretch;
+  min-width: 0;
+}
+
+.bonus-hero-card img {
+  position: absolute;
+  right: -76px;
+  bottom: -14px;
+  width: 235px;
+  max-width: none;
+  height: 270px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 22px rgba(53, 64, 37, 0.16));
+}
+
+.bonus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.bonus-store-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 250px;
+  padding: 12px 10px;
+  border: 1px solid rgba(74, 93, 55, 0.12);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 253, 248, 0.94));
+  box-shadow:
+    0 12px 24px rgba(66, 62, 41, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.bonus-store-card.unlocked {
+  border-color: rgba(77, 132, 57, 0.26);
+  background:
+    radial-gradient(circle at 72% 0%, rgba(166, 217, 106, 0.2), transparent 75px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 255, 242, 0.94));
+}
+
+.bonus-card-top {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.bonus-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  color: #2f7331;
+  background: #e8f3d9;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.bonus-icon-sauce,
+.bonus-icon-list {
+  background: #fbedd6;
+}
+
+.bonus-icon-family {
+  background: #fde7df;
+}
+
+.bonus-mini-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  max-width: 100%;
+  padding: 0 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  color: #3f7836;
+  background: #edf7e2;
+  font-size: 8px;
+  font-weight: 900;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bonus-store-card h3 {
+  min-height: 40px;
+  margin: 12px 0 7px;
+  color: #174824;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.25px;
+  text-align: center;
+}
+
+.bonus-store-card p {
+  min-height: 54px;
+  margin: 0 0 10px;
+  color: #4b5548;
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.bonus-store-card ul {
+  min-height: 52px;
+  gap: 6px;
+}
+
+.bonus-store-card li {
+  align-items: flex-start;
+  gap: 5px;
+  color: #42523f;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.bonus-store-card li svg {
+  width: 13px;
+  height: 13px;
+  margin-top: 1px;
+}
+
+.bonus-price {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  min-height: 31px;
+  margin: auto 0 9px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: #184b27;
+  background: #e6f2d7;
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.bonus-actions {
+  display: grid;
+  gap: 6px;
+}
+
+.bonus-primary-action,
+.bonus-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 35px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bonus-primary-action {
+  color: #fffef6;
+  background: linear-gradient(180deg, #4b8439, #1f5a28);
+  box-shadow: 0 10px 18px rgba(40, 93, 37, 0.18);
+}
+
+.bonus-secondary-action {
+  color: #1f5a28;
+  background: #eef7e2;
+}
+
+.bonus-primary-action.combo {
+  min-height: 54px;
+  margin-top: 18px;
+  font-size: 15px;
+}
+
+.bonus-store-card small,
+.bonus-combo-card > small {
+  display: block;
+  margin-top: 7px;
+  color: #6b7465;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.bonus-error {
+  color: #a84832 !important;
+}
+
+.bonus-combo-card {
+  position: relative;
+  margin: 14px 0 0;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(80, 111, 58, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 80% 38%, rgba(167, 212, 125, 0.28), transparent 132px),
+    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(246, 252, 235, 0.96));
+  box-shadow: 0 16px 34px rgba(63, 64, 43, 0.08);
+}
+
+.bonus-combo-card h2 {
+  max-width: 230px;
+  margin: 12px 0 7px;
+  color: #184b27;
+  font-size: 25px;
+  font-weight: 950;
+  line-height: 1.04;
+  letter-spacing: -0.8px;
+}
+
+.bonus-combo-card p {
+  max-width: 230px;
+  margin: 0 0 12px;
+  color: #4b5548;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.bonus-combo-card li {
+  color: #42523f;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.bonus-combo-price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.bonus-combo-price span {
+  color: #777d70;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: line-through;
+}
+
+.bonus-combo-price strong {
+  display: inline-flex;
+  align-items: center;
+  min-height: 39px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: #184b27;
+  background: #dff0cf;
+  font-size: 22px;
+  font-weight: 950;
+}
+
+.bonus-combo-orbit {
+  position: absolute;
+  top: 34px;
+  right: 22px;
+  display: grid;
+  place-items: center;
+  width: 122px;
+  height: 122px;
+  border-radius: 999px;
+  background: rgba(229, 243, 214, 0.66);
+}
+
+.bonus-combo-orbit span {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  color: #2f7331;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 7px 16px rgba(68, 79, 50, 0.1);
+}
+
+.bonus-combo-orbit span:nth-child(1) { transform: translate(-36px, -24px); }
+.bonus-combo-orbit span:nth-child(2) { transform: translate(33px, -29px); }
+.bonus-combo-orbit span:nth-child(3) {
+  width: 54px;
+  height: 54px;
+  color: #fffef6;
+  background: linear-gradient(180deg, #4b8439, #1f5a28);
+}
+.bonus-combo-orbit span:nth-child(4) { transform: translate(34px, 34px); }
+
+.app-shell:has(.bonus-screen.active) .bottom-nav.salad-premium-bottom-nav button.active {
+  color: #2f7d32 !important;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(166, 217, 106, 0.2), transparent 68%),
+    rgba(232, 242, 214, 0.65) !important;
+}
+
+@media (max-width: 400px) {
+  .bonus-content {
+    padding-inline: 16px;
+  }
+
+  .bonus-hero-card {
+    grid-template-columns: minmax(0, 1fr) 36%;
+    min-height: 230px;
+  }
+
+  .bonus-hero-copy {
+    padding: 18px 4px 18px 18px;
+  }
+
+  .bonus-hero-card h2 {
+    max-width: 205px;
+    font-size: 20px;
+  }
+
+  .bonus-hero-card li {
+    font-size: 12px;
+  }
+
+  .bonus-hero-card img {
+    right: -86px;
+    bottom: -12px;
+    width: 214px;
+    height: 248px;
+  }
+
+  .bonus-grid {
+    gap: 10px;
+  }
+
+  .bonus-store-card {
+    min-height: 246px;
+    padding: 10px 8px;
+    border-radius: 16px;
+  }
+
+  .bonus-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .bonus-store-card h3 {
+    font-size: 12.5px;
+  }
+
+  .bonus-store-card p {
+    font-size: 9.5px;
+  }
+
+  .bonus-store-card li {
+    font-size: 8.7px;
+  }
+
+  .bonus-primary-action,
+  .bonus-secondary-action {
+    min-height: 33px;
+    font-size: 9.7px;
+  }
+
+  .bonus-combo-card {
+    padding: 18px;
+  }
+
+  .bonus-combo-orbit {
+    right: 14px;
+    width: 104px;
+    height: 104px;
+  }
+}
+
+@media (max-width: 360px) {
+  .bonus-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bonus-hero-card {
+    grid-template-columns: 1fr;
+  }
+
+  .bonus-hero-card picture {
+    display: none;
+  }
+
+  .bonus-store-card {
+    min-height: 230px;
+  }
+}

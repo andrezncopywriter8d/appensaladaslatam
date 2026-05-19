@@ -1,6 +1,6 @@
 import { useEffect, useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
-import { ArrowLeft, Award, Bell, BookOpen, Check, ChevronRight, Clock3, Copy, Heart, Home, Layers3, Leaf, Menu, Plus, Salad, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Star, Trash2, Utensils } from "lucide-react";
-import { conservationTips, dressings, faq, homeCards, layerSteps, navigationItems, recipes, sellingTips, weeklyMenus, type Dressing, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
+import { ArrowLeft, Award, Bell, Check, ChevronRight, Clock3, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Star, Trash2, Utensils } from "lucide-react";
+import { recipes, weeklyMenus, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
 
 interface AppContext {
@@ -15,7 +15,7 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
     { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId, recipeCategory: "Todas" },
     { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, recipeCategory: "Favoritas" },
-    { key: "guide", label: "Mi guía", icon: BookOpen, screen: "guide" as ScreenId }
+    { key: "guide", label: "Bonos", icon: Gift, screen: "guide" as ScreenId }
   ];
 
   return (
@@ -632,28 +632,262 @@ export function SaladShoppingScreen({ active, state, setState }: AppContext & { 
   );
 }
 
-export function SaladGuideScreen({ active, state, setState }: AppContext & { readonly active: boolean }) {
-  const [ingredients, setIngredients] = useState(state.priceCalculator.ingredients);
-  const [packaging, setPackaging] = useState(state.priceCalculator.packaging);
-  const [extra, setExtra] = useState(state.priceCalculator.extra);
-  const [margin, setMargin] = useState(state.priceCalculator.margin);
-  const price = (ingredients + packaging + extra) * (1 + margin / 100);
-  const modules = [...conservationTips, ...sellingTips];
+type BonusStatus = "idle" | "loading" | "error";
 
-  function savePrice() {
-    setState((current) => ({ ...current, priceCalculator: { ingredients, packaging, extra, margin } }));
+type BonusOffer = {
+  readonly id: string;
+  readonly name: string;
+  readonly price: string;
+  readonly badge: "BONO PREMIUM" | "POPULAR";
+  readonly description: string;
+  readonly benefits: readonly string[];
+  readonly checkoutUrl: string;
+  readonly contentUrl: string;
+  readonly icon: "avocado" | "sauce" | "calendar" | "list" | "shop" | "family";
+  readonly defaultUnlocked?: boolean;
+};
+
+const bonusOffers: readonly BonusOffer[] = [
+  {
+    id: "antojos-cero",
+    name: "Pack Antojos Cero",
+    price: "$2",
+    badge: "POPULAR",
+    description: "30 snacks y postres rápidos para matar las ganas de dulce sin romper la dieta.",
+    benefits: ["Postres listos en 5 minutos", "Opciones con banana, yogur, avena y chocolate"],
+    checkoutUrl: "https://pay.ensaladasenfrasco.com/antojos-cero",
+    contentUrl: "https://app.ensaladasenfrasco.com/bonos/antojos-cero",
+    icon: "avocado"
+  },
+  {
+    id: "salsas-premium",
+    name: "Pack Salsas Premium",
+    price: "$1",
+    badge: "BONO PREMIUM",
+    description: "15 aderezos cremosos para que tus ensaladas no sepan siempre igual.",
+    benefits: ["Salsa tipo Big Mac saludable", "Aderezos dulces, cítricos y cremosos"],
+    checkoutUrl: "https://pay.ensaladasenfrasco.com/salsas-premium",
+    contentUrl: "https://app.ensaladasenfrasco.com/bonos/salsas-premium",
+    icon: "sauce"
+  },
+  {
+    id: "menu-7-dias",
+    name: "Menú 7 Días en Frasco",
+    price: "$2",
+    badge: "POPULAR",
+    description: "Un plan semanal listo para saber qué preparar cada día sin pensar demasiado.",
+    benefits: ["Combinaciones ya organizadas", "Ideal para preparar todo el domingo"],
+    checkoutUrl: "https://pay.ensaladasenfrasco.com/menu-7-dias",
+    contentUrl: "https://app.ensaladasenfrasco.com/bonos/menu-7-dias",
+    icon: "calendar"
+  },
+  {
+    id: "lista-inteligente",
+    name: "Lista de Compras Inteligente",
+    price: "$1",
+    badge: "BONO PREMIUM",
+    description: "Lista práctica por ingredientes para comprar menos, ahorrar más y evitar desperdicios.",
+    benefits: ["Separada por categorías", "Pensada para toda la semana"],
+    checkoutUrl: "https://pay.ensaladasenfrasco.com/lista-inteligente",
+    contentUrl: "https://app.ensaladasenfrasco.com/bonos/lista-inteligente",
+    icon: "list"
+  },
+  {
+    id: "vender-ensaladas",
+    name: "Guía Para Vender Ensaladas",
+    price: "$3",
+    badge: "BONO PREMIUM",
+    description: "Aprende a calcular precios, armar combos y vender tus ensaladas por WhatsApp.",
+    benefits: ["Precios sugeridos y margen", "Ideas de combos para vender"],
+    checkoutUrl: "https://pay.ensaladasenfrasco.com/vender-ensaladas",
+    contentUrl: "https://app.ensaladasenfrasco.com/bonos/vender-ensaladas",
+    icon: "shop"
+  },
+  {
+    id: "plan-familiar",
+    name: "Plan Familiar Saludable",
+    price: "$2",
+    badge: "BONO PREMIUM",
+    description: "Recetas y combinaciones para que tu familia también coma rico sin reclamar.",
+    benefits: ["Opciones para niños y esposo", "Sabores más cremosos y fáciles"],
+    checkoutUrl: "https://pay.ensaladasenfrasco.com/plan-familiar",
+    contentUrl: "https://app.ensaladasenfrasco.com/bonos/plan-familiar",
+    icon: "family"
+  }
+];
+
+export function SaladGuideScreen({ active, state }: AppContext & { readonly active: boolean }) {
+  const [bonusStatus, setBonusStatus] = useState<Record<string, BonusStatus>>({});
+  const unlockedBonusIds = state.unlockedBonusIds ?? [];
+  const comboUnlocked = ["antojos-cero", "salsas-premium", "menu-7-dias"].every((id) => unlockedBonusIds.includes(id) || bonusOffers.find((bonus) => bonus.id === id)?.defaultUnlocked);
+
+  function isUnlocked(bonus: BonusOffer) {
+    return Boolean(bonus.defaultUnlocked || unlockedBonusIds.includes(bonus.id));
+  }
+
+  function setStatus(id: string, status: BonusStatus) {
+    setBonusStatus((current) => ({ ...current, [id]: status }));
+  }
+
+  function openExternal(id: string, url: string) {
+    if (!url) {
+      setStatus(id, "error");
+      return;
+    }
+
+    setStatus(id, "loading");
+    const opened = window.open(url, "_blank", "noopener,noreferrer");
+    window.setTimeout(() => setStatus(id, opened ? "idle" : "error"), 520);
   }
 
   return (
-    <section className={`screen ${active ? "active" : ""}`}>
-      <Header eyebrow="Bonus" title="Guia practica" subtitle="Metodo de capas, aderezos, conservacion, venta, precios y FAQ." />
-      <section className="chart-card"><h3>El metodo de capas</h3><p>El secreto para que tus ensaladas se mantengan frescas por mas tiempo esta en el orden correcto de los ingredientes.</p><div className="banana-timeline">{layerSteps.map((step, index) => <div className="banana-timeline-item" key={step}><span>{index + 1}</span><div><strong>{step}</strong><small>Conserva textura y frescura.</small></div></div>)}</div></section>
-      <section className="chart-card"><h3>Aderezos</h3>{dressings.map((dressing: Dressing) => <article className="routine-item" key={dressing.id}><div><strong>{dressing.nombre}</strong><p>{dressing.descripcion}</p><small>Combina con: {dressing.combinaCon.join(", ")}</small></div></article>)}</section>
-      <section className="chart-card"><h3>Vende tus ensaladas</h3><div className="recipe-detail-grid"><PriceField label="Ingredientes" value={ingredients} onChange={setIngredients} /><PriceField label="Frasco" value={packaging} onChange={setPackaging} /><PriceField label="Extra" value={extra} onChange={setExtra} /><PriceField label="Margen %" value={margin} onChange={setMargin} /></div><div className="result-card"><strong>Precio sugerido: ${price.toFixed(2)}</strong><span>Calculo simple: costos x margen deseada.</span></div><button className="protocol-secondary full" type="button" onClick={savePrice}>Guardar calculo</button></section>
-      <section className="chart-card"><h3>Consejos y venta</h3>{modules.map((module) => <article className="routine-item" key={module.id}><div><strong>{module.title}</strong><p>{module.description}</p><small>{module.readingTime}</small></div><button className="icon-soft" type="button" onClick={() => setState((current) => ({ ...current, completedGuides: toggle(current.completedGuides, module.id) }))}>{state.completedGuides.includes(module.id) ? <Check size={18} /> : <Star size={18} />}</button></article>)}</section>
-      <section className="chart-card"><h3>FAQ</h3>{faq.map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}</summary><p>{answer}</p></details>)}</section>
+    <section className={`screen bonus-screen ${active ? "active" : ""}`}>
+      <header className="premium-salad-header bonus-topbar">
+        <button className="premium-header-button" type="button" aria-label="Abrir menú">
+          <Menu size={28} strokeWidth={2.5} />
+        </button>
+
+        <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
+          <strong>ensaladas</strong>
+          <small>EN FRASCO</small>
+        </div>
+
+        <button className="premium-header-button" type="button" aria-label="Notificaciones">
+          <Bell size={25} strokeWidth={2.3} />
+        </button>
+      </header>
+
+      <div className="bonus-content">
+        <BonusHeader />
+
+        <div className="bonus-grid" id="bonos-disponibles">
+          {bonusOffers.map((bonus) => (
+            <BonusCard
+              bonus={bonus}
+              key={bonus.id}
+              status={bonusStatus[bonus.id] ?? "idle"}
+              unlocked={isUnlocked(bonus)}
+              onOpen={() => openExternal(bonus.id, bonus.contentUrl)}
+              onUnlock={() => openExternal(bonus.id, bonus.checkoutUrl)}
+            />
+          ))}
+        </div>
+
+        <BonusComboCard
+          status={bonusStatus.combo ?? "idle"}
+          unlocked={comboUnlocked}
+          onOpen={() => openExternal("combo", "https://app.ensaladasenfrasco.com/bonos/combo-recomendado")}
+          onUnlock={() => openExternal("combo", "https://pay.ensaladasenfrasco.com/combo-recomendado")}
+        />
+      </div>
     </section>
   );
+}
+
+function BonusHeader() {
+  return (
+    <section className="bonus-page-head">
+      <h1>Bonos Especiales</h1>
+      <p>Complementa tus ensaladas con guías rápidas, menús y packs exclusivos desde solo $1.</p>
+
+      <article className="bonus-hero-card">
+        <div className="bonus-hero-copy">
+          <span className="bonus-pill"><Gift size={16} /> OFERTAS EXCLUSIVAS</span>
+          <h2>Desbloquea herramientas extras para ahorrar tiempo, comer más rico y seguir bajando de peso sin complicarte.</h2>
+          <ul>
+            <li><Check size={16} /> Contenido práctico</li>
+            <li><Check size={16} /> Listo para usar</li>
+            <li><Check size={16} /> Resultados deliciosos</li>
+          </ul>
+          <a className="bonus-hero-button" href="#bonos-disponibles">Ver bonos disponibles</a>
+        </div>
+
+        <picture>
+          <source srcSet="/assets/bonos/bonus-hero.webp" type="image/webp" />
+          <img src="/assets/bonos/bonus-hero.png" alt="Ensalada en frasco con verduras frescas y hojas verdes" loading="eager" decoding="async" />
+        </picture>
+      </article>
+    </section>
+  );
+}
+
+function BonusCard({ bonus, status, unlocked, onOpen, onUnlock }: { readonly bonus: BonusOffer; readonly status: BonusStatus; readonly unlocked: boolean; readonly onOpen: () => void; readonly onUnlock: () => void }) {
+  return (
+    <article className={`bonus-store-card ${unlocked ? "unlocked" : ""}`}>
+      <div className="bonus-card-top">
+        <span className={`bonus-icon bonus-icon-${bonus.icon}`} aria-hidden="true">{bonusIcon(bonus.icon)}</span>
+        <span className="bonus-mini-badge">{unlocked ? "Desbloqueado" : bonus.badge}</span>
+      </div>
+
+      <h3>{bonus.name}</h3>
+      <p>{bonus.description}</p>
+
+      <ul>
+        {bonus.benefits.map((benefit) => (
+          <li key={benefit}><Check size={14} /> {benefit}</li>
+        ))}
+      </ul>
+
+      <strong className="bonus-price">{unlocked ? "Listo" : bonus.price}</strong>
+
+      <div className="bonus-actions">
+        <button className={unlocked ? "bonus-secondary-action" : "bonus-primary-action"} type="button" onClick={unlocked ? onOpen : onUnlock}>
+          {status === "loading" ? "Procesando..." : unlocked ? "Abrir" : "Desbloquear"}
+          {unlocked ? <ChevronRight size={15} /> : <LockKeyhole size={14} />}
+        </button>
+      </div>
+
+      {status === "error" ? <small className="bonus-error">No se pudo completar. Intenta de nuevo.</small> : <small>Acceso inmediato dentro del app</small>}
+    </article>
+  );
+}
+
+function BonusComboCard({ status, unlocked, onOpen, onUnlock }: { readonly status: BonusStatus; readonly unlocked: boolean; readonly onOpen: () => void; readonly onUnlock: () => void }) {
+  return (
+    <section className="bonus-combo-card">
+      <div>
+        <span className="bonus-pill hot"><Sparkles size={15} /> MÁS VENDIDO</span>
+        <h2>Combo recomendado</h2>
+        <p>Llévate los 3 bonos más vendidos por solo $4.</p>
+        <ul>
+          <li>Pack Antojos Cero</li>
+          <li>Pack Salsas Premium</li>
+          <li>Menú 7 Días en Frasco</li>
+        </ul>
+        <div className="bonus-combo-price">
+          <span>Antes $5</span>
+          <strong>Hoy $4</strong>
+        </div>
+      </div>
+
+      <div className="bonus-combo-orbit" aria-hidden="true">
+        <span><Gift size={22} /></span>
+        <span><Leaf size={22} /></span>
+        <span><Star size={22} /></span>
+        <span><ShoppingBasket size={22} /></span>
+      </div>
+
+      <button className="bonus-primary-action combo" type="button" onClick={unlocked ? onOpen : onUnlock}>
+        {status === "loading" ? "Procesando..." : unlocked ? "Abrir combo" : "Quiero el combo"}
+        <LockKeyhole size={16} />
+      </button>
+      {status === "error" ? <small className="bonus-error">No se pudo completar. Intenta de nuevo.</small> : <small>Compra segura y acceso inmediato.</small>}
+    </section>
+  );
+}
+
+function bonusIcon(icon: BonusOffer["icon"]) {
+  const props = { size: 30, strokeWidth: 2.2 };
+  const icons: Record<BonusOffer["icon"], React.ReactNode> = {
+    avocado: <Leaf {...props} />,
+    sauce: <Utensils {...props} />,
+    calendar: <Clock3 {...props} />,
+    list: <Check {...props} />,
+    shop: <ShoppingBasket {...props} />,
+    family: <Heart {...props} />
+  };
+
+  return icons[icon];
 }
 
 function Header({ eyebrow, title, subtitle }: { readonly eyebrow: string; readonly title: string; readonly subtitle: string }) {

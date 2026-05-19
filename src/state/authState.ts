@@ -100,19 +100,6 @@ export async function registerWithPassword(name: string, email: string, password
   return { ok: true, message: "Cuenta creada.", session: saveAuthSession(mapSupabaseSession(data.session)) };
 }
 
-export async function loginWithGoogleCredential(credential: string): Promise<AuthResult> {
-  const { data, error } = await supabase.auth.signInWithIdToken({
-    provider: "google",
-    token: credential
-  });
-
-  if (error || !data.session) {
-    return { ok: false, message: authErrorMessage(error?.message) };
-  }
-
-  return { ok: true, message: "Sesión iniciada con Google.", session: saveAuthSession(mapSupabaseSession(data.session)) };
-}
-
 function mapSupabaseSession(session: Session): AuthSession {
   const user = session.user;
 
@@ -153,4 +140,3 @@ function authErrorMessage(message?: string) {
   if (normalized.includes("password")) return "Revisa la contraseña e intenta otra vez.";
   return "No pudimos completar el acceso ahora. Intenta nuevamente.";
 }
-

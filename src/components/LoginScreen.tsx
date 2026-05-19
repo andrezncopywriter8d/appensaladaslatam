@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { LoginForm, SmokeyBackground } from "./ui/login-form";
-import { loginWithGoogleCredential, loginWithPassword, registerWithPassword, type AuthSession } from "../state/authState";
+import { loginWithPassword, registerWithPassword, type AuthSession } from "../state/authState";
 
 interface LoginScreenProps {
   readonly onAuthenticated: (session: AuthSession) => void;
@@ -25,18 +25,6 @@ export function LoginScreen({ onAuthenticated }: LoginScreenProps) {
     onAuthenticated(result.session);
   }
 
-  async function submitGoogle(credential: string) {
-    setLoading(true);
-    setError("");
-    const result = await loginWithGoogleCredential(credential);
-    setLoading(false);
-    if (!result.ok || !result.session) {
-      setError(result.message);
-      return;
-    }
-    onAuthenticated(result.session);
-  }
-
   return (
     <main className="login-shell">
       <SmokeyBackground color="#f6c83f" backdropBlurAmount="sm" />
@@ -47,11 +35,8 @@ export function LoginScreen({ onAuthenticated }: LoginScreenProps) {
       <div className="login-center">
         <LoginForm
           error={error}
-          googleClientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
           loading={loading}
           mode={mode}
-          onGoogleCredential={submitGoogle}
-          onGoogleError={setError}
           onModeChange={setMode}
           onSubmit={submit}
         />

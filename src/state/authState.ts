@@ -1,17 +1,7 @@
-export const AUTH_DB_KEY = "ensaladasEnFrascoAuthDb";
-export const AUTH_SESSION_KEY = "ensaladasEnFrascoAuthSession";
+import type { Session, User } from "@supabase/supabase-js";
+import { supabase } from "../lib/supabaseClient";
 
-export interface AuthUser {
-  readonly id: string;
-  readonly name: string;
-  readonly email: string;
-  readonly passwordHash?: string;
-  readonly provider?: "password" | "google";
-  readonly googleSub?: string;
-  readonly picture?: string;
-  readonly createdAt: string;
-  readonly lastLoginAt: string | null;
-}
+export const AUTH_SESSION_KEY = "ensaladasEnFrascoAuthSession";
 
 export interface AuthSession {
   readonly userId: string;
@@ -20,10 +10,6 @@ export interface AuthSession {
   readonly provider?: "password" | "google";
   readonly picture?: string;
   readonly startedAt: string;
-}
-
-interface AuthDb {
-  readonly users: readonly AuthUser[];
 }
 
 export interface AuthResult {
@@ -41,8 +27,28 @@ export function loadAuthSession(): AuthSession | null {
   }
 }
 
+export async function getCurrentAuthSession(): Promise<AuthSession | null> {
+  const { data, error } = await supabase.auth.getSession();
+  if (error || !data.session) {
+    clearAuthSession();
+    return null;
+  }
+
+  return saveAuthSession(mapSupabaseSession(data.session));
+}
+
+export function onAuthSessionChange(callback: (session: AuthSession | null) => void) {
+  const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    callback(session ? saveAuthSession(mapSupabaseSession(session)) : null);
+    if (!session) clearAuthSession();
+  });
+
+  return () => data.subscription.unsubscribe();
+}
+
 export function saveAuthSession(session: AuthSession) {
   localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+  return session;
 }
 
 export function clearAuthSession() {
@@ -50,137 +56,85 @@ export function clearAuthSession() {
 }
 
 export async function loginWithPassword(email: string, password: string): Promise<AuthResult> {
-  const db = loadDb();
   const normalized = normalizeEmail(email);
-  const user = db.users.find((item) => item.email === normalized);
-  if (!user) return { ok: false, message: "No encontramos una cuenta con ese correo." };
-  if (!user.passwordHash) return { ok: false, message: "Esta cuenta usa acceso con Google." };
-  const hash = await hashPassword(password, normalized);
-  if (hash !== user.passwordHash) return { ok: false, message: "Correo o contraseña incorrectos." };
-  const session = makeSession(user);
-  const users = db.users.map((item) => item.id === user.id ? { ...item, lastLoginAt: new Date().toISOString() } : item);
-  saveDb({ users });
-  saveAuthSession(session);
-  return { ok: true, message: "Sesión iniciada.", session };
+  if (!isValidEmail(normalized)) return { ok: false, message: "Escribe un correo válido." };
+  if (!password) return { ok: false, message: "Escribe tu contraseña." };
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: normalized,
+    password
+  });
+
+  if (error || !data.session) {
+    return { ok: false, message: authErrorMessage(error?.message) };
+  }
+
+  return { ok: true, message: "Sesión iniciada.", session: saveAuthSession(mapSupabaseSession(data.session)) };
 }
 
 export async function registerWithPassword(name: string, email: string, password: string): Promise<AuthResult> {
-  const db = loadDb();
   const normalized = normalizeEmail(email);
   if (!name.trim()) return { ok: false, message: "Escribe tu nombre." };
   if (!isValidEmail(normalized)) return { ok: false, message: "Escribe un correo válido." };
   if (password.length < 8) return { ok: false, message: "Usa al menos 8 caracteres." };
-  if (db.users.some((item) => item.email === normalized)) return { ok: false, message: "Ese correo ya tiene una cuenta." };
-  const now = new Date().toISOString();
-  const user: AuthUser = {
-    id: `user-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    name: name.trim(),
+
+  const { data, error } = await supabase.auth.signUp({
     email: normalized,
-    passwordHash: await hashPassword(password, normalized),
-    provider: "password",
-    createdAt: now,
-    lastLoginAt: now
-  };
-  saveDb({ users: [...db.users, user] });
-  const session = makeSession(user);
-  saveAuthSession(session);
-  return { ok: true, message: "Cuenta creada.", session };
+    password,
+    options: {
+      data: {
+        full_name: name.trim(),
+        name: name.trim()
+      }
+    }
+  });
+
+  if (error) return { ok: false, message: authErrorMessage(error.message) };
+  if (!data.session) {
+    return {
+      ok: false,
+      message: "Cuenta creada. Revisa tu correo para confirmar el acceso antes de entrar."
+    };
+  }
+
+  return { ok: true, message: "Cuenta creada.", session: saveAuthSession(mapSupabaseSession(data.session)) };
 }
 
 export async function loginWithGoogleCredential(credential: string): Promise<AuthResult> {
-  const profile = decodeGoogleCredential(credential);
-  if (!profile?.email || !profile.sub) {
-    return { ok: false, message: "Não conseguimos validar sua conta Google." };
+  const { data, error } = await supabase.auth.signInWithIdToken({
+    provider: "google",
+    token: credential
+  });
+
+  if (error || !data.session) {
+    return { ok: false, message: authErrorMessage(error?.message) };
   }
 
-  const normalized = normalizeEmail(profile.email);
-  if (!isValidEmail(normalized)) {
-    return { ok: false, message: "O Google não devolveu um e-mail válido." };
-  }
-
-  const db = loadDb();
-  const now = new Date().toISOString();
-  const existing = db.users.find((item) => item.email === normalized || item.googleSub === profile.sub);
-  const user: AuthUser = existing
-    ? {
-      ...existing,
-      name: profile.name || existing.name,
-      email: normalized,
-      provider: existing.provider ?? "google",
-      googleSub: profile.sub,
-      picture: profile.picture ?? existing.picture,
-      lastLoginAt: now
-    }
-    : {
-      id: `google-${profile.sub}`,
-      name: profile.name || normalized.split("@")[0],
-      email: normalized,
-      provider: "google",
-      googleSub: profile.sub,
-      picture: profile.picture,
-      createdAt: now,
-      lastLoginAt: now
-    };
-
-  const users = existing
-    ? db.users.map((item) => item.id === existing.id ? user : item)
-    : [...db.users, user];
-  saveDb({ users });
-  const session = makeSession(user);
-  saveAuthSession(session);
-  return { ok: true, message: "Sessão iniciada com Google.", session };
+  return { ok: true, message: "Sesión iniciada con Google.", session: saveAuthSession(mapSupabaseSession(data.session)) };
 }
 
-export function exportAuthDb() {
-  return loadDb();
-}
+function mapSupabaseSession(session: Session): AuthSession {
+  const user = session.user;
 
-function makeSession(user: AuthUser): AuthSession {
   return {
     userId: user.id,
-    email: user.email,
-    name: user.name,
-    provider: user.provider,
-    picture: user.picture,
+    email: user.email ?? "",
+    name: userDisplayName(user),
+    provider: authProvider(user),
+    picture: user.user_metadata?.avatar_url ?? user.user_metadata?.picture,
     startedAt: new Date().toISOString()
   };
 }
 
-interface GoogleJwtProfile {
-  readonly sub: string;
-  readonly email: string;
-  readonly name?: string;
-  readonly picture?: string;
+function userDisplayName(user: User) {
+  const metadata = user.user_metadata ?? {};
+  const candidate = metadata.full_name ?? metadata.name ?? metadata.display_name;
+  if (typeof candidate === "string" && candidate.trim()) return candidate.trim();
+  return user.email?.split("@")[0] ?? "Usuario";
 }
 
-function decodeGoogleCredential(credential: string): GoogleJwtProfile | null {
-  try {
-    const [, payload] = credential.split(".");
-    if (!payload) return null;
-    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
-    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
-    const decoded = decodeURIComponent(
-      Array.from(atob(padded))
-        .map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, "0")}`)
-        .join("")
-    );
-    return JSON.parse(decoded) as GoogleJwtProfile;
-  } catch {
-    return null;
-  }
-}
-
-function loadDb(): AuthDb {
-  try {
-    const raw = localStorage.getItem(AUTH_DB_KEY);
-    return raw ? JSON.parse(raw) as AuthDb : { users: [] };
-  } catch {
-    return { users: [] };
-  }
-}
-
-function saveDb(db: AuthDb) {
-  localStorage.setItem(AUTH_DB_KEY, JSON.stringify(db));
+function authProvider(user: User): "password" | "google" {
+  return user.app_metadata?.provider === "google" ? "google" : "password";
 }
 
 function normalizeEmail(email: string) {
@@ -191,16 +145,12 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-async function hashPassword(password: string, email: string) {
-  const input = `onda-tesla::${email}::${password}`;
-  if (crypto.subtle) {
-    const encoded = new TextEncoder().encode(input);
-    const digest = await crypto.subtle.digest("SHA-256", encoded);
-    return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
-  }
-  let hash = 0;
-  for (let index = 0; index < input.length; index += 1) {
-    hash = ((hash << 5) - hash + input.charCodeAt(index)) | 0;
-  }
-  return `fallback-${hash}`;
+function authErrorMessage(message?: string) {
+  const normalized = (message ?? "").toLowerCase();
+  if (normalized.includes("invalid login credentials")) return "Correo o contraseña incorrectos.";
+  if (normalized.includes("email not confirmed")) return "Confirma tu correo antes de entrar.";
+  if (normalized.includes("user already registered") || normalized.includes("already registered")) return "Ese correo ya tiene una cuenta.";
+  if (normalized.includes("password")) return "Revisa la contraseña e intenta otra vez.";
+  return "No pudimos completar el acceso ahora. Intenta nuevamente.";
 }
+

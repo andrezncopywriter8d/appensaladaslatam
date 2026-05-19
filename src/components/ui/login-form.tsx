@@ -220,7 +220,7 @@ export function LoginForm({
         </label>
         <label className="floating-field">
           <Lock size={17} />
-          <input value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Senha" type="password" autoComplete={isRegister ? "new-password" : "current-password"} required />
+          <input value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Contraseña" type="password" autoComplete={isRegister ? "new-password" : "current-password"} required />
         </label>
         {error ? <p className="login-error">{error}</p> : null}
         <button className="protocol-primary login-submit" type="submit" disabled={loading}>
@@ -228,7 +228,7 @@ export function LoginForm({
           <ArrowRight size={18} />
         </button>
       </form>
-      <div className="login-divider"><span />OU CONTINUE COM<span /></div>
+      <div className="login-divider"><span />O CONTINÚA CON<span /></div>
       <GoogleSignIn clientId={googleClientId} onCredential={onGoogleCredential} onError={onGoogleError} />
       <p className="login-switch">
         {isRegister ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"}{" "}
@@ -293,7 +293,7 @@ function GoogleSignIn({ clientId, onCredential, onError }: GoogleSignInProps) {
     return (
       <div className="google-config-warning">
         <GoogleIcon />
-        <span>Configure VITE_GOOGLE_CLIENT_ID para ativar o Google.</span>
+        <span>Configura VITE_GOOGLE_CLIENT_ID para activar Google.</span>
       </div>
     );
   }
@@ -302,7 +302,7 @@ function GoogleSignIn({ clientId, onCredential, onError }: GoogleSignInProps) {
     return (
       <div className="google-config-warning">
         <GoogleIcon />
-        <span>Não foi possível carregar o Google agora. Recarregue a página e tente novamente.</span>
+        <span>No fue posible cargar Google ahora. Recarga la página e intenta nuevamente.</span>
       </div>
     );
   }
@@ -310,7 +310,7 @@ function GoogleSignIn({ clientId, onCredential, onError }: GoogleSignInProps) {
   return (
     <div className="google-slot" aria-busy={!ready}>
       <div ref={buttonRef} />
-      {!ready ? <span>Carregando Google...</span> : null}
+      {!ready ? <span>Cargando Google...</span> : null}
     </div>
   );
 }

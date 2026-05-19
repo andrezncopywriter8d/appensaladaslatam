@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { LoginScreen } from "./components/LoginScreen";
 import { SaladBottomNav, SaladGuideScreen, SaladHomeScreen, SaladOnboarding, SaladRecipeDetail, SaladRecipesScreen, SaladShoppingScreen, SaladWeekScreen } from "./components/SaladScreens";
 import { recipes, type SaladRecipe, type ScreenId } from "./data/saladData";
-import { loadAuthSession, type AuthSession } from "./state/authState";
+import { getCurrentAuthSession, loadAuthSession, onAuthSessionChange, type AuthSession } from "./state/authState";
 import { loadSaladState, saveSaladState, type SaladProfile, type SaladState } from "./state/saladState";
 
 export interface PlayerSource {
@@ -26,6 +26,22 @@ export function App() {
 
   useEffect(() => () => {
     if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    getCurrentAuthSession().then((session) => {
+      if (mounted) setAuthSession(session);
+    });
+
+    const unsubscribe = onAuthSessionChange((session) => {
+      if (mounted) setAuthSession(session);
+    });
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
   }, []);
 
   const hasOnboarding = state.onboardingCompleted && state.profile && state.onboardingUserId === authSession?.userId;

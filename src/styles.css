@@ -9685,3 +9685,116 @@ select {
   max-width: 100% !important;
   overflow: hidden !important;
 }
+
+/* ============================================================
+   HOME TO RECIPES CONTINUITY FIX
+   Makes Recetas feel like the same app section, not a separate UI.
+   ============================================================ */
+
+.app-shell:has(.premium-recipes-screen.active) {
+  width: min(100%, 430px) !important;
+  min-height: 100dvh !important;
+  margin: 0 auto !important;
+  overflow-x: hidden !important;
+  background: #fffaf0 !important;
+  box-shadow: 0 0 0 1px rgba(47, 93, 32, 0.08), 0 22px 70px rgba(47, 93, 32, 0.16) !important;
+}
+
+.app-shell:has(.premium-recipes-screen.active) .status-glow {
+  display: none !important;
+}
+
+.premium-recipes-screen .premium-recipes-header {
+  min-height: 104px !important;
+  padding: calc(8px + env(safe-area-inset-top)) 22px 15px !important;
+  grid-template-columns: 54px 1fr 54px !important;
+  background:
+    radial-gradient(circle at 50% -40%, rgba(255, 255, 255, 0.13), transparent 165px),
+    linear-gradient(180deg, #506f3a 0%, #3f6031 100%) !important;
+  box-shadow: 0 16px 34px rgba(47, 68, 38, 0.16) !important;
+}
+
+.premium-recipes-screen .premium-recipes-content {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 24px 22px calc(118px + env(safe-area-inset-bottom)) !important;
+}
+
+.screen.premium-recipes-screen.active > .premium-recipes-content {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.premium-recipes-screen .recipe-gallery-title {
+  order: 1 !important;
+}
+
+.premium-recipes-screen .recipe-gallery-search {
+  order: 2 !important;
+}
+
+.premium-recipes-screen .recipe-gallery-chips {
+  order: 3 !important;
+}
+
+.premium-recipes-screen .premium-week-progress-card {
+  order: 4 !important;
+  margin: 2px 0 22px !important;
+  border-radius: 24px !important;
+}
+
+.premium-recipes-screen .premium-recipe-list {
+  order: 5 !important;
+}
+
+.premium-recipes-screen .recipe-weekly-banner {
+  order: 6 !important;
+}
+
+.premium-recipes-screen .recipe-gallery-title h1 {
+  font-size: clamp(35px, 9.4vw, 45px) !important;
+}
+
+.premium-recipes-screen .recipe-gallery-title p {
+  max-width: 235px !important;
+}
+
+.app-shell.screen-is-transitioning > .screen.active {
+  animation: saladScreenEnterUnified 300ms cubic-bezier(0.18, 0.84, 0.28, 1) both !important;
+}
+
+@keyframes saladScreenEnterUnified {
+  from {
+    opacity: 0;
+    filter: none;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    filter: none;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (max-width: 390px) {
+  .premium-recipes-screen .premium-recipes-header {
+    min-height: 104px !important;
+    padding-inline: 18px !important;
+  }
+
+  .premium-recipes-screen .premium-recipes-content {
+    padding: 20px 18px calc(118px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .premium-recipes-screen .premium-week-progress-card {
+    margin-top: 0 !important;
+  }
+}
+
+.app-shell:has(.premium-recipes-screen.active) .bottom-nav.salad-premium-bottom-nav,
+.app-shell:has(.salad-premium-home.active) .bottom-nav.salad-premium-bottom-nav {
+  height: 86px !important;
+  padding: 8px 10px !important;
+  border-radius: 28px !important;
+}

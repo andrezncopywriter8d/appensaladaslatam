@@ -292,7 +292,7 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
     <section className={`screen recipe-browser premium-recipes-screen ${active ? "active" : ""}`}>
       <header className="premium-salad-header premium-recipes-header">
         <button className="premium-header-button" type="button" aria-label="Abrir menú">
-          <Menu size={34} strokeWidth={2.5} />
+          <Menu size={28} strokeWidth={2.5} />
         </button>
 
         <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
@@ -304,7 +304,7 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
         </div>
 
         <button className="premium-header-button" type="button" aria-label="Notificaciones">
-          <Bell size={31} strokeWidth={2.3} />
+          <Bell size={25} strokeWidth={2.3} />
         </button>
       </header>
 

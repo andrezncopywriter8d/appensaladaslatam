@@ -9798,3 +9798,331 @@ select {
   padding: 8px 10px !important;
   border-radius: 28px !important;
 }
+
+/* ============================================================
+   GLASS HOME REFERENCE PASS
+   Frosted top bar, photographic hero, image icons, softer cards.
+   ============================================================ */
+
+.screen.salad-premium-home.active {
+  background:
+    radial-gradient(circle at 96% 59%, rgba(159, 187, 125, 0.28), transparent 42px),
+    radial-gradient(circle at -8% 82%, rgba(139, 166, 106, 0.18), transparent 120px),
+    linear-gradient(180deg, #fffdf6 0%, #fbf4e4 56%, #fff9ee 100%) !important;
+}
+
+.salad-premium-home .premium-salad-header {
+  min-height: 108px !important;
+  color: #10140f !important;
+  background:
+    linear-gradient(180deg, rgba(250, 247, 239, 0.7), rgba(235, 229, 217, 0.55)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.54) !important;
+  border-top: 0 !important;
+  border-radius: 0 0 18px 18px !important;
+  box-shadow:
+    0 18px 34px rgba(61, 58, 48, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.48) !important;
+  backdrop-filter: blur(22px) saturate(1.18) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.18) !important;
+}
+
+.salad-premium-home .premium-header-button {
+  color: #10140f !important;
+}
+
+.salad-premium-home .premium-salad-brand strong {
+  color: #0f120d !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(52px, 14vw, 70px) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: -2.6px !important;
+  text-shadow: none !important;
+}
+
+.salad-premium-home .premium-salad-brand small {
+  margin-top: 13px !important;
+  color: #0f120d !important;
+  font-family: Poppins, system-ui, sans-serif !important;
+  font-size: clamp(18px, 5vw, 26px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 7px !important;
+}
+
+.salad-premium-home .premium-jars-hero {
+  height: clamp(260px, 70vw, 326px) !important;
+  margin-top: -18px !important;
+  background: #efe4d4 !important;
+}
+
+.salad-premium-home .premium-jars-photo {
+  object-position: center 48% !important;
+  filter: saturate(1.03) contrast(1.02) !important;
+}
+
+.salad-premium-home .premium-jars-hero::after {
+  position: absolute !important;
+  inset: auto 0 0 !important;
+  display: block !important;
+  height: 110px !important;
+  content: "" !important;
+  pointer-events: none !important;
+  background: linear-gradient(180deg, rgba(255, 253, 247, 0), rgba(255, 253, 247, 0.94) 78%, #fffdf7 100%) !important;
+}
+
+.salad-premium-home .premium-welcome {
+  margin-top: -28px !important;
+  padding: 24px 18px 42px !important;
+  background: linear-gradient(180deg, rgba(255, 253, 247, 0.94), rgba(255, 253, 247, 0.98)) !important;
+}
+
+.salad-premium-home .premium-welcome h1 {
+  color: #4d763e !important;
+  font-size: clamp(42px, 11.8vw, 61px) !important;
+  letter-spacing: -1.4px !important;
+}
+
+.salad-premium-home .premium-welcome p {
+  max-width: 330px !important;
+  color: #1c2c19 !important;
+  font-size: clamp(19px, 5.4vw, 27px) !important;
+  line-height: 1.18 !important;
+  font-weight: 500 !important;
+}
+
+.salad-premium-home .premium-explore-wrap {
+  padding: 0 34px 32px !important;
+}
+
+.salad-premium-home .premium-explore-divider,
+.salad-premium-home .premium-custom-badge {
+  display: none !important;
+}
+
+.salad-premium-home .premium-section-row {
+  min-height: 62px !important;
+  margin: 0 0 18px !important;
+}
+
+.salad-premium-home .premium-section-row h2 {
+  color: #4e7540 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(44px, 12vw, 63px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -1.2px !important;
+}
+
+.salad-premium-home .premium-section-row h2 span {
+  color: #79a36b !important;
+}
+
+.salad-premium-home .premium-explore-grid {
+  gap: 19px 20px !important;
+}
+
+.salad-premium-home .premium-explore-card {
+  min-height: 156px !important;
+  padding: 17px 8px 19px !important;
+  border-radius: 17px !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  box-shadow:
+    0 13px 27px rgba(70, 67, 47, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+}
+
+.salad-premium-home .premium-icon-orb {
+  width: 62px !important;
+  height: 62px !important;
+  margin-bottom: 12px !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+.salad-premium-home .premium-icon-orb svg {
+  display: none !important;
+}
+
+.salad-premium-home .premium-icon-orb picture,
+.salad-premium-home .premium-icon-orb img {
+  display: block !important;
+  width: 62px !important;
+  height: 62px !important;
+  object-fit: contain !important;
+}
+
+.salad-premium-home .premium-card-label {
+  color: #4d7240 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(21px, 5.9vw, 30px) !important;
+  line-height: 0.92 !important;
+  font-weight: 800 !important;
+  overflow-wrap: normal !important;
+}
+
+.salad-premium-home .premium-card-arrow {
+  right: 11px !important;
+  bottom: 11px !important;
+  width: 30px !important;
+  height: 30px !important;
+  color: #4b743b !important;
+  background: #dcefc3 !important;
+}
+
+@media (max-width: 390px) {
+  .salad-premium-home .premium-salad-header {
+    min-height: 100px !important;
+    padding-inline: 18px !important;
+  }
+
+  .salad-premium-home .premium-salad-brand strong {
+    font-size: 48px !important;
+  }
+
+  .salad-premium-home .premium-salad-brand small {
+    font-size: 17px !important;
+    letter-spacing: 6px !important;
+  }
+
+  .salad-premium-home .premium-jars-hero {
+    height: 222px !important;
+  }
+
+  .salad-premium-home .premium-welcome {
+    margin-top: -22px !important;
+    padding: 18px 18px 28px !important;
+  }
+
+  .salad-premium-home .premium-welcome h1 {
+    font-size: 42px !important;
+  }
+
+  .salad-premium-home .premium-welcome p {
+    max-width: 360px !important;
+    font-size: 18px !important;
+    line-height: 1.14 !important;
+  }
+
+  .salad-premium-home .premium-section-row {
+    min-height: 52px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .salad-premium-home .premium-section-row h2 {
+    font-size: 42px !important;
+  }
+
+  .salad-premium-home .premium-explore-wrap {
+    padding-inline: 18px !important;
+  }
+
+  .salad-premium-home .premium-explore-grid {
+    gap: 14px 12px !important;
+  }
+
+  .salad-premium-home .premium-explore-card {
+    min-height: 126px !important;
+  }
+
+  .salad-premium-home .premium-icon-orb,
+  .salad-premium-home .premium-icon-orb picture,
+  .salad-premium-home .premium-icon-orb img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .salad-premium-home .premium-card-label {
+    font-size: 18px !important;
+  }
+}
+
+/* Tighten home card proportions after switching to photographic icons. */
+.salad-premium-home .premium-explore-card {
+  align-content: center !important;
+  min-height: 128px !important;
+  padding: 13px 6px 18px !important;
+}
+
+.salad-premium-home .premium-icon-orb {
+  margin-bottom: 5px !important;
+}
+
+.salad-premium-home .premium-card-label {
+  max-width: 92px !important;
+  font-size: clamp(17px, 4.65vw, 22px) !important;
+  line-height: 0.98 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.salad-premium-home .premium-card-arrow {
+  right: 5px !important;
+  bottom: 8px !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+
+@media (max-width: 390px) {
+  .salad-premium-home .premium-explore-card {
+    min-height: 112px !important;
+    padding-top: 10px !important;
+  }
+
+  .salad-premium-home .premium-card-label {
+    max-width: 78px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* Final mobile fit pass for the glass-reference home. */
+@media (max-width: 390px) {
+  .salad-premium-home .premium-jars-hero {
+    height: 214px !important;
+    min-height: 0 !important;
+    margin-top: -14px !important;
+  }
+
+  .salad-premium-home .premium-welcome {
+    margin-top: -20px !important;
+    padding: 17px 16px 24px !important;
+  }
+
+  .salad-premium-home .premium-welcome h1 {
+    margin-bottom: 7px !important;
+    font-size: 41px !important;
+  }
+
+  .salad-premium-home .premium-welcome p {
+    max-width: 355px !important;
+    font-size: 17px !important;
+    line-height: 1.16 !important;
+  }
+
+  .salad-premium-home .premium-section-row {
+    min-height: 48px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .salad-premium-home .premium-section-row h2 {
+    font-size: 40px !important;
+  }
+
+  .salad-premium-home .premium-explore-grid {
+    gap: 12px 10px !important;
+  }
+
+  .salad-premium-home .premium-explore-card {
+    min-height: 108px !important;
+    padding: 8px 6px 15px !important;
+  }
+
+  .salad-premium-home .premium-icon-orb,
+  .salad-premium-home .premium-icon-orb picture,
+  .salad-premium-home .premium-icon-orb img {
+    width: 43px !important;
+    height: 43px !important;
+  }
+
+  .salad-premium-home .premium-card-label {
+    font-size: 15.5px !important;
+  }
+}

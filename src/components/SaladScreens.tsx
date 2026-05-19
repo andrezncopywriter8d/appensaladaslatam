@@ -117,12 +117,12 @@ export function SaladOnboarding({ onComplete }: { readonly onComplete: (profile:
 
 export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly active: boolean }) {
   const exploreCards = [
-    { title: "Recetas", icon: Salad, screen: "recipes" as ScreenId, tone: "green" },
-    { title: "Aderezos", icon: Utensils, screen: "guide" as ScreenId, tone: "cream" },
-    { title: "Combinaciones", icon: Layers3, screen: "guide" as ScreenId, tone: "green" },
-    { title: "Menús", icon: ShoppingBasket, screen: "week" as ScreenId, tone: "cream" },
-    { title: "Consejos", icon: Sparkles, screen: "guide" as ScreenId, tone: "green" },
-    { title: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, tone: "pink" }
+    { title: "Recetas", icon: Salad, image: "recipes", screen: "recipes" as ScreenId, tone: "green" },
+    { title: "Aderezos", icon: Utensils, image: "dressings", screen: "guide" as ScreenId, tone: "cream" },
+    { title: "Combinaciones", icon: Layers3, image: "combinations", screen: "guide" as ScreenId, tone: "green" },
+    { title: "Menús", icon: ShoppingBasket, image: "menus", screen: "week" as ScreenId, tone: "cream" },
+    { title: "Consejos", icon: Sparkles, image: "tips", screen: "guide" as ScreenId, tone: "green" },
+    { title: "Favoritos", icon: Heart, image: "favorites", screen: "recipes" as ScreenId, tone: "pink" }
   ];
 
   return (
@@ -209,7 +209,11 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
                 onClick={() => openScreen(card.screen)}
               >
                 <span className="premium-icon-orb">
-                  <Icon size={28} strokeWidth={2.25} />
+                  <picture>
+                    <source srcSet={`/assets/home-icons/${card.image}.webp`} type="image/webp" />
+                    <img src={`/assets/home-icons/${card.image}.png`} alt="" loading="eager" decoding="async" />
+                  </picture>
+                  <Icon size={28} strokeWidth={2.25} aria-hidden="true" />
                 </span>
 
                 <span className="premium-card-label">{card.title}</span>

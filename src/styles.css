@@ -12108,3 +12108,409 @@ textarea,
     max-width: 150px !important;
   }
 }
+
+/* ============================================================
+   ADEREZOS SCREEN - 60 MOLHOS PARA SALADAS
+   Mirrors the Recetas mobile system with sauce-focused cards.
+   ============================================================ */
+
+.app-shell:has(.premium-dressings-screen.active) {
+  width: min(100%, 430px) !important;
+  min-height: 100dvh !important;
+  margin: 0 auto !important;
+  overflow-x: hidden !important;
+  background: #fffaf0 !important;
+  box-shadow: 0 0 0 1px rgba(47, 93, 32, 0.08), 0 22px 70px rgba(47, 93, 32, 0.16) !important;
+}
+
+.app-shell:has(.premium-dressings-screen.active) .status-glow {
+  display: none !important;
+}
+
+.screen.premium-dressings-screen.active {
+  display: block !important;
+  background:
+    radial-gradient(circle at 100% 18%, rgba(190, 211, 148, 0.18), transparent 145px),
+    radial-gradient(circle at -8% 76%, rgba(139, 166, 106, 0.18), transparent 120px),
+    linear-gradient(180deg, #fffaf0 0%, #fbf4e4 50%, #fff9ee 100%) !important;
+}
+
+.premium-dressings-screen .premium-recipes-header {
+  min-height: 104px !important;
+  padding: calc(8px + env(safe-area-inset-top)) 22px 15px !important;
+  grid-template-columns: 54px 1fr 54px !important;
+}
+
+.premium-dressings-screen .dressing-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  padding: 20px 18px calc(118px + env(safe-area-inset-bottom)) !important;
+}
+
+.dressing-hero-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 39%;
+  min-height: 188px;
+  overflow: hidden;
+  border: 1px solid rgba(80, 111, 58, 0.15);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 91% 18%, rgba(162, 195, 116, 0.24), transparent 92px),
+    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(241, 250, 230, 0.95));
+  box-shadow: 0 16px 32px rgba(64, 64, 46, 0.08);
+}
+
+.dressing-hero-card > div {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 20px 8px 20px 20px;
+}
+
+.dressing-hero-card span {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 7px;
+  min-height: 29px;
+  padding: 0 11px;
+  border-radius: 999px;
+  color: #2f7d32;
+  background: #e5f2d3;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.25px;
+}
+
+.dressing-hero-card h1 {
+  margin: 14px 0 8px;
+  color: #174824;
+  font-size: clamp(33px, 9vw, 44px);
+  font-weight: 950;
+  line-height: 0.96;
+  letter-spacing: -1.4px;
+}
+
+.dressing-hero-card p {
+  max-width: 230px;
+  margin: 0;
+  color: #425240;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.34;
+}
+
+.dressing-hero-card picture {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.dressing-hero-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% center;
+}
+
+.dressing-search {
+  min-height: 58px !important;
+  margin: 0 !important;
+}
+
+.dressing-chips {
+  margin: -2px -18px 0 0 !important;
+  padding-right: 18px !important;
+}
+
+.dressing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 12px;
+}
+
+.dressing-card {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(79, 94, 63, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 253, 247, 0.96);
+  box-shadow:
+    0 13px 26px rgba(66, 62, 41, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.dressing-card-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 126px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: #efe5d4;
+  cursor: pointer;
+}
+
+.dressing-card-photo picture,
+.dressing-card-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dressing-card-photo img {
+  object-fit: cover;
+  object-position: center 48%;
+  transform: scale(1.04);
+}
+
+.dressing-card-photo span {
+  position: absolute;
+  left: 10px;
+  bottom: 9px;
+  min-height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  color: #2d6f31;
+  background: rgba(232, 244, 216, 0.94);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 24px;
+}
+
+.dressing-heart {
+  top: 9px !important;
+  right: 9px !important;
+}
+
+.dressing-card-copy {
+  display: grid;
+  gap: 8px;
+  padding: 11px 12px 12px;
+}
+
+.dressing-card-copy > button {
+  display: -webkit-box;
+  min-height: 2.22em;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  color: #174824;
+  background: transparent;
+  font-size: clamp(15px, 4vw, 19px);
+  font-weight: 950;
+  line-height: 1.1;
+  text-align: left;
+  cursor: pointer;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.dressing-card-copy p {
+  display: -webkit-box;
+  min-height: 2.65em;
+  margin: 0;
+  overflow: hidden;
+  color: #53604f;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.32;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.dressing-card-copy div {
+  display: grid;
+  gap: 5px;
+  color: #53604f;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.dressing-card-copy div span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.dressing-card-copy svg {
+  flex: 0 0 auto;
+  color: #57904a;
+}
+
+.dressing-detail-card {
+  display: grid;
+  gap: 15px;
+  padding: 17px;
+  border: 1px solid rgba(80, 111, 58, 0.16);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(162, 195, 116, 0.2), transparent 90px),
+    rgba(255, 253, 247, 0.97);
+  box-shadow: 0 16px 32px rgba(64, 64, 46, 0.08);
+}
+
+.dressing-detail-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dressing-detail-head button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  color: #2f6f31;
+  background: #e8f3d9;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.dressing-detail-head button.active {
+  color: #fffef6;
+  background: linear-gradient(180deg, #4f823b, #225d2a);
+}
+
+.dressing-detail-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 7px;
+  color: #2f7d32;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.dressing-detail-card h2 {
+  margin: -5px 0 0;
+  color: #174824;
+  font-size: clamp(25px, 6.8vw, 33px);
+  font-weight: 950;
+  line-height: 1.02;
+  letter-spacing: -0.8px;
+}
+
+.dressing-detail-card p {
+  margin: 0;
+  color: #485447;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.42;
+}
+
+.dressing-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dressing-detail-meta span,
+.dressing-combo-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  color: #34672e;
+  background: #e8f3d9;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.dressing-detail-card section {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(80, 111, 58, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.dressing-detail-card h3 {
+  margin: 0;
+  color: #174824;
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.dressing-detail-card ul,
+.dressing-detail-card ol {
+  display: grid;
+  gap: 8px;
+  padding-left: 18px;
+  margin: 0;
+  color: #425240;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.dressing-combo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dressing-storage-tip {
+  padding: 13px 14px;
+  border-radius: 18px;
+  color: #285d2f !important;
+  background: #edf7e2;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+
+.dressing-tip-banner {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 390px) {
+  .premium-dressings-screen .dressing-content {
+    padding-inline: 14px !important;
+  }
+
+  .dressing-hero-card {
+    min-height: 176px;
+    grid-template-columns: minmax(0, 1fr) 36%;
+  }
+
+  .dressing-hero-card > div {
+    padding: 17px 6px 17px 17px;
+  }
+
+  .dressing-hero-card h1 {
+    font-size: 31px;
+  }
+
+  .dressing-hero-card p {
+    max-width: 206px;
+    font-size: 12px;
+  }
+
+  .dressing-grid {
+    gap: 12px 10px;
+  }
+
+  .dressing-card-photo {
+    height: 116px;
+  }
+
+  .dressing-card-copy {
+    padding: 10px;
+  }
+}

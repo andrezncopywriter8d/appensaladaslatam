@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
 import { ArrowLeft, Award, Bell, Check, ChevronRight, Clock3, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShieldCheck, ShoppingBasket, SlidersHorizontal, Sparkles, Trash2, Utensils } from "lucide-react";
 import { recipes, weeklyMenus, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
+import { saladDressings, type SaladDressing } from "../data/saladDressings";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
 
 interface AppContext {
@@ -120,7 +121,7 @@ export function SaladOnboarding({ onComplete }: { readonly onComplete: (profile:
 export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly active: boolean }) {
   const exploreCards = [
     { title: "Recetas", icon: Salad, image: "recipes", screen: "recipes" as ScreenId, tone: "green", recipeCategory: "Todas" },
-    { title: "Aderezos", icon: Utensils, image: "dressings", screen: "guide" as ScreenId, tone: "cream" },
+    { title: "Aderezos", icon: Utensils, image: "dressings", screen: "dressings" as ScreenId, tone: "cream" },
     { title: "Combinaciones", icon: Layers3, image: "combinations", screen: "guide" as ScreenId, tone: "green" },
     { title: "Menús", icon: ShoppingBasket, image: "menus", screen: "week" as ScreenId, tone: "cream" },
     { title: "Consejos", icon: Sparkles, image: "tips", screen: "guide" as ScreenId, tone: "green" },
@@ -467,6 +468,224 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe, recipe
         </button>
       </div>
     </section>
+  );
+}
+
+export function SaladDressingsScreen({ active, state, setState, openScreen }: AppContext & { readonly active: boolean }) {
+  const [category, setCategory] = useState<string>("Todas");
+  const [query, setQuery] = useState("");
+  const [selectedDressing, setSelectedDressing] = useState<SaladDressing | null>(null);
+
+  const normalizeText = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const normalizedQuery = normalizeText(query.trim());
+
+  const categoryOptions = [
+    "Todas",
+    "Cremosos",
+    "Citricos",
+    "Verdes",
+    "Picantes",
+    "Dulces",
+    "Favoritos"
+  ];
+
+  const filteredDressings = saladDressings.filter((dressing) => {
+    const byCategory =
+      category === "Todas"
+      || dressing.category === category
+      || (category === "Favoritos" && state.favoriteDressingIds.includes(dressing.id));
+
+    const searchable = normalizeText([
+      dressing.name,
+      dressing.category,
+      dressing.shortDescription,
+      ...dressing.ingredients,
+      ...dressing.bestWith,
+      ...dressing.tags
+    ].join(" "));
+
+    return byCategory && (!normalizedQuery || searchable.includes(normalizedQuery));
+  });
+
+  function toggleFavoriteDressing(id: string) {
+    setState((current) => ({
+      ...current,
+      favoriteDressingIds: toggle(current.favoriteDressingIds, id)
+    }));
+  }
+
+  return (
+    <section className={`screen recipe-browser premium-recipes-screen premium-dressings-screen ${active ? "active" : ""}`}>
+      <header className="premium-salad-header premium-recipes-header">
+        <button className="premium-header-button" type="button" aria-label="Abrir menu">
+          <Menu size={28} strokeWidth={2.5} />
+        </button>
+
+        <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
+          <span className="premium-brand-leaf" aria-hidden="true">
+            <Leaf size={18} strokeWidth={2.2} />
+          </span>
+          <strong>ensaladas</strong>
+          <small>EN FRASCO</small>
+        </div>
+
+        <button className="premium-header-button" type="button" aria-label="Notificaciones">
+          <Bell size={25} strokeWidth={2.3} />
+        </button>
+      </header>
+
+      <div className="premium-recipes-content dressing-content">
+        <section className="dressing-hero-card">
+          <div>
+            <span><Utensils size={16} /> Guia de aderezos</span>
+            <h1>60 aderezos</h1>
+            <p>Salsas cremosas, citricas y verdes para transformar tus ensaladas en frasco.</p>
+          </div>
+          <picture>
+            <source srcSet="/assets/bonos/bonus-sauces.webp" type="image/webp" />
+            <img src="/assets/bonos/bonus-sauces.jpg" alt="Aderezos cremosos para ensaladas en frasco" loading="eager" decoding="async" />
+          </picture>
+        </section>
+
+        <label className="premium-recipe-search recipe-gallery-search dressing-search">
+          <Search size={22} strokeWidth={2.2} />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Buscar aderezo o ingrediente..."
+          />
+        </label>
+
+        <div className="premium-recipe-chip-row recipe-gallery-chips dressing-chips" aria-label="Filtros de aderezos">
+          {categoryOptions.map((option) => (
+            <button
+              className={option === category ? "active" : ""}
+              key={option}
+              type="button"
+              onClick={() => {
+                setCategory(option);
+                setSelectedDressing(null);
+              }}
+            >
+              {option === "Favoritos" ? <Heart size={17} strokeWidth={2.4} /> : null}
+              <span>{option}</span>
+            </button>
+          ))}
+        </div>
+
+        {selectedDressing ? (
+          <DressingDetailCard
+            dressing={selectedDressing}
+            favorite={state.favoriteDressingIds.includes(selectedDressing.id)}
+            onBack={() => setSelectedDressing(null)}
+            onFavorite={() => toggleFavoriteDressing(selectedDressing.id)}
+          />
+        ) : null}
+
+        {filteredDressings.length === 0 ? (
+          <EmptyState
+            title="Nada encontrado aqui todavia"
+            text="Prueba otro ingrediente o marca aderezos como favoritos para verlos aqui."
+          />
+        ) : null}
+
+        <div className="dressing-grid">
+          {filteredDressings.map((dressing, index) => {
+            const favorite = state.favoriteDressingIds.includes(dressing.id);
+            const imageIndex = (index % 6) + 1;
+
+            return (
+              <article className="dressing-card" key={dressing.id}>
+                <button
+                  className="dressing-card-photo"
+                  type="button"
+                  onClick={() => setSelectedDressing(dressing)}
+                  aria-label={`Abrir ${dressing.name}`}
+                >
+                  <picture>
+                    <source srcSet={`/assets/recipes/recipe-card-${imageIndex}.webp`} type="image/webp" />
+                    <img src={`/assets/recipes/recipe-card-${imageIndex}.jpg`} alt={dressing.name} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
+                  </picture>
+                  <span>{dressing.category}</span>
+                </button>
+
+                <button
+                  className={`recipe-gallery-heart dressing-heart ${favorite ? "active" : ""}`}
+                  type="button"
+                  aria-label={favorite ? "Quitar de favoritos" : "Guardar favorito"}
+                  onClick={() => toggleFavoriteDressing(dressing.id)}
+                >
+                  <Heart size={21} strokeWidth={2.2} fill={favorite ? "currentColor" : "none"} />
+                </button>
+
+                <div className="dressing-card-copy">
+                  <button type="button" onClick={() => setSelectedDressing(dressing)}>{dressing.name}</button>
+                  <p>{dressing.shortDescription}</p>
+                  <div>
+                    <span><Clock3 size={14} /> {dressing.prepTime}</span>
+                    <span><Leaf size={14} /> {dressing.estimatedDuration}</span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <button className="recipe-weekly-banner dressing-tip-banner" type="button" onClick={() => openScreen("shopping")}>
+          <span><ShoppingBasket size={22} strokeWidth={2.2} /></span>
+          <strong>Tip de organizacion</strong>
+          <small>Elige 3 aderezos y prepara toda la semana con sabores diferentes.</small>
+          <ChevronRight size={21} strokeWidth={2.8} />
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function DressingDetailCard({ dressing, favorite, onBack, onFavorite }: { readonly dressing: SaladDressing; readonly favorite: boolean; readonly onBack: () => void; readonly onFavorite: () => void }) {
+  return (
+    <article className="dressing-detail-card">
+      <div className="dressing-detail-head">
+        <button type="button" onClick={onBack}><ArrowLeft size={17} /> Volver</button>
+        <button className={favorite ? "active" : ""} type="button" onClick={onFavorite}>
+          <Heart size={20} fill={favorite ? "currentColor" : "none"} />
+          {favorite ? "Favorito" : "Guardar"}
+        </button>
+      </div>
+
+      <span className="dressing-detail-kicker"><Utensils size={15} /> Paso a paso</span>
+      <h2>{dressing.name}</h2>
+      <p>{dressing.shortDescription}</p>
+
+      <div className="dressing-detail-meta">
+        <span>{dressing.prepTime}</span>
+        <span>{dressing.estimatedDuration}</span>
+        <span>{dressing.difficulty}</span>
+      </div>
+
+      <section>
+        <h3>Ingredientes</h3>
+        <ul>
+          {dressing.ingredients.map((item) => <li key={item}>{item}</li>)}
+        </ul>
+      </section>
+
+      <section>
+        <h3>Preparacion</h3>
+        <ol>
+          {dressing.preparation.map((step) => <li key={step}>{step}</li>)}
+        </ol>
+      </section>
+
+      <section>
+        <h3>Combina mejor con</h3>
+        <div className="dressing-combo-tags">
+          {dressing.bestWith.map((item) => <span key={item}>{item}</span>)}
+        </div>
+      </section>
+
+      <p className="dressing-storage-tip">{dressing.storageTip}</p>
+    </article>
   );
 }
 

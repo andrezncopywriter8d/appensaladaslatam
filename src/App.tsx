@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LoginScreen } from "./components/LoginScreen";
-import { SaladBottomNav, SaladGuideScreen, SaladHomeScreen, SaladOnboarding, SaladRecipeDetail, SaladRecipesScreen, SaladShoppingScreen, SaladWeekScreen } from "./components/SaladScreens";
+import { SaladBottomNav, SaladDressingsScreen, SaladGuideScreen, SaladHomeScreen, SaladOnboarding, SaladRecipeDetail, SaladRecipesScreen, SaladShoppingScreen, SaladWeekScreen } from "./components/SaladScreens";
 import { recipes, type SaladRecipe, type ScreenId } from "./data/saladData";
 import { getCurrentAuthSession, loadAuthSession, onAuthSessionChange, type AuthSession } from "./state/authState";
 import { loadSaladState, saveSaladState, type SaladProfile, type SaladState } from "./state/saladState";
@@ -123,6 +123,7 @@ export function App() {
       <div className="status-glow" />
       <SaladHomeScreen {...context} active={activeScreen === "home"} />
       <SaladRecipesScreen {...context} active={activeScreen === "recipes" && !recipeDetailOpen} recipeCategoryRequest={recipeCategoryRequest} />
+      <SaladDressingsScreen {...context} active={activeScreen === "dressings"} />
       <SaladRecipeDetail active={activeScreen === "recipes" && recipeDetailOpen} recipe={selectedRecipe} state={state} setState={setState} openScreen={openScreen} />
       <SaladWeekScreen {...context} active={activeScreen === "week"} />
       <SaladShoppingScreen {...context} active={activeScreen === "shopping"} />

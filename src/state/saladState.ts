@@ -1,4 +1,5 @@
 import { recipes, type SaladRecipe } from "../data/saladData";
+import { saladDressings } from "../data/saladDressings";
 
 export const SALAD_STORAGE_KEY = "ensaladasEnFrascoStateV2";
 
@@ -71,9 +72,11 @@ export function saveSaladState(state: SaladState) {
 
 export function normalizeState(partial: Partial<SaladState>): SaladState {
   const validRecipeIds = new Set(recipes.map((recipe) => recipe.id));
+  const validDressingIds = new Set(saladDressings.map((dressing) => dressing.id));
   const safeWeekRecipeIds = (partial.weekRecipeIds ?? defaultSaladState.weekRecipeIds).filter((id) => validRecipeIds.has(id));
   const safeCompletedRecipeIds = (partial.completedRecipeIds ?? defaultSaladState.completedRecipeIds).filter((id) => validRecipeIds.has(id));
   const safeFavoriteRecipeIds = (partial.favoriteRecipeIds ?? defaultSaladState.favoriteRecipeIds).filter((id) => validRecipeIds.has(id));
+  const safeFavoriteDressingIds = (partial.favoriteDressingIds ?? defaultSaladState.favoriteDressingIds).filter((id) => validDressingIds.has(id));
   const safePreparedLog = (partial.preparedLog ?? defaultSaladState.preparedLog).filter((entry) => validRecipeIds.has(entry.recipeId));
   const safeUnlockedBonusIds = (partial.unlockedBonusIds ?? defaultSaladState.unlockedBonusIds).filter((id) => typeof id === "string" && id.length > 0);
   const safeRecipeProgress = Object.fromEntries(
@@ -97,6 +100,7 @@ export function normalizeState(partial: Partial<SaladState>): SaladState {
     weekRecipeIds: safeWeekRecipeIds.length ? Array.from(new Set(safeWeekRecipeIds)) : defaultSaladState.weekRecipeIds,
     completedRecipeIds: Array.from(new Set(safeCompletedRecipeIds)),
     favoriteRecipeIds: Array.from(new Set(safeFavoriteRecipeIds)),
+    favoriteDressingIds: Array.from(new Set(safeFavoriteDressingIds)),
     unlockedBonusIds: Array.from(new Set(safeUnlockedBonusIds)),
     priceCalculator: {
       ...defaultSaladState.priceCalculator,

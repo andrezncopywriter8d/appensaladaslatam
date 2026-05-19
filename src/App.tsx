@@ -11,12 +11,22 @@ export interface PlayerSource {
   readonly routineId?: string;
 }
 
+export interface ScreenOpenOptions {
+  readonly recipeCategory?: string;
+}
+
+export interface RecipeCategoryRequest {
+  readonly category: string;
+  readonly version: number;
+}
+
 export function App() {
   const [state, setState] = useState<SaladState>(() => loadSaladState());
   const [authSession, setAuthSession] = useState<AuthSession | null>(() => loadAuthSession());
   const [activeScreen, setActiveScreen] = useState<ScreenId>("home");
   const [selectedRecipe, setSelectedRecipe] = useState<SaladRecipe>(recipes[0]);
   const [recipeDetailOpen, setRecipeDetailOpen] = useState(false);
+  const [recipeCategoryRequest, setRecipeCategoryRequest] = useState<RecipeCategoryRequest>({ category: "Todas", version: 0 });
   const [screenTransitioning, setScreenTransitioning] = useState(false);
   const transitionTimer = useRef<number | null>(null);
 
@@ -53,8 +63,14 @@ export function App() {
     openRecipe
   }), [state]);
 
-  function openScreen(screen: ScreenId) {
+  function openScreen(screen: ScreenId, options?: ScreenOpenOptions) {
     beginScreenTransition();
+    if (screen === "recipes") {
+      setRecipeCategoryRequest((current) => ({
+        category: options?.recipeCategory ?? "Todas",
+        version: current.version + 1
+      }));
+    }
     setRecipeDetailOpen(false);
     setActiveScreen(screen);
     window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
@@ -103,12 +119,12 @@ export function App() {
     <main className={`app-shell ${screenTransitioning ? "screen-is-transitioning" : ""}`}>
       <div className="status-glow" />
       <SaladHomeScreen {...context} active={activeScreen === "home"} />
-      <SaladRecipesScreen {...context} active={activeScreen === "recipes" && !recipeDetailOpen} />
+      <SaladRecipesScreen {...context} active={activeScreen === "recipes" && !recipeDetailOpen} recipeCategoryRequest={recipeCategoryRequest} />
       <SaladRecipeDetail active={activeScreen === "recipes" && recipeDetailOpen} recipe={selectedRecipe} state={state} setState={setState} openScreen={openScreen} />
       <SaladWeekScreen {...context} active={activeScreen === "week"} />
       <SaladShoppingScreen {...context} active={activeScreen === "shopping"} />
       <SaladGuideScreen {...context} active={activeScreen === "guide"} />
-      <SaladBottomNav activeScreen={activeScreen} openScreen={openScreen} />
+      <SaladBottomNav activeScreen={activeScreen} activeRecipeCategory={recipeCategoryRequest.category} openScreen={openScreen} />
     </main>
   );
 }

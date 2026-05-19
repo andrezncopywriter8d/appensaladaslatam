@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
 import { ArrowLeft, Award, Bell, BookOpen, Check, ChevronRight, Clock3, Copy, Heart, Home, Layers3, Leaf, Menu, Plus, Salad, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Star, Trash2, Utensils } from "lucide-react";
 import { conservationTips, dressings, faq, homeCards, layerSteps, navigationItems, recipes, sellingTips, weeklyMenus, type Dressing, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
@@ -6,15 +6,15 @@ import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type Sala
 interface AppContext {
   readonly state: SaladState;
   readonly setState: Dispatch<SetStateAction<SaladState>>;
-  readonly openScreen: (screen: ScreenId) => void;
+  readonly openScreen: (screen: ScreenId, options?: { readonly recipeCategory?: string }) => void;
   readonly openRecipe: (recipe: SaladRecipe) => void;
 }
 
-export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeScreen: ScreenId; readonly openScreen: (screen: ScreenId) => void }) {
+export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen }: { readonly activeScreen: ScreenId; readonly activeRecipeCategory: string; readonly openScreen: (screen: ScreenId, options?: { readonly recipeCategory?: string }) => void }) {
   const navItems = [
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
-    { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId },
-    { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId },
+    { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId, recipeCategory: "Todas" },
+    { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, recipeCategory: "Favoritas" },
     { key: "guide", label: "Mi guía", icon: BookOpen, screen: "guide" as ScreenId }
   ];
 
@@ -27,8 +27,10 @@ export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeSc
             ? activeScreen === "home"
             : item.key === "guide"
               ? activeScreen === "guide"
-              : item.key === "recipes"
-                ? activeScreen === "recipes"
+            : item.key === "recipes"
+                ? activeScreen === "recipes" && activeRecipeCategory !== "Favoritas"
+                : item.key === "favorites"
+                  ? activeScreen === "recipes" && activeRecipeCategory === "Favoritas"
                 : false;
 
         return (
@@ -38,7 +40,7 @@ export function SaladBottomNav({ activeScreen, openScreen }: { readonly activeSc
             type="button"
             data-screen-target={item.screen}
             aria-current={active ? "page" : undefined}
-            onClick={() => openScreen(item.screen)}
+            onClick={() => openScreen(item.screen, "recipeCategory" in item ? { recipeCategory: item.recipeCategory } : undefined)}
           >
             <Icon size={25} strokeWidth={active ? 2.8 : 2.2} fill={active && item.key === "home" ? "currentColor" : "none"} />
             <span>{item.label}</span>
@@ -117,12 +119,12 @@ export function SaladOnboarding({ onComplete }: { readonly onComplete: (profile:
 
 export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly active: boolean }) {
   const exploreCards = [
-    { title: "Recetas", icon: Salad, image: "recipes", screen: "recipes" as ScreenId, tone: "green" },
+    { title: "Recetas", icon: Salad, image: "recipes", screen: "recipes" as ScreenId, tone: "green", recipeCategory: "Todas" },
     { title: "Aderezos", icon: Utensils, image: "dressings", screen: "guide" as ScreenId, tone: "cream" },
     { title: "Combinaciones", icon: Layers3, image: "combinations", screen: "guide" as ScreenId, tone: "green" },
     { title: "Menús", icon: ShoppingBasket, image: "menus", screen: "week" as ScreenId, tone: "cream" },
     { title: "Consejos", icon: Sparkles, image: "tips", screen: "guide" as ScreenId, tone: "green" },
-    { title: "Favoritos", icon: Heart, image: "favorites", screen: "recipes" as ScreenId, tone: "pink" }
+    { title: "Favoritos", icon: Heart, image: "favorites", screen: "recipes" as ScreenId, tone: "pink", recipeCategory: "Favoritas" }
   ];
 
   return (
@@ -206,7 +208,7 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
                 className={`premium-explore-card tone-${card.tone}`}
                 key={card.title}
                 type="button"
-                onClick={() => openScreen(card.screen)}
+                onClick={() => openScreen(card.screen, "recipeCategory" in card ? { recipeCategory: card.recipeCategory } : undefined)}
               >
                 <span className="premium-icon-orb">
                   <picture>
@@ -230,7 +232,7 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
   );
 }
 
-export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppContext & { readonly active: boolean }) {
+export function SaladRecipesScreen({ active, state, setState, openRecipe, recipeCategoryRequest }: AppContext & { readonly active: boolean; readonly recipeCategoryRequest: { readonly category: string; readonly version: number } }) {
   const [category, setCategory] = useState<string>("Todas");
   const [query, setQuery] = useState("");
 
@@ -241,6 +243,12 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
     { value: "Economicas", label: "Económicas", icon: null },
     { value: "Favoritas", label: "Favoritas", icon: Heart }
   ];
+
+  useEffect(() => {
+    if (!active) return;
+    setCategory(recipeCategoryRequest.category);
+    setQuery("");
+  }, [active, recipeCategoryRequest.category, recipeCategoryRequest.version]);
 
   const normalizedQuery = query.trim().toLowerCase();
 

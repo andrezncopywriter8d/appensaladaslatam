@@ -11419,3 +11419,645 @@ textarea,
     min-height: 230px;
   }
 }
+
+/* ============================================================
+   BONOS V2 - PIXEL-REFERENCED STOREFRONT
+   ============================================================ */
+
+.app-shell:has(.bonus-screen.active) {
+  width: min(100%, 430px) !important;
+  background:
+    radial-gradient(circle at 50% -12%, rgba(255, 255, 255, 0.9), transparent 190px),
+    linear-gradient(180deg, #fffaf0 0%, #f7efdf 100%) !important;
+}
+
+.screen.bonus-screen {
+  padding: 0 0 calc(104px + env(safe-area-inset-bottom)) !important;
+  background:
+    radial-gradient(circle at 0% 12%, rgba(255, 255, 255, 0.92), transparent 210px),
+    radial-gradient(circle at 100% 46%, rgba(156, 181, 121, 0.1), transparent 190px),
+    linear-gradient(180deg, #fffaf0 0%, #f7efdf 100%) !important;
+}
+
+.bonus-screen .bonus-topbar {
+  display: grid !important;
+  grid-template-columns: 54px 1fr 54px !important;
+  min-height: 94px !important;
+  padding: calc(10px + env(safe-area-inset-top)) 22px 14px !important;
+  border: 1px solid rgba(74, 93, 55, 0.08) !important;
+  border-top: 0 !important;
+  border-radius: 0 0 24px 24px !important;
+  color: #0d1610 !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 251, 243, 0.92)) !important;
+  box-shadow:
+    0 14px 34px rgba(69, 57, 37, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+  backdrop-filter: blur(16px);
+}
+
+.bonus-screen .premium-header-button {
+  color: #0d1610 !important;
+}
+
+.bonus-screen .premium-salad-brand strong {
+  color: #103f21 !important;
+  font-family: Poppins, Montserrat, Inter, system-ui, sans-serif !important;
+  font-size: clamp(34px, 9.4vw, 46px) !important;
+  font-style: normal !important;
+  font-weight: 950 !important;
+  line-height: 0.86 !important;
+  letter-spacing: -1.8px !important;
+  text-shadow: none !important;
+}
+
+.bonus-screen .premium-salad-brand small {
+  margin-top: 11px !important;
+  color: #103f21 !important;
+  font-size: clamp(12px, 3.5vw, 18px) !important;
+  font-weight: 950 !important;
+  letter-spacing: 7px !important;
+}
+
+.bonus-content {
+  padding: 8px 10px 0 !important;
+}
+
+.bonus-page-head {
+  margin-bottom: 10px;
+}
+
+.bonus-page-head > h1,
+.bonus-page-head > p {
+  display: none !important;
+}
+
+.bonus-hero-card {
+  display: grid !important;
+  grid-template-columns: 45% 55% !important;
+  min-height: 232px !important;
+  margin: 0 0 12px !important;
+  border: 1px solid rgba(74, 93, 55, 0.11) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(90deg, rgba(242, 249, 236, 0.94) 0 38%, rgba(255, 255, 255, 0.1) 70%),
+    #f5f8ed !important;
+  box-shadow:
+    0 13px 28px rgba(63, 59, 41, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+.bonus-hero-copy {
+  align-self: center;
+  justify-content: center !important;
+  padding: 24px 8px 24px 22px !important;
+}
+
+.bonus-hero-copy h1 {
+  margin: 0;
+  color: #174824;
+  font-size: clamp(41px, 11vw, 55px);
+  font-weight: 950;
+  line-height: 1.02;
+  letter-spacing: -1.8px;
+}
+
+.bonus-title-line {
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin: 20px 0 17px;
+  background: #174824;
+  opacity: 0.82;
+}
+
+.bonus-hero-copy p {
+  max-width: 190px;
+  margin: 0 0 21px;
+  color: #1e4b29;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.48;
+}
+
+.bonus-hero-card ul {
+  display: block !important;
+  min-height: 0 !important;
+}
+
+.bonus-hero-card li {
+  display: grid !important;
+  grid-template-columns: 33px 1fr;
+  align-items: center;
+  gap: 10px;
+  max-width: 155px;
+  color: #2f4a31;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.bonus-hero-card li svg {
+  width: 31px !important;
+  height: 31px !important;
+  padding: 7px !important;
+  color: #2d7a34 !important;
+  background: #dff0d0 !important;
+}
+
+.bonus-hero-card picture {
+  position: relative;
+  display: block;
+  min-height: 232px;
+  overflow: hidden;
+}
+
+.bonus-hero-card img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: 52% center !important;
+  filter: none !important;
+}
+
+.bonus-hero-card picture::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(90deg, rgba(245, 248, 237, 0.1), transparent 25%);
+}
+
+.bonus-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 !important;
+}
+
+.bonus-store-card {
+  display: grid !important;
+  grid-template-columns: 43% 57% !important;
+  min-height: 164px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(74, 93, 55, 0.1) !important;
+  border-radius: 14px !important;
+  background: rgba(255, 253, 247, 0.96) !important;
+  box-shadow:
+    0 12px 24px rgba(66, 62, 41, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+}
+
+.bonus-card-media {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #f3ebdc;
+}
+
+.bonus-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.bonus-card-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 13px 12px 12px;
+}
+
+.bonus-store-card h3 {
+  min-height: 0 !important;
+  margin: 0 0 11px !important;
+  color: #174824 !important;
+  font-size: clamp(14px, 3.7vw, 18px) !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.35px !important;
+  text-align: left !important;
+}
+
+.bonus-store-card ul {
+  min-height: 50px !important;
+  gap: 4px !important;
+}
+
+.bonus-store-card li {
+  display: grid !important;
+  grid-template-columns: 13px 1fr !important;
+  align-items: start !important;
+  gap: 5px !important;
+  color: #344534 !important;
+  font-size: clamp(9px, 2.45vw, 11px) !important;
+  font-weight: 500 !important;
+  line-height: 1.14 !important;
+}
+
+.bonus-store-card li svg {
+  width: 11px !important;
+  height: 11px !important;
+  margin-top: 1px !important;
+  padding: 1.5px !important;
+  background: #70aa5a !important;
+}
+
+.bonus-price {
+  display: block !important;
+  align-self: flex-start !important;
+  min-height: auto !important;
+  margin: auto 0 7px !important;
+  padding: 0 !important;
+  color: #2f7a38 !important;
+  background: transparent !important;
+  font-size: clamp(18px, 4.8vw, 24px) !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+}
+
+.bonus-primary-action,
+.bonus-secondary-action {
+  width: 100% !important;
+  min-height: 31px !important;
+  border-radius: 999px !important;
+  font-size: clamp(11px, 2.85vw, 13px) !important;
+  font-weight: 900 !important;
+}
+
+.bonus-primary-action {
+  color: #fffef6 !important;
+  background:
+    radial-gradient(circle at 30% 8%, rgba(255, 255, 255, 0.16), transparent 50%),
+    linear-gradient(180deg, #4c9245, #1d672f) !important;
+  box-shadow: 0 8px 15px rgba(34, 87, 37, 0.2) !important;
+}
+
+.bonus-secondary-action {
+  color: #1d672f !important;
+  background: #e7f2d9 !important;
+}
+
+.bonus-store-card small {
+  display: none !important;
+}
+
+.bonus-combo-card {
+  display: grid !important;
+  grid-template-columns: 52% 48% !important;
+  min-height: 142px !important;
+  margin: 14px 0 10px !important;
+  padding: 17px 14px !important;
+  border: 1px solid rgba(80, 111, 58, 0.16) !important;
+  border-radius: 16px !important;
+  background:
+    radial-gradient(circle at 91% 20%, rgba(121, 166, 83, 0.18), transparent 80px),
+    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(246, 252, 235, 0.96)) !important;
+  box-shadow: 0 16px 32px rgba(63, 64, 43, 0.08) !important;
+}
+
+.bonus-combo-card .bonus-pill {
+  min-height: 27px !important;
+  padding: 0 11px !important;
+  color: #fff !important;
+  font-size: 10px !important;
+}
+
+.bonus-combo-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 230px !important;
+  margin: 18px 0 8px !important;
+  color: #184b27 !important;
+  font-size: clamp(20px, 5vw, 28px) !important;
+  font-weight: 950 !important;
+  line-height: 1.05 !important;
+}
+
+.bonus-combo-card h2 svg {
+  color: #5b9a43;
+  flex: 0 0 auto;
+}
+
+.bonus-combo-card p {
+  max-width: 220px !important;
+  margin: 0 !important;
+  color: #36473b !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+}
+
+.bonus-combo-card ul {
+  display: none !important;
+}
+
+.bonus-combo-side {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 94px;
+  align-items: end;
+  gap: 5px;
+  min-width: 0;
+  border-left: 1px solid rgba(80, 111, 58, 0.12);
+  padding-left: 16px;
+}
+
+.bonus-combo-price {
+  display: grid !important;
+  gap: 5px !important;
+  margin: 0 0 48px !important;
+}
+
+.bonus-combo-price small {
+  color: #4c584b;
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.bonus-combo-price span {
+  color: #6a6f67 !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+.bonus-combo-price strong {
+  display: block !important;
+  min-height: auto !important;
+  padding: 0 !important;
+  color: #286d32 !important;
+  background: transparent !important;
+  font-size: clamp(30px, 8.5vw, 44px) !important;
+  line-height: 0.9 !important;
+}
+
+.bonus-combo-side picture {
+  position: absolute;
+  right: -4px;
+  bottom: 34px;
+  width: 110px;
+  height: 78px;
+  overflow: hidden;
+}
+
+.bonus-combo-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+.bonus-combo-side b {
+  position: absolute;
+  top: 1px;
+  right: 70px;
+  display: grid;
+  place-items: center;
+  width: 59px;
+  height: 65px;
+  color: #fff;
+  background: linear-gradient(180deg, #1f6330, #154622);
+  clip-path: polygon(0 0, 100% 0, 100% 73%, 50% 100%, 0 73%);
+  font-size: 11px;
+  font-weight: 950;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.bonus-combo-side b::first-line {
+  font-size: 9px;
+}
+
+.bonus-primary-action.combo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(100%, 188px) !important;
+  min-height: 39px !important;
+  margin: 0 !important;
+  font-size: clamp(12px, 3.2vw, 15px) !important;
+  box-shadow: 0 11px 20px rgba(34, 87, 37, 0.18) !important;
+}
+
+.bonus-payment-trust {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) repeat(4, minmax(34px, 0.45fr)) minmax(0, 0.75fr);
+  align-items: center;
+  gap: 7px;
+  min-height: 58px;
+  margin: 0 0 12px;
+  padding: 8px 11px;
+  border: 1px solid rgba(80, 111, 58, 0.12);
+  border-radius: 15px;
+  background: rgba(255, 253, 247, 0.94);
+  box-shadow: 0 10px 22px rgba(63, 64, 43, 0.06);
+}
+
+.bonus-secure-copy,
+.bonus-ssl-copy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: #4d6343;
+}
+
+.bonus-secure-copy svg {
+  width: 31px;
+  height: 31px;
+  padding: 6px;
+  border-radius: 999px;
+  color: #fff;
+  background: #5a9360;
+}
+
+.bonus-secure-copy strong {
+  display: block;
+  color: #235a2e;
+  font-size: 12px;
+  font-weight: 950;
+  line-height: 1.05;
+}
+
+.bonus-secure-copy small {
+  display: block;
+  color: #5a6259;
+  font-size: 9px;
+  line-height: 1.1;
+}
+
+.bonus-payment-trust picture {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  height: 29px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(80, 111, 58, 0.08);
+}
+
+.bonus-payment-trust img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.35);
+}
+
+.bonus-ssl-copy {
+  justify-content: center;
+  gap: 4px;
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1.05;
+  text-align: left;
+}
+
+.bonus-ssl-copy svg {
+  width: 16px;
+  height: 16px;
+}
+
+.app-shell:has(.bonus-screen.active) .bottom-nav.salad-premium-bottom-nav {
+  grid-template-columns: repeat(5, 1fr) !important;
+  width: min(calc(100% - 28px), 392px) !important;
+  height: 74px !important;
+  bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+  border-radius: 25px !important;
+}
+
+.app-shell:has(.bonus-screen.active) .bottom-nav.salad-premium-bottom-nav button {
+  grid-template-rows: 24px 13px !important;
+  min-height: 55px !important;
+  font-size: 9px !important;
+}
+
+.app-shell:has(.bonus-screen.active) .bottom-nav.salad-premium-bottom-nav button svg {
+  width: 23px !important;
+  height: 23px !important;
+}
+
+@media (max-width: 400px) {
+  .bonus-content {
+    padding-inline: 8px !important;
+  }
+
+  .bonus-hero-card {
+    min-height: 218px !important;
+  }
+
+  .bonus-hero-copy {
+    padding: 19px 6px 19px 19px !important;
+  }
+
+  .bonus-hero-copy h1 {
+    font-size: 38px;
+  }
+
+  .bonus-hero-copy p {
+    font-size: 13.5px;
+    max-width: 166px;
+  }
+
+  .bonus-store-card {
+    grid-template-columns: 42% 58% !important;
+    min-height: 154px !important;
+  }
+
+  .bonus-card-copy {
+    padding: 11px 10px 10px;
+  }
+
+  .bonus-store-card h3 {
+    font-size: 13px !important;
+  }
+
+  .bonus-store-card li {
+    font-size: 8.6px !important;
+  }
+
+  .bonus-primary-action,
+  .bonus-secondary-action {
+    min-height: 29px !important;
+    font-size: 10.5px !important;
+  }
+
+  .bonus-combo-card {
+    padding: 15px 12px !important;
+  }
+
+  .bonus-payment-trust {
+    grid-template-columns: minmax(0, 1.55fr) repeat(4, minmax(30px, 0.4fr)) minmax(0, 0.68fr);
+    gap: 5px;
+    padding-inline: 8px;
+  }
+
+  .bonus-secure-copy small {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .bonus-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .bonus-store-card {
+    min-height: 162px !important;
+  }
+}
+
+/* Combo card uses the generated premium artwork directly, matching the reference block. */
+.bonus-combo-card.bonus-combo-card-image {
+  position: relative !important;
+  display: block !important;
+  min-height: 0 !important;
+  aspect-ratio: 766 / 262 !important;
+  margin: 14px 0 10px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(80, 111, 58, 0.16) !important;
+  border-radius: 16px !important;
+  background:
+    url("/assets/bonos/bonus-combo-card.webp") center / contain no-repeat,
+    rgba(255, 253, 247, 0.96) !important;
+  box-shadow: 0 16px 32px rgba(63, 64, 43, 0.08) !important;
+}
+
+.bonus-combo-reference {
+  display: none !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.bonus-combo-reference img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+.bonus-combo-hotspot {
+  position: absolute !important;
+  right: 12px !important;
+  bottom: 11px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: 38% !important;
+  min-height: 28px !important;
+  padding: 0 8px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: transparent !important;
+  background: transparent !important;
+  cursor: pointer !important;
+}
+
+.bonus-combo-hotspot svg {
+  opacity: 0 !important;
+}

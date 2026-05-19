@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
-import { ArrowLeft, Award, Bell, Check, ChevronRight, Clock3, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Star, Trash2, Utensils } from "lucide-react";
+import { ArrowLeft, Award, Bell, BookOpen, Check, ChevronRight, Clock3, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShieldCheck, ShoppingBasket, SlidersHorizontal, Sparkles, Trash2, Utensils } from "lucide-react";
 import { recipes, weeklyMenus, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
 
@@ -14,8 +14,9 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
   const navItems = [
     { key: "home", label: "Inicio", icon: Home, screen: "home" as ScreenId },
     { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId, recipeCategory: "Todas" },
+    { key: "bonus", label: "Bonos", icon: Gift, screen: "guide" as ScreenId },
     { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, recipeCategory: "Favoritas" },
-    { key: "guide", label: "Bonos", icon: Gift, screen: "guide" as ScreenId }
+    { key: "guide", label: "Mi guía", icon: BookOpen, screen: "guide" as ScreenId }
   ];
 
   return (
@@ -25,9 +26,11 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
         const active =
           item.key === "home"
             ? activeScreen === "home"
-            : item.key === "guide"
+            : item.key === "bonus"
               ? activeScreen === "guide"
-            : item.key === "recipes"
+              : item.key === "guide"
+                ? false
+                : item.key === "recipes"
                 ? activeScreen === "recipes" && activeRecipeCategory !== "Favoritas"
                 : item.key === "favorites"
                   ? activeScreen === "recipes" && activeRecipeCategory === "Favoritas"
@@ -644,6 +647,7 @@ type BonusOffer = {
   readonly checkoutUrl: string;
   readonly contentUrl: string;
   readonly icon: "avocado" | "sauce" | "calendar" | "list" | "shop" | "family";
+  readonly image: string;
   readonly defaultUnlocked?: boolean;
 };
 
@@ -653,66 +657,72 @@ const bonusOffers: readonly BonusOffer[] = [
     name: "Pack Antojos Cero",
     price: "$2",
     badge: "POPULAR",
-    description: "30 snacks y postres rápidos para matar las ganas de dulce sin romper la dieta.",
-    benefits: ["Postres listos en 5 minutos", "Opciones con banana, yogur, avena y chocolate"],
+    description: "Snacks saludables para controlar antojos sin culpa.",
+    benefits: ["Snacks saludables", "Fáciles y rápidos", "Sin culpa"],
     checkoutUrl: "https://pay.ensaladasenfrasco.com/antojos-cero",
     contentUrl: "https://app.ensaladasenfrasco.com/bonos/antojos-cero",
-    icon: "avocado"
+    icon: "avocado",
+    image: "bonus-snacks"
   },
   {
     id: "salsas-premium",
     name: "Pack Salsas Premium",
     price: "$1",
     badge: "BONO PREMIUM",
-    description: "15 aderezos cremosos para que tus ensaladas no sepan siempre igual.",
-    benefits: ["Salsa tipo Big Mac saludable", "Aderezos dulces, cítricos y cremosos"],
+    description: "Salsas caseras para llevar tus ensaladas al siguiente nivel.",
+    benefits: ["Salsas caseras", "Más sabor", "Combina todo"],
     checkoutUrl: "https://pay.ensaladasenfrasco.com/salsas-premium",
     contentUrl: "https://app.ensaladasenfrasco.com/bonos/salsas-premium",
-    icon: "sauce"
+    icon: "sauce",
+    image: "bonus-sauces"
   },
   {
     id: "menu-7-dias",
     name: "Menú 7 Días en Frasco",
     price: "$2",
     badge: "POPULAR",
-    description: "Un plan semanal listo para saber qué preparar cada día sin pensar demasiado.",
-    benefits: ["Combinaciones ya organizadas", "Ideal para preparar todo el domingo"],
+    description: "Planifica tu semana con ensaladas fáciles y balanceadas.",
+    benefits: ["7 días completos", "Balanceado y rico", "Ahorra tiempo"],
     checkoutUrl: "https://pay.ensaladasenfrasco.com/menu-7-dias",
     contentUrl: "https://app.ensaladasenfrasco.com/bonos/menu-7-dias",
-    icon: "calendar"
+    icon: "calendar",
+    image: "bonus-jars"
   },
   {
     id: "lista-inteligente",
     name: "Lista de Compras Inteligente",
     price: "$1",
     badge: "BONO PREMIUM",
-    description: "Lista práctica por ingredientes para comprar menos, ahorrar más y evitar desperdicios.",
-    benefits: ["Separada por categorías", "Pensada para toda la semana"],
+    description: "Lista de compra automática para cada receta.",
+    benefits: ["Organizada por recetas", "Optimiza tu compra", "Ahorra dinero"],
     checkoutUrl: "https://pay.ensaladasenfrasco.com/lista-inteligente",
     contentUrl: "https://app.ensaladasenfrasco.com/bonos/lista-inteligente",
-    icon: "list"
+    icon: "list",
+    image: "bonus-shopping"
   },
   {
     id: "vender-ensaladas",
-    name: "Guía Para Vender Ensaladas",
+    name: "Guía para vender ensaladas",
     price: "$3",
     badge: "BONO PREMIUM",
-    description: "Aprende a calcular precios, armar combos y vender tus ensaladas por WhatsApp.",
-    benefits: ["Precios sugeridos y margen", "Ideas de combos para vender"],
+    description: "Guía práctica para emprender y vender ensaladas.",
+    benefits: ["Paso a paso", "Precios y márgenes", "Haz crecer tu negocio"],
     checkoutUrl: "https://pay.ensaladasenfrasco.com/vender-ensaladas",
     contentUrl: "https://app.ensaladasenfrasco.com/bonos/vender-ensaladas",
-    icon: "shop"
+    icon: "shop",
+    image: "bonus-sell"
   },
   {
     id: "plan-familiar",
-    name: "Plan Familiar Saludable",
+    name: "Plan familiar saludable",
     price: "$2",
     badge: "BONO PREMIUM",
-    description: "Recetas y combinaciones para que tu familia también coma rico sin reclamar.",
-    benefits: ["Opciones para niños y esposo", "Sabores más cremosos y fáciles"],
+    description: "Ideas y porciones para alimentar a toda tu familia.",
+    benefits: ["Menús para toda la familia", "Nutritivo y delicioso", "Todos lo disfrutan"],
     checkoutUrl: "https://pay.ensaladasenfrasco.com/plan-familiar",
     contentUrl: "https://app.ensaladasenfrasco.com/bonos/plan-familiar",
-    icon: "family"
+    icon: "family",
+    image: "bonus-family"
   }
 ];
 
@@ -761,9 +771,10 @@ export function SaladGuideScreen({ active, state }: AppContext & { readonly acti
         <BonusHeader />
 
         <div className="bonus-grid" id="bonos-disponibles">
-          {bonusOffers.map((bonus) => (
+          {bonusOffers.map((bonus, index) => (
             <BonusCard
               bonus={bonus}
+              index={index + 1}
               key={bonus.id}
               status={bonusStatus[bonus.id] ?? "idle"}
               unlocked={isUnlocked(bonus)}
@@ -779,6 +790,7 @@ export function SaladGuideScreen({ active, state }: AppContext & { readonly acti
           onOpen={() => openExternal("combo", "https://app.ensaladasenfrasco.com/bonos/combo-recomendado")}
           onUnlock={() => openExternal("combo", "https://pay.ensaladasenfrasco.com/combo-recomendado")}
         />
+        <BonusPaymentTrust />
       </div>
     </section>
   );
@@ -787,107 +799,85 @@ export function SaladGuideScreen({ active, state }: AppContext & { readonly acti
 function BonusHeader() {
   return (
     <section className="bonus-page-head">
-      <h1>Bonos Especiales</h1>
-      <p>Complementa tus ensaladas con guías rápidas, menús y packs exclusivos desde solo $1.</p>
-
       <article className="bonus-hero-card">
         <div className="bonus-hero-copy">
-          <span className="bonus-pill"><Gift size={16} /> OFERTAS EXCLUSIVAS</span>
-          <h2>Desbloquea herramientas extras para ahorrar tiempo, comer más rico y seguir bajando de peso sin complicarte.</h2>
+          <h1>Bonos especiales</h1>
+          <span className="bonus-title-line" />
+          <p>Extras prácticos desde $1 para mejorar tu experiencia y ahorrar tiempo.</p>
           <ul>
-            <li><Check size={16} /> Contenido práctico</li>
-            <li><Check size={16} /> Listo para usar</li>
-            <li><Check size={16} /> Resultados deliciosos</li>
+            <li><Leaf size={18} /> Contenido digital inmediato</li>
           </ul>
-          <a className="bonus-hero-button" href="#bonos-disponibles">Ver bonos disponibles</a>
         </div>
 
         <picture>
-          <source srcSet="/assets/bonos/bonus-hero.webp" type="image/webp" />
-          <img src="/assets/bonos/bonus-hero.png" alt="Ensalada en frasco con verduras frescas y hojas verdes" loading="eager" decoding="async" />
+          <source srcSet="/assets/bonos/bonus-jars.webp" type="image/webp" />
+          <img src="/assets/bonos/bonus-jars.jpg" alt="Ensaladas en frasco frescas para preparar bonos especiales" loading="eager" decoding="async" />
         </picture>
       </article>
     </section>
   );
 }
 
-function BonusCard({ bonus, status, unlocked, onOpen, onUnlock }: { readonly bonus: BonusOffer; readonly status: BonusStatus; readonly unlocked: boolean; readonly onOpen: () => void; readonly onUnlock: () => void }) {
+function BonusCard({ bonus, index, status, unlocked, onOpen, onUnlock }: { readonly bonus: BonusOffer; readonly index: number; readonly status: BonusStatus; readonly unlocked: boolean; readonly onOpen: () => void; readonly onUnlock: () => void }) {
   return (
     <article className={`bonus-store-card ${unlocked ? "unlocked" : ""}`}>
-      <div className="bonus-card-top">
-        <span className={`bonus-icon bonus-icon-${bonus.icon}`} aria-hidden="true">{bonusIcon(bonus.icon)}</span>
-        <span className="bonus-mini-badge">{unlocked ? "Desbloqueado" : bonus.badge}</span>
-      </div>
+      <picture className="bonus-card-media">
+        <source srcSet={`/assets/bonos/${bonus.image}.webp`} type="image/webp" />
+        <img src={`/assets/bonos/${bonus.image}.jpg`} alt={bonus.name} loading="lazy" decoding="async" />
+      </picture>
 
-      <h3>{bonus.name}</h3>
-      <p>{bonus.description}</p>
+      <div className="bonus-card-copy">
+        <h3>{index}. {bonus.name}</h3>
+        <ul>
+          {bonus.benefits.map((benefit) => (
+            <li key={benefit}><Check size={13} /> {benefit}</li>
+          ))}
+        </ul>
 
-      <ul>
-        {bonus.benefits.map((benefit) => (
-          <li key={benefit}><Check size={14} /> {benefit}</li>
-        ))}
-      </ul>
+        <strong className="bonus-price">{unlocked ? "Listo" : bonus.price}</strong>
 
-      <strong className="bonus-price">{unlocked ? "Listo" : bonus.price}</strong>
-
-      <div className="bonus-actions">
         <button className={unlocked ? "bonus-secondary-action" : "bonus-primary-action"} type="button" onClick={unlocked ? onOpen : onUnlock}>
-          {status === "loading" ? "Procesando..." : unlocked ? "Abrir" : "Desbloquear"}
-          {unlocked ? <ChevronRight size={15} /> : <LockKeyhole size={14} />}
+          {status === "loading" ? "Procesando..." : unlocked ? "Abrir" : "Añadir"}
+          {unlocked ? <ChevronRight size={15} /> : null}
         </button>
+        {status === "error" ? <small className="bonus-error">No se pudo completar. Intenta de nuevo.</small> : null}
       </div>
-
-      {status === "error" ? <small className="bonus-error">No se pudo completar. Intenta de nuevo.</small> : <small>Acceso inmediato dentro del app</small>}
     </article>
   );
 }
 
 function BonusComboCard({ status, unlocked, onOpen, onUnlock }: { readonly status: BonusStatus; readonly unlocked: boolean; readonly onOpen: () => void; readonly onUnlock: () => void }) {
   return (
-    <section className="bonus-combo-card">
-      <div>
-        <span className="bonus-pill hot"><Sparkles size={15} /> MÁS VENDIDO</span>
-        <h2>Combo recomendado</h2>
-        <p>Llévate los 3 bonos más vendidos por solo $4.</p>
-        <ul>
-          <li>Pack Antojos Cero</li>
-          <li>Pack Salsas Premium</li>
-          <li>Menú 7 Días en Frasco</li>
-        </ul>
-        <div className="bonus-combo-price">
-          <span>Antes $5</span>
-          <strong>Hoy $4</strong>
-        </div>
-      </div>
+    <section className="bonus-combo-card bonus-combo-card-image">
+      <picture className="bonus-combo-reference">
+        <source srcSet="/assets/bonos/bonus-combo-card.webp" type="image/webp" />
+        <img src="/assets/bonos/bonus-combo-card.jpg" alt="Combo recomendado: lleva más, ahorra más por $7" loading="lazy" decoding="async" />
+      </picture>
 
-      <div className="bonus-combo-orbit" aria-hidden="true">
-        <span><Gift size={22} /></span>
-        <span><Leaf size={22} /></span>
-        <span><Star size={22} /></span>
-        <span><ShoppingBasket size={22} /></span>
-      </div>
-
-      <button className="bonus-primary-action combo" type="button" onClick={unlocked ? onOpen : onUnlock}>
+      <button className="bonus-combo-hotspot" type="button" onClick={unlocked ? onOpen : onUnlock}>
         {status === "loading" ? "Procesando..." : unlocked ? "Abrir combo" : "Quiero el combo"}
-        <LockKeyhole size={16} />
+        <ChevronRight size={16} />
       </button>
-      {status === "error" ? <small className="bonus-error">No se pudo completar. Intenta de nuevo.</small> : <small>Compra segura y acceso inmediato.</small>}
+
+      {status === "error" ? <small className="bonus-error">No se pudo completar. Intenta de nuevo.</small> : null}
     </section>
   );
 }
 
-function bonusIcon(icon: BonusOffer["icon"]) {
-  const props = { size: 30, strokeWidth: 2.2 };
-  const icons: Record<BonusOffer["icon"], React.ReactNode> = {
-    avocado: <Leaf {...props} />,
-    sauce: <Utensils {...props} />,
-    calendar: <Clock3 {...props} />,
-    list: <Check {...props} />,
-    shop: <ShoppingBasket {...props} />,
-    family: <Heart {...props} />
-  };
-
-  return icons[icon];
+function BonusPaymentTrust() {
+  return (
+    <section className="bonus-payment-trust">
+      <div className="bonus-secure-copy">
+        <ShieldCheck size={30} />
+        <span><strong>Pago 100% seguro</strong><small>Tus datos están protegidos</small></span>
+      </div>
+      <picture><source srcSet="/assets/bonos/bonus-secure.webp" type="image/webp" /><img src="/assets/bonos/bonus-secure.jpg" alt="Visa" /></picture>
+      <picture><source srcSet="/assets/bonos/bonus-mastercard.webp" type="image/webp" /><img src="/assets/bonos/bonus-mastercard.jpg" alt="Mastercard" /></picture>
+      <picture><source srcSet="/assets/bonos/bonus-amex.webp" type="image/webp" /><img src="/assets/bonos/bonus-amex.jpg" alt="American Express" /></picture>
+      <picture><source srcSet="/assets/bonos/bonus-paypal.webp" type="image/webp" /><img src="/assets/bonos/bonus-paypal.jpg" alt="PayPal" /></picture>
+      <div className="bonus-ssl-copy"><LockKeyhole size={18} /><span>SSL<br />Encriptado</span></div>
+    </section>
+  );
 }
 
 function Header({ eyebrow, title, subtitle }: { readonly eyebrow: string; readonly title: string; readonly subtitle: string }) {

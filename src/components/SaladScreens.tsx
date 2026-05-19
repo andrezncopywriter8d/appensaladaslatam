@@ -250,8 +250,6 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
   const visibleWeekTotal = weekRecipes.length ? Math.max(weekRecipes.length, 7) : 7;
   const weekPercent = Math.round((visibleWeekCompleted / visibleWeekTotal) * 100);
   const remainingWeek = Math.max(visibleWeekTotal - visibleWeekCompleted, 0);
-  const recipeCalories = [420, 390, 360, 410, 380, 370];
-  const referenceTitles = ["Mediterránea con pollo", "Atún y garbanzos", "César ligera", "Quinoa y aguacate", "Mexicana fresca", "Lentejas crujientes"];
 
   const normalizeText = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -383,18 +381,11 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
           {premiumRecipes.map((recipe, index) => {
             const favorite = state.favoriteRecipeIds.includes(recipe.id);
             const tags = displayTags(recipe, index);
-            const visualTitle =
-              index < referenceTitles.length ? referenceTitles[index]
-              : recipe.nombre.replace("Ensalada ", "").replace(" en Frasco", "");
-            const visualTime =
-              index === 0 ? "15 min"
-              : index === 1 ? "12 min"
-              : index === 2 ? "18 min"
-              : index === 3 ? "10 min"
-              : recipe.tiempoPreparacion;
+            const visualTitle = recipe.nombre;
+            const visualTime = recipe.tiempoPreparacion;
             const imageIndex = (index % 6) + 1;
-            const calories = recipeCalories[index % recipeCalories.length];
-            const tagLabel = index === 5 ? "Veganas" : tags[1] ?? recipe.categoria;
+            const calories = recipe.tags.find((tag) => tag.includes("kcal")) ?? "";
+            const tagLabel = tags[0] ?? recipe.categoria;
 
             return (
               <article className="premium-recipe-card recipe-gallery-card" key={recipe.id}>
@@ -439,7 +430,7 @@ export function SaladRecipesScreen({ active, state, setState, openRecipe }: AppC
 
                   <div className="recipe-gallery-meta">
                     <span><Clock3 size={15} strokeWidth={2} /> {visualTime}</span>
-                    <span><Leaf size={15} strokeWidth={2} /> {calories} kcal</span>
+                    {calories ? <span><Leaf size={15} strokeWidth={2} /> {calories.replace(" aprox.", "")}</span> : null}
                   </div>
                 </div>
               </article>

@@ -10279,3 +10279,258 @@ select {
     animation: none !important;
   }
 }
+
+/* ============================================================
+   MODERN UI SYSTEM PASS - POPPINS
+   Final pass from the UI/UX audit: remove the old serif-heavy
+   hierarchy, keep the organic glass direction, and fix card labels.
+   ============================================================ */
+
+:root {
+  --salad-font: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --salad-ink: #22341f;
+  --salad-green: #3f6f35;
+  --salad-green-strong: #2f6530;
+  --salad-muted: #5f6b58;
+  --salad-card: rgba(255, 255, 255, 0.92);
+  --salad-border: rgba(77, 111, 58, 0.14);
+  --salad-ring: rgba(76, 124, 63, 0.34);
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+.app-shell,
+.screen,
+.screen * {
+  font-family: var(--salad-font) !important;
+}
+
+.premium-salad-brand strong,
+.salad-premium-home .premium-salad-brand strong,
+.premium-recipes-screen .premium-recipes-header .premium-salad-brand strong {
+  color: #10140f !important;
+  font-family: var(--salad-font) !important;
+  font-size: clamp(39px, 10.4vw, 50px) !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+  line-height: 0.88 !important;
+  letter-spacing: -2.2px !important;
+  text-transform: lowercase !important;
+  text-shadow: none !important;
+}
+
+.premium-salad-brand small,
+.salad-premium-home .premium-salad-brand small,
+.premium-recipes-screen .premium-recipes-header .premium-salad-brand small {
+  margin-top: 7px !important;
+  color: #10140f !important;
+  font-family: var(--salad-font) !important;
+  font-size: clamp(14px, 3.9vw, 18px) !important;
+  font-weight: 900 !important;
+  line-height: 0.9 !important;
+  letter-spacing: 5.2px !important;
+}
+
+.salad-premium-home .premium-welcome {
+  padding-top: 16px !important;
+  padding-bottom: 22px !important;
+}
+
+.salad-premium-home .premium-welcome h1 {
+  color: var(--salad-green) !important;
+  font-family: var(--salad-font) !important;
+  font-size: clamp(32px, 8.4vw, 38px) !important;
+  font-weight: 800 !important;
+  line-height: 1.02 !important;
+  letter-spacing: -1.1px !important;
+}
+
+.salad-premium-home .premium-welcome h1::before {
+  font-family: var(--salad-font) !important;
+  font-size: 16px !important;
+  transform: rotate(-32deg) translateY(-5px) !important;
+}
+
+.salad-premium-home .premium-welcome p {
+  max-width: 335px !important;
+  color: var(--salad-ink) !important;
+  font-size: clamp(14.5px, 4vw, 17px) !important;
+  font-weight: 500 !important;
+  line-height: 1.32 !important;
+  letter-spacing: 0 !important;
+}
+
+.salad-premium-home .premium-section-row {
+  min-height: 44px !important;
+  margin-bottom: 12px !important;
+}
+
+.salad-premium-home .premium-section-row h2,
+.premium-recipes-title h1,
+.premium-recipes-screen .recipe-gallery-title h1 {
+  color: var(--salad-green) !important;
+  font-family: var(--salad-font) !important;
+  font-size: clamp(29px, 7.4vw, 36px) !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -1px !important;
+}
+
+.salad-premium-home .premium-section-row h2 span,
+.premium-recipes-title h1 span,
+.premium-recipes-screen .recipe-gallery-title h1 span {
+  color: #77a163 !important;
+}
+
+.salad-premium-home .premium-explore-grid {
+  gap: 12px 10px !important;
+}
+
+.salad-premium-home .premium-explore-card {
+  min-height: 116px !important;
+  padding: 10px 7px 14px !important;
+  border: 1px solid var(--salad-border) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 253, 247, 0.9)) !important;
+  box-shadow:
+    0 10px 24px rgba(63, 64, 43, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+.salad-premium-home .premium-icon-orb,
+.salad-premium-home .premium-icon-orb picture,
+.salad-premium-home .premium-icon-orb img {
+  width: 54px !important;
+  height: 54px !important;
+}
+
+.salad-premium-home .premium-icon-orb {
+  margin-bottom: 8px !important;
+}
+
+.salad-premium-home .premium-card-label {
+  max-width: 102px !important;
+  color: #416b36 !important;
+  font-family: var(--salad-font) !important;
+  font-size: clamp(11.5px, 3.2vw, 13.5px) !important;
+  font-weight: 800 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.2px !important;
+  text-align: center !important;
+  white-space: normal !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+.salad-premium-home .premium-explore-card:nth-child(3) .premium-card-label {
+  max-width: 78px !important;
+  font-size: clamp(9.6px, 2.55vw, 11.4px) !important;
+  letter-spacing: -0.35px !important;
+}
+
+.salad-premium-home .premium-card-arrow {
+  right: 7px !important;
+  bottom: 7px !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.premium-recipes-screen .recipe-gallery-title p,
+.premium-recipes-title p {
+  color: var(--salad-muted) !important;
+  font-family: var(--salad-font) !important;
+  font-size: clamp(15px, 4vw, 18px) !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+}
+
+.premium-recipes-screen .recipe-gallery-info .premium-recipe-title-button,
+.premium-recipe-title-button {
+  color: #255b2d !important;
+  font-family: var(--salad-font) !important;
+  font-size: clamp(16px, 4.2vw, 20px) !important;
+  font-weight: 800 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.45px !important;
+}
+
+.premium-recipes-screen .recipe-gallery-card {
+  border-color: var(--salad-border) !important;
+  background: var(--salad-card) !important;
+}
+
+.premium-recipe-chip-row button,
+.recipe-filter-button,
+.bottom-nav.salad-premium-bottom-nav button {
+  font-family: var(--salad-font) !important;
+  font-weight: 700 !important;
+}
+
+.premium-header-button:focus-visible,
+.premium-explore-card:focus-visible,
+.bottom-nav.salad-premium-bottom-nav button:focus-visible,
+.premium-recipe-title-button:focus-visible,
+.recipe-gallery-heart:focus-visible,
+.recipe-filter-button:focus-visible,
+.premium-recipe-chip-row button:focus-visible,
+.premium-custom-badge:focus-visible {
+  outline: 3px solid var(--salad-ring) !important;
+  outline-offset: 3px !important;
+}
+
+@media (max-width: 390px) {
+  .premium-salad-brand strong,
+  .salad-premium-home .premium-salad-brand strong,
+  .premium-recipes-screen .premium-recipes-header .premium-salad-brand strong {
+    font-size: 40px !important;
+    letter-spacing: -1.8px !important;
+  }
+
+  .premium-salad-brand small,
+  .salad-premium-home .premium-salad-brand small,
+  .premium-recipes-screen .premium-recipes-header .premium-salad-brand small {
+    font-size: 13px !important;
+    letter-spacing: 4.8px !important;
+  }
+
+  .salad-premium-home .premium-welcome h1 {
+    font-size: 32px !important;
+  }
+
+  .salad-premium-home .premium-welcome p {
+    font-size: 14.5px !important;
+    line-height: 1.28 !important;
+  }
+
+  .salad-premium-home .premium-section-row h2,
+  .premium-recipes-title h1,
+  .premium-recipes-screen .recipe-gallery-title h1 {
+    font-size: 30px !important;
+  }
+
+  .salad-premium-home .premium-explore-card {
+    min-height: 112px !important;
+  }
+
+  .salad-premium-home .premium-icon-orb,
+  .salad-premium-home .premium-icon-orb picture,
+  .salad-premium-home .premium-icon-orb img {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .salad-premium-home .premium-card-label {
+    max-width: 100px !important;
+    font-size: 12px !important;
+  }
+
+  .salad-premium-home .premium-explore-card:nth-child(3) .premium-card-label {
+    font-size: 9.6px !important;
+  }
+}

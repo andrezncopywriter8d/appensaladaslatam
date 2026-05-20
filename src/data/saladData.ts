@@ -1,13 +1,13 @@
-﻿import { BookOpen, Calculator, ClipboardCheck, Gift, Heart, Home, Layers3, ListChecks, Salad, ShoppingBasket, Sparkles } from "lucide-react";
+import { BookOpen, Calculator, CalendarDays, ClipboardCheck, Gift, Heart, Home, Layers3, ListChecks, Salad, ShoppingBasket, Sparkles } from "lucide-react";
 import { saladRecipes, type SaladRecipe as CanonicalSaladRecipe } from "./saladRecipes";
 
-export type ScreenId = "home" | "recipes" | "dressings" | "week" | "shopping" | "guide";
+export type ScreenId = "home" | "recipes" | "dressings" | "week" | "shopping" | "guide" | "smartMenu";
 export type RecipeCategory = "Clasicas" | "Proteicas" | "Vegetarianas" | "Economicas" | "Gourmet" | "Para vender";
 export interface SaladRecipe { readonly id:string; readonly nombre:string; readonly categoria:RecipeCategory; readonly objetivo:string; readonly descripcion:string; readonly tiempoPreparacion:string; readonly porciones:number; readonly duracionRefrigerada:string; readonly dificultad:"Facil"|"Media"; readonly ingredientes:readonly string[]; readonly aderezoRecomendado:string; readonly capas:readonly string[]; readonly instrucciones:readonly string[]; readonly consejos:readonly string[]; readonly tags:readonly string[]; readonly imagenPlaceholder:string; }
 export interface Dressing { readonly id:string; readonly nombre:string; readonly tipo:string; readonly descripcion:string; readonly ingredientes:readonly string[]; readonly preparacion:readonly string[]; readonly combinaCon:readonly string[]; readonly duracionRefrigerada:string; readonly tags:readonly string[]; }
 export interface WeeklyMenu { readonly id:string; readonly titulo:string; readonly descripcion:string; readonly dias:readonly {readonly dia:string; readonly recetaId:string; readonly aderezo:string}[]; }
 export interface GuideModule { readonly id:string; readonly title:string; readonly description:string; readonly readingTime:string; readonly paragraphs:readonly string[]; }
-export const navigationItems = [{id:"home",label:"Inicio",icon:Home},{id:"recipes",label:"Recetas",icon:Salad},{id:"week",label:"Mi semana",icon:ClipboardCheck},{id:"shopping",label:"Lista",icon:ShoppingBasket},{id:"guide",label:"Bonus",icon:Gift}] as const;
+export const navigationItems = [{id:"home",label:"Inicio",icon:Home},{id:"recipes",label:"Recetas",icon:Salad},{id:"dressings",label:"Aderezos",icon:ShoppingBasket},{id:"guide",label:"Bonos",icon:Gift},{id:"smartMenu",label:"Menú 21 Días",icon:CalendarDays}] as const;
 const categoryToApp: Record<CanonicalSaladRecipe["category"], RecipeCategory> = {
   "Clásicas": "Clasicas",
   Proteicas: "Proteicas",
@@ -907,4 +907,6 @@ export const faq = [
   ]
 ] as const;
 export const homeCards = [{title:'Recetas',text:'Explora recetas listas para organizar tu semana.',icon:Salad,screen:'recipes' as ScreenId},{title:'Aderezos',text:'Dale mas sabor a tus ensaladas con aderezos simples y ligeros.',icon:Sparkles,screen:'dressings' as ScreenId},{title:'Menus',text:'Elige un menu de 3, 5 o 7 dias y prepara todo con mas facilidad.',icon:ListChecks,screen:'week' as ScreenId},{title:'Lista de compras',text:'Genera una lista practica segun las recetas que elijas.',icon:ShoppingBasket,screen:'shopping' as ScreenId},{title:'Conservacion',text:'Aprende como mantener textura, sabor y frescura por mas tiempo.',icon:Layers3,screen:'guide' as ScreenId},{title:'Vender',text:'Ideas simples para presentar, organizar y fijar precios.',icon:Calculator,screen:'guide' as ScreenId},{title:'Favoritas',text:'Guarda tus recetas preferidas para encontrarlas rapido.',icon:Heart,screen:'recipes' as ScreenId},{title:'Guia practica',text:'Metodo de capas, conservacion, menus y FAQ en un solo lugar.',icon:BookOpen,screen:'guide' as ScreenId}] as const;
+
+
 

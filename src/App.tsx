@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LoginScreen } from "./components/LoginScreen";
-import { SaladBottomNav, SaladDressingsScreen, SaladGuideScreen, SaladHomeScreen, SaladOnboarding, SaladRecipeDetail, SaladRecipesScreen, SaladShoppingScreen, SaladWeekScreen } from "./components/SaladScreens";
+import { MenuInteligenteScreen, SaladBottomNav, SaladDressingsScreen, SaladGuideScreen, SaladHomeScreen, SaladOnboarding, SaladRecipeDetail, SaladRecipesScreen, SaladShoppingScreen, SaladWeekScreen } from "./components/SaladScreens";
 import { recipes, type SaladRecipe, type ScreenId } from "./data/saladData";
 import { getCurrentAuthSession, loadAuthSession, onAuthSessionChange, type AuthSession } from "./state/authState";
 import { loadSaladState, saveSaladState, type SaladProfile, type SaladState } from "./state/saladState";
@@ -134,6 +134,7 @@ export function App() {
       <SaladWeekScreen {...context} active={activeScreen === "week"} />
       <SaladShoppingScreen {...context} active={activeScreen === "shopping"} />
       <SaladGuideScreen {...context} active={activeScreen === "guide"} />
+      <MenuInteligenteScreen {...context} active={activeScreen === "smartMenu"} />
       <SaladBottomNav activeScreen={activeScreen} activeRecipeCategory={recipeCategoryRequest.category} openScreen={openScreen} />
     </main>
   );

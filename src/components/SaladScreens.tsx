@@ -1,7 +1,8 @@
 import { useEffect, useState, type CSSProperties, type Dispatch, type SetStateAction } from "react";
-import { ArrowLeft, Award, Bell, Check, ChevronRight, Clock3, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShieldCheck, ShoppingBasket, SlidersHorizontal, Sparkles, Trash2, Utensils } from "lucide-react";
+import { AlertCircle, ArrowLeft, Award, Bell, Brain, CalendarDays, Check, ChevronRight, Clock3, ClipboardList, Copy, Gift, Heart, Home, Layers3, Leaf, LockKeyhole, Menu, Plus, Salad, Search, ShieldCheck, ShoppingBasket, SlidersHorizontal, Sparkles, Trash2, Utensils } from "lucide-react";
 import { recipes, weeklyMenus, type SaladRecipe, type ScreenId, type WeeklyMenu } from "../data/saladData";
 import { saladDressings, type SaladDressing } from "../data/saladDressings";
+import { smartMenuDays, smartMenuPrepSteps, smartMenuShoppingLists, smartMenuWeeks, type MenuDay, type SmartMenuTab } from "../data/smartMenu21";
 import { generateProfile, recipeById, shoppingItemsForRecipes, toggle, type SaladProfile, type SaladState } from "../state/saladState";
 
 interface AppContext {
@@ -17,7 +18,7 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
     { key: "recipes", label: "Recetas", icon: Salad, screen: "recipes" as ScreenId, recipeCategory: "Todas" },
     { key: "dressings", label: "Aderezos", icon: Utensils, screen: "dressings" as ScreenId },
     { key: "bonus", label: "Bonos", icon: Gift, screen: "guide" as ScreenId },
-    { key: "favorites", label: "Favoritos", icon: Heart, screen: "recipes" as ScreenId, recipeCategory: "Favoritas" }
+    { key: "smartMenu", label: "Menú 21 Días", icon: CalendarDays, screen: "smartMenu" as ScreenId }
   ];
 
   return (
@@ -29,12 +30,12 @@ export function SaladBottomNav({ activeScreen, activeRecipeCategory, openScreen 
             ? activeScreen === "home"
             : item.key === "bonus"
               ? activeScreen === "guide"
+            : item.key === "smartMenu"
+              ? activeScreen === "smartMenu"
               : item.key === "dressings"
                 ? activeScreen === "dressings"
               : item.key === "recipes"
-                ? activeScreen === "recipes" && activeRecipeCategory !== "Favoritas"
-                : item.key === "favorites"
-                  ? activeScreen === "recipes" && activeRecipeCategory === "Favoritas"
+                ? activeScreen === "recipes"
                 : false;
 
         return (
@@ -128,7 +129,8 @@ export function SaladHomeScreen({ active, openScreen }: AppContext & { readonly 
     { title: "Combinaciones", icon: Layers3, image: "combinations", screen: "guide" as ScreenId, tone: "green" },
     { title: "Menús", icon: ShoppingBasket, image: "menus", screen: "week" as ScreenId, tone: "cream" },
     { title: "Consejos", icon: Sparkles, image: "tips", screen: "guide" as ScreenId, tone: "green" },
-    { title: "Favoritos", icon: Heart, image: "favorites", screen: "recipes" as ScreenId, tone: "pink", recipeCategory: "Favoritas" }
+    { title: "Favoritos", icon: Heart, image: "favorites", screen: "recipes" as ScreenId, tone: "pink", recipeCategory: "Favoritas" },
+    { title: "Menú 21 Días", icon: CalendarDays, image: "menus", screen: "smartMenu" as ScreenId, tone: "green" }
   ];
 
   return (
@@ -1113,6 +1115,417 @@ function BonusPaymentTrust() {
   );
 }
 
+const SMART_MENU_BONUS_ID = "menu-inteligente-21-dias";
+const MENU_INTELIGENTE_CHECKOUT_URL = "COLOCAR_LINK_DO_CHECKOUT_AQUI";
+
+export function MenuInteligenteScreen({ active, state, setState, openRecipe, openScreen }: AppContext & { readonly active: boolean }) {
+  const [activeTab, setActiveTab] = useState<SmartMenuTab>("semana-1");
+  const [copiedWeek, setCopiedWeek] = useState<number | null>(null);
+  const [checkoutError, setCheckoutError] = useState(false);
+  const [previewDay, setPreviewDay] = useState<MenuDay | null>(null);
+  const completedDays = state.smartMenuCompletedDays ?? [];
+  const completedCount = completedDays.length;
+  const progress = Math.round((completedCount / 21) * 100);
+  const unlocked = state.unlockedBonusIds.includes(SMART_MENU_BONUS_ID);
+  const nextDay = smartMenuDays.find((day) => !completedDays.includes(day.day)) ?? smartMenuDays[0];
+
+  function selectTab(tab: SmartMenuTab) {
+    setActiveTab(tab);
+    window.requestAnimationFrame(() => document.getElementById("smart-menu-content")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function openCheckout() {
+    setCheckoutError(false);
+    if (!MENU_INTELIGENTE_CHECKOUT_URL || MENU_INTELIGENTE_CHECKOUT_URL.includes("COLOCAR_LINK")) {
+      setCheckoutError(true);
+      return;
+    }
+
+    const opened = window.open(MENU_INTELIGENTE_CHECKOUT_URL, "_blank", "noopener,noreferrer");
+    if (!opened) setCheckoutError(true);
+  }
+
+  function toggleMenuDay(day: number) {
+    setState((current) => ({
+      ...current,
+      smartMenuCompletedDays: current.smartMenuCompletedDays.includes(day)
+        ? current.smartMenuCompletedDays.filter((item) => item !== day)
+        : [...current.smartMenuCompletedDays, day].sort((a, b) => a - b)
+    }));
+  }
+
+  function findRecipeForDay(day: MenuDay) {
+    const hint = normalizeMenuText(`${day.recipeHint} ${day.title}`);
+    return recipes.find((recipe) => {
+      const searchable = normalizeMenuText(`${recipe.nombre} ${recipe.tags.join(" ")} ${recipe.ingredientes.join(" ")}`);
+      return day.recipeHint.split(" ").some((part) => part.length > 3 && searchable.includes(normalizeMenuText(part))) || searchable.includes(hint);
+    });
+  }
+
+  function openDayRecipe(day: MenuDay) {
+    const recipe = findRecipeForDay(day);
+    if (recipe) {
+      openRecipe(recipe);
+      return;
+    }
+    setPreviewDay(day);
+  }
+
+  async function copyShoppingList(list: typeof smartMenuShoppingLists[number]) {
+    const text = [
+      list.title,
+      "",
+      "Verduras y hojas:",
+      ...list.verduras.map((item) => `- ${item}`),
+      "",
+      "Proteínas:",
+      ...list.proteinas.map((item) => `- ${item}`),
+      "",
+      "Granos y extras:",
+      ...list.granos.map((item) => `- ${item}`),
+      "",
+      "Aderezos:",
+      ...list.aderezos.map((item) => `- ${item}`),
+      "",
+      "Extras:",
+      ...list.extras.map((item) => `- ${item}`)
+    ].join("\n");
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedWeek(list.week);
+      window.setTimeout(() => setCopiedWeek(null), 1800);
+    } catch {
+      setCopiedWeek(null);
+    }
+  }
+
+  return (
+    <section className={`screen smart-menu-screen ${active ? "active" : ""}`}>
+      <header className="premium-salad-header smart-menu-topbar">
+        <button className="premium-header-button" type="button" aria-label="Abrir menú">
+          <Menu size={28} strokeWidth={2.5} />
+        </button>
+
+        <div className="premium-salad-brand" aria-label="Ensaladas en Frasco">
+          <strong>ensaladas</strong>
+          <small>EN FRASCO</small>
+        </div>
+
+        <button className="premium-header-button" type="button" aria-label="Notificaciones">
+          <Bell size={25} strokeWidth={2.3} />
+        </button>
+      </header>
+
+      <div className="smart-menu-content">
+        {unlocked ? (
+          <>
+            <MenuHeroCard onStart={() => selectTab("semana-1")} onShopping={() => selectTab("compras")} />
+            <ProgressTracker completedCount={completedCount} progress={progress} nextDay={nextDay.day} onToggleNext={() => toggleMenuDay(nextDay.day)} />
+            <WeekTabs activeTab={activeTab} onSelect={selectTab} />
+            <div id="smart-menu-content">
+              {activeTab.startsWith("semana") ? (
+                <WeekPlanCard
+                  activeTab={activeTab}
+                  completedDays={completedDays}
+                  onOpenRecipe={openDayRecipe}
+                  onToggleDay={toggleMenuDay}
+                />
+              ) : null}
+              {activeTab === "compras" ? <ShoppingListsPanel copiedWeek={copiedWeek} onCopy={copyShoppingList} /> : null}
+              {activeTab === "preparacion" ? <PrepTimeline /> : null}
+              {activeTab === "calendario" ? <PrintableCalendar completedDays={completedDays} onOpenRecipe={openDayRecipe} onToggleDay={toggleMenuDay} /> : null}
+            </div>
+          </>
+        ) : (
+          <LockedPremiumSection
+            checkoutError={checkoutError}
+            onCheckout={openCheckout}
+            onDecline={() => openScreen("home")}
+          />
+        )}
+      </div>
+
+      {previewDay ? (
+        <div className="smart-menu-modal-backdrop" role="presentation" onClick={() => setPreviewDay(null)}>
+          <article className="smart-menu-modal" role="dialog" aria-modal="true" aria-label={previewDay.title} onClick={(event) => event.stopPropagation()}>
+            <button className="smart-menu-modal-close" type="button" onClick={() => setPreviewDay(null)}>Cerrar</button>
+            <span className="smart-menu-chip">Día {previewDay.day}</span>
+            <h2>{previewDay.title}</h2>
+            <p>Ingredientes principales: {previewDay.ingredients.join(", ")}.</p>
+            <ol>
+              <li>Coloca el aderezo en el fondo del frasco.</li>
+              <li>Agrega ingredientes firmes y proteínas en el centro.</li>
+              <li>Deja las hojas arriba para mantener todo fresco.</li>
+            </ol>
+          </article>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function MenuHeroCard({ onStart, onShopping }: { readonly onStart: () => void; readonly onShopping: () => void }) {
+  return (
+    <section className="smart-menu-hero">
+      <div className="smart-menu-hero-copy">
+        <span className="smart-menu-pill"><Sparkles size={15} /> Disponible como mejora especial</span>
+        <h1>Menú Inteligente 21 Días</h1>
+        <p>Tu plan listo para saber qué ensalada preparar cada día, qué comprar cada semana y cómo organizar todo sin pensar.</p>
+        <div className="smart-menu-hero-actions">
+          <button type="button" onClick={onStart}>Empezar mi plan <ChevronRight size={18} /></button>
+          <button type="button" onClick={onShopping}>Ver lista de compras <ShoppingBasket size={17} /></button>
+        </div>
+      </div>
+      <picture>
+        <source srcSet="/assets/bonos/bonus-jars.webp" type="image/webp" />
+        <img src="/assets/bonos/bonus-jars.jpg" alt="Frascos de ensalada organizados para el menú inteligente" loading="eager" decoding="async" />
+      </picture>
+    </section>
+  );
+}
+
+function ProgressTracker({ completedCount, progress, nextDay, onToggleNext }: { readonly completedCount: number; readonly progress: number; readonly nextDay: number; readonly onToggleNext: () => void }) {
+  return (
+    <section className="smart-menu-progress">
+      <div className="smart-menu-progress-ring" style={{ "--smartProgress": `${progress * 3.6}deg` } as CSSProperties}>
+        <strong>{completedCount}<small>/21</small></strong>
+        <span>días</span>
+      </div>
+      <div>
+        <h2>{completedCount} de 21 días completados</h2>
+        <p>{completedCount === 0 ? "Empieza hoy y deja de decidir desde cero." : "¡Vas muy bien! Sigue así."}</p>
+        <div className="smart-menu-progress-bar"><span style={{ width: `${progress}%` }} /></div>
+      </div>
+      <button type="button" onClick={onToggleNext}><Check size={24} /><span>Día {nextDay}</span></button>
+    </section>
+  );
+}
+
+function WeekTabs({ activeTab, onSelect }: { readonly activeTab: SmartMenuTab; readonly onSelect: (tab: SmartMenuTab) => void }) {
+  const tabs: readonly { readonly id: SmartMenuTab; readonly label: string }[] = [
+    { id: "semana-1", label: "Semana 1" },
+    { id: "semana-2", label: "Semana 2" },
+    { id: "semana-3", label: "Semana 3" },
+    { id: "compras", label: "Compras" },
+    { id: "preparacion", label: "Preparación" },
+    { id: "calendario", label: "Calendario" }
+  ];
+
+  return (
+    <nav className="smart-menu-tabs" aria-label="Menú inteligente">
+      {tabs.map((tab) => (
+        <button className={activeTab === tab.id ? "active" : ""} key={tab.id} type="button" onClick={() => onSelect(tab.id)}>
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function WeekPlanCard({ activeTab, completedDays, onOpenRecipe, onToggleDay }: { readonly activeTab: SmartMenuTab; readonly completedDays: readonly number[]; readonly onOpenRecipe: (day: MenuDay) => void; readonly onToggleDay: (day: number) => void }) {
+  const weekNumber = Number(activeTab.replace("semana-", "")) as 1 | 2 | 3;
+  const week = smartMenuWeeks.find((item) => item.week === weekNumber) ?? smartMenuWeeks[0];
+  const days = smartMenuDays.filter((day) => day.week === week.week);
+
+  return (
+    <section className="smart-menu-week">
+      <div className="smart-menu-section-head">
+        <span><CalendarDays size={20} /> {week.fullTitle}</span>
+        <p>{week.goal}</p>
+      </div>
+      <div className="smart-menu-day-grid">
+        {days.map((day, index) => (
+          <DayMenuCard
+            completed={completedDays.includes(day.day)}
+            day={day}
+            imageIndex={index + 1}
+            key={day.day}
+            onOpenRecipe={() => onOpenRecipe(day)}
+            onToggle={() => onToggleDay(day.day)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DayMenuCard({ day, imageIndex, completed, onOpenRecipe, onToggle }: { readonly day: MenuDay; readonly imageIndex: number; readonly completed: boolean; readonly onOpenRecipe: () => void; readonly onToggle: () => void }) {
+  const photo = ((day.day + imageIndex) % 6) + 1;
+
+  return (
+    <article className={`smart-menu-day-card ${completed ? "completed" : ""}`}>
+      <picture>
+        <source srcSet={`/assets/recipes/recipe-card-${photo}.webp`} type="image/webp" />
+        <img src={`/assets/recipes/recipe-card-${photo}.jpg`} alt={day.title} loading="lazy" decoding="async" />
+      </picture>
+      <button className="smart-menu-day-check" type="button" onClick={onToggle} aria-label={completed ? "Desmarcar día" : "Marcar día como completado"}>
+        <Check size={17} />
+      </button>
+      <div>
+        <span className="smart-menu-chip">Día {day.day}</span>
+        <h3>{day.title}</h3>
+        <p>{day.ingredients.join(", ")}</p>
+        <div className="smart-menu-day-meta">
+          <span><Clock3 size={14} /> {day.time}</span>
+          <span><Leaf size={14} /> {day.tag}</span>
+        </div>
+        <button type="button" onClick={onOpenRecipe}>Ver receta <ChevronRight size={16} /></button>
+      </div>
+    </article>
+  );
+}
+
+function ShoppingListsPanel({ copiedWeek, onCopy }: { readonly copiedWeek: number | null; readonly onCopy: (list: typeof smartMenuShoppingLists[number]) => void }) {
+  return (
+    <section className="smart-menu-shopping-panel">
+      <div className="smart-menu-section-head">
+        <span><ClipboardList size={20} /> Listas de compras</span>
+        <p>Compra una vez por semana y evita desperdicios.</p>
+      </div>
+      {smartMenuShoppingLists.map((list) => (
+        <article className="smart-menu-shopping-card" key={list.week}>
+          <div>
+            <h3>{list.title}</h3>
+            <button type="button" onClick={() => onCopy(list)}><Copy size={16} /> {copiedWeek === list.week ? "Lista copiada" : "Copiar lista"}</button>
+          </div>
+          <ShoppingCategory title="Verduras y hojas" items={list.verduras} />
+          <ShoppingCategory title="Proteínas" items={list.proteinas} />
+          <ShoppingCategory title="Granos y extras" items={list.granos} />
+          <ShoppingCategory title="Aderezos" items={list.aderezos} />
+          <ShoppingCategory title="Extras" items={list.extras} />
+        </article>
+      ))}
+    </section>
+  );
+}
+
+function ShoppingCategory({ title, items }: { readonly title: string; readonly items: readonly string[] }) {
+  return (
+    <section>
+      <h4>{title}</h4>
+      <p>{items.join(", ")}</p>
+    </section>
+  );
+}
+
+function PrepTimeline() {
+  return (
+    <section className="smart-menu-prep-timeline">
+      <div className="smart-menu-section-head">
+        <span><Clock3 size={20} /> Prepara tu semana en 30 minutos</span>
+        <p>Sigue este orden y deja tus frascos listos sin ensuciar toda la cocina.</p>
+      </div>
+      {smartMenuPrepSteps.map((step, index) => (
+        <article key={step.title}>
+          <span>Paso {index + 1} - {step.duration}</span>
+          <h3>{step.title}</h3>
+          <p>{step.description}</p>
+        </article>
+      ))}
+      <div className="smart-menu-golden-rule">
+        <strong>Regla de oro del frasco</strong>
+        <p>El aderezo siempre va abajo y las hojas siempre van arriba. Así tu ensalada se mantiene fresca por más tiempo.</p>
+      </div>
+    </section>
+  );
+}
+
+function PrintableCalendar({ completedDays, onOpenRecipe, onToggleDay }: { readonly completedDays: readonly number[]; readonly onOpenRecipe: (day: MenuDay) => void; readonly onToggleDay: (day: number) => void }) {
+  const [downloadFeedback, setDownloadFeedback] = useState(false);
+  const nextIncompleteDay = smartMenuDays.find((day) => !completedDays.includes(day.day)) ?? smartMenuDays[0];
+
+  function prepareDownload() {
+    // Conectar aquí la generación real de PDF o imagen imprimible cuando el checkout definitivo esté listo.
+    setDownloadFeedback(true);
+    window.setTimeout(() => setDownloadFeedback(false), 1800);
+  }
+
+  return (
+    <section className="smart-menu-calendar">
+      <div className="smart-menu-section-head">
+        <span><CalendarDays size={20} /> Calendario 21 días</span>
+        <p>Marca tus días y construye el hábito sin improvisar.</p>
+      </div>
+      <div className="smart-menu-calendar-grid">
+        {smartMenuDays.map((day) => (
+          <button className={completedDays.includes(day.day) ? "completed" : ""} key={day.day} type="button" onClick={() => onToggleDay(day.day)}>
+            <strong>{day.day}</strong>
+            <span>{shortMenuTitle(day.title)}</span>
+            <small>{completedDays.includes(day.day) ? "Hecho" : "Marcar"}</small>
+          </button>
+        ))}
+      </div>
+      <div className="smart-menu-calendar-actions">
+        <button type="button" onClick={prepareDownload}>{downloadFeedback ? "Calendario preparado" : "Descargar calendario"}</button>
+        <button type="button" onClick={() => onToggleDay(nextIncompleteDay.day)}>Marcar día como completado</button>
+      </div>
+    </section>
+  );
+}
+
+function LockedPremiumSection({ checkoutError, onCheckout, onDecline }: { readonly checkoutError: boolean; readonly onCheckout: () => void; readonly onDecline: () => void }) {
+  return (
+    <section className="smart-menu-locked">
+      <article className="smart-menu-locked-hero">
+        <div>
+          <span className="smart-menu-pill"><LockKeyhole size={15} /> Disponible como mejora especial</span>
+          <h1>Desbloquea tu Menú Inteligente 21 Días</h1>
+          <p>Convierte tus 60 recetas en un plan listo para seguir día por día, con listas de compras y preparación semanal.</p>
+          <button type="button" onClick={onCheckout}>Desbloquear por $17</button>
+          <small>Pago único. Sin mensualidad. Garantía de 7 días.</small>
+          {checkoutError ? <em>No se pudo completar. Intenta de nuevo.</em> : null}
+        </div>
+        <picture>
+          <source srcSet="/assets/bonos/bonus-jars.webp" type="image/webp" />
+          <img src="/assets/bonos/bonus-jars.jpg" alt="Plan premium de ensaladas en frasco" loading="eager" decoding="async" />
+        </picture>
+      </article>
+
+      <article className="smart-menu-problem-card">
+        <Brain size={26} />
+        <h2>El problema no es la falta de recetas</h2>
+        <p>El problema es decidir. Cuando tienes muchas opciones, pero no tienes un plan claro, terminas improvisando o pidiendo delivery.</p>
+      </article>
+
+      <article className="smart-menu-solution-card">
+        <AlertCircle size={24} />
+        <h2>¿Por qué necesitas este plan?</h2>
+        <p>Porque tener recetas no significa tener la semana organizada. Este menú te dice exactamente qué preparar cada día, qué comprar antes de empezar y cómo dejar todo listo sin perder tiempo.</p>
+        <ul>
+          <li>Evita perder tiempo eligiendo recetas</li>
+          <li>Reduce compras innecesarias</li>
+          <li>Ayuda a no caer en delivery por falta de planificación</li>
+          <li>Organiza 3 semanas completas</li>
+          <li>Ideal para mujeres ocupadas que quieren comer mejor sin complicarse</li>
+        </ul>
+      </article>
+
+      <div className="smart-menu-locked-preview">
+        {["21 días de menú", "3 listas de compras", "Preparación en 30 minutos", "Calendario imprimible"].map((item) => (
+          <span key={item}><LockKeyhole size={16} /> {item}</span>
+        ))}
+      </div>
+
+      <article className="smart-menu-cta-box">
+        <span>Valor normal: <s>$47</s></span>
+        <strong>Hoy por solo $17</strong>
+        <p>Garantía de 7 días. Si no te ayuda a organizar tu rutina, puedes pedir tu reembolso.</p>
+        <button type="button" onClick={onCheckout}>Sí, quiero mi Menú Inteligente</button>
+        <button type="button" onClick={onDecline}>No gracias, prefiero seguir organizándome sola</button>
+      </article>
+    </section>
+  );
+}
+
+function normalizeMenuText(value: string) {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+function shortMenuTitle(title: string) {
+  return title.replace("Ensalada de ", "").replace("Ensalada ", "").slice(0, 18);
+}
+
 function Header({ eyebrow, title, subtitle }: { readonly eyebrow: string; readonly title: string; readonly subtitle: string }) {
   return <header className="screen-head"><span className="protocol-eyebrow"><Salad size={14} /> {eyebrow}</span><h1>{title}</h1><p>{subtitle}</p></header>;
 }
@@ -1140,3 +1553,4 @@ function EmptyState({ title, text }: { readonly title: string; readonly text: st
 function getTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
+

@@ -31,6 +31,7 @@ export interface SaladState {
   readonly customShoppingItems: readonly string[];
   readonly completedGuides: readonly string[];
   readonly unlockedBonusIds: readonly string[];
+  readonly smartMenuCompletedDays: readonly number[];
   readonly priceCalculator: {
     readonly ingredients: number;
     readonly packaging: number;
@@ -55,6 +56,7 @@ export const defaultSaladState: SaladState = {
   customShoppingItems: [],
   completedGuides: [],
   unlockedBonusIds: [],
+  smartMenuCompletedDays: [],
   priceCalculator: { ingredients: 3.5, packaging: 0.8, extra: 0.5, margin: 45 }
 };
 
@@ -97,6 +99,8 @@ export function normalizeState(partial: Partial<SaladState>, userId?: string | n
   const safeFavoriteDressingIds = (partial.favoriteDressingIds ?? defaultSaladState.favoriteDressingIds).filter((id) => validDressingIds.has(id));
   const safePreparedLog = (partial.preparedLog ?? defaultSaladState.preparedLog).filter((entry) => validRecipeIds.has(entry.recipeId));
   const safeUnlockedBonusIds = (partial.unlockedBonusIds ?? defaultSaladState.unlockedBonusIds).filter((id) => typeof id === "string" && id.length > 0);
+  const safeSmartMenuCompletedDays = (partial.smartMenuCompletedDays ?? defaultSaladState.smartMenuCompletedDays)
+    .filter((day) => Number.isInteger(day) && day >= 1 && day <= 21);
   const safeRecipeProgress = Object.fromEntries(
     Object.entries(partial.recipeProgress ?? {})
       .filter(([recipeId]) => validRecipeIds.has(recipeId))
@@ -123,6 +127,7 @@ export function normalizeState(partial: Partial<SaladState>, userId?: string | n
     favoriteRecipeIds: Array.from(new Set(safeFavoriteRecipeIds)),
     favoriteDressingIds: Array.from(new Set(safeFavoriteDressingIds)),
     unlockedBonusIds: Array.from(new Set(safeUnlockedBonusIds)),
+    smartMenuCompletedDays: Array.from(new Set(safeSmartMenuCompletedDays)).sort((a, b) => a - b),
     priceCalculator: {
       ...defaultSaladState.priceCalculator,
       ...(partial.priceCalculator ?? {})

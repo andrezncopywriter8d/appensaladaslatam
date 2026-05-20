@@ -13325,3 +13325,114 @@ textarea,
     font-size: 14px;
   }
 }
+
+/* ============================================================
+   SMART MENU MOBILE PROPORTION FIX
+   Keeps the premium locked/unlocked hero readable on 390-430px.
+   ============================================================ */
+
+.smart-menu-screen .smart-menu-hero,
+.smart-menu-screen .smart-menu-locked-hero {
+  grid-template-columns: 1fr !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.smart-menu-screen .smart-menu-hero picture,
+.smart-menu-screen .smart-menu-locked-hero picture {
+  position: relative !important;
+  inset: auto !important;
+  order: -1 !important;
+  display: block !important;
+  width: 100% !important;
+  height: clamp(158px, 45vw, 188px) !important;
+  border-radius: 20px 20px 0 0 !important;
+}
+
+.smart-menu-screen .smart-menu-hero img,
+.smart-menu-screen .smart-menu-locked-hero img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+.smart-menu-screen .smart-menu-hero-copy,
+.smart-menu-screen .smart-menu-locked-hero > div {
+  display: grid !important;
+  gap: 10px !important;
+  padding: 16px !important;
+  background: linear-gradient(180deg, rgba(242, 249, 235, 0.97), rgba(255, 253, 247, 0.92)) !important;
+}
+
+.smart-menu-screen .smart-menu-hero h1,
+.smart-menu-screen .smart-menu-locked-hero h1 {
+  max-width: 100% !important;
+  margin: 0 !important;
+  font-size: clamp(28px, 8.2vw, 36px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.8px !important;
+}
+
+.smart-menu-screen .smart-menu-hero p,
+.smart-menu-screen .smart-menu-locked-hero p {
+  max-width: 100% !important;
+  font-size: clamp(12px, 3.35vw, 14px) !important;
+  line-height: 1.32 !important;
+}
+
+.smart-menu-screen .smart-menu-locked-hero small,
+.smart-menu-screen .smart-menu-locked-hero em {
+  display: block !important;
+  max-width: 100% !important;
+  line-height: 1.25 !important;
+}
+
+.smart-menu-screen .smart-menu-hero-actions {
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+  margin-top: 0 !important;
+}
+
+.smart-menu-screen .smart-menu-hero-actions button,
+.smart-menu-screen .smart-menu-locked-hero button,
+.smart-menu-screen .smart-menu-cta-box button {
+  width: 100% !important;
+  min-height: 44px !important;
+}
+
+.smart-menu-screen .smart-menu-problem-card,
+.smart-menu-screen .smart-menu-solution-card,
+.smart-menu-screen .smart-menu-cta-box {
+  padding: 15px !important;
+}
+
+.smart-menu-screen .smart-menu-problem-card h2,
+.smart-menu-screen .smart-menu-solution-card h2,
+.smart-menu-screen .smart-menu-cta-box strong {
+  font-size: clamp(17px, 5vw, 21px) !important;
+  line-height: 1.08 !important;
+}
+
+.smart-menu-screen .smart-menu-problem-card p,
+.smart-menu-screen .smart-menu-solution-card p,
+.smart-menu-screen .smart-menu-cta-box p {
+  font-size: clamp(11.5px, 3.3vw, 13px) !important;
+}
+
+.smart-menu-screen .smart-menu-solution-card ul {
+  gap: 6px !important;
+  font-size: clamp(10.5px, 3vw, 12px) !important;
+  line-height: 1.35 !important;
+}
+
+.smart-menu-screen .smart-menu-locked-preview {
+  gap: 8px !important;
+}
+
+.smart-menu-screen .smart-menu-locked-preview span {
+  min-height: 58px !important;
+  padding: 10px !important;
+  font-size: clamp(10px, 3vw, 11.5px) !important;
+  line-height: 1.15 !important;
+}

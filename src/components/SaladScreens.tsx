@@ -1507,11 +1507,22 @@ function LockedPremiumSection({ checkoutError, onCheckout, onDecline }: { readon
         ))}
       </div>
 
-      <article className="smart-menu-cta-box">
-        <span>Valor normal: <s>$47</s></span>
-        <strong>Hoy por solo $17</strong>
-        <p>Garantía de 7 días. Si no te ayuda a organizar tu rutina, puedes pedir tu reembolso.</p>
-        <button type="button" onClick={onCheckout}>Sí, quiero mi Menú Inteligente</button>
+      <article className="smart-menu-cta-box smart-menu-bundle-offer">
+        <span className="smart-menu-offer-kicker"><Gift size={15} /> Oferta especial del app</span>
+        <strong>Menú 21 Días + todos los bonos por $17</strong>
+        <p>Te llevas el plan completo para saber qué preparar cada día y además desbloqueas todos los bonos premium para hacerlo más fácil, rico y organizado.</p>
+        <div className="smart-menu-offer-value">
+          <span><small>Valor normal</small><s>$64</s></span>
+          <span><small>Hoy pagas</small><b>$17</b></span>
+          <span><small>Ahorras</small><b>$47</b></span>
+        </div>
+        <ul className="smart-menu-offer-list">
+          <li>Menú Inteligente 21 Días</li>
+          <li>6 bonos especiales incluidos</li>
+          <li>Listas de compras + preparación semanal</li>
+        </ul>
+        <button type="button" onClick={onCheckout}>Sí, quiero el plan + todos los bonos</button>
+        <small>Pago único. Acceso inmediato. Garantía de 7 días.</small>
         <button type="button" onClick={onDecline}>No gracias, prefiero seguir organizándome sola</button>
       </article>
     </section>

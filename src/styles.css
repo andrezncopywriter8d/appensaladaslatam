@@ -13481,3 +13481,183 @@ textarea,
   color: #2f7d32 !important;
   background: rgba(232, 242, 214, 0.62) !important;
 }
+
+/* ============================================================
+   SMART MENU BUNDLE OFFER CTA
+   Makes the $17 plan + bonuses offer clearer and more valuable.
+   ============================================================ */
+
+.smart-menu-screen .smart-menu-bundle-offer {
+  position: relative;
+  overflow: hidden;
+  gap: 13px !important;
+  padding: 18px !important;
+  border-color: rgba(47, 125, 50, 0.22) !important;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(221, 232, 208, 0.95), transparent 94px),
+    linear-gradient(180deg, #fffdf7 0%, #f6f8ee 100%) !important;
+}
+
+.smart-menu-screen .smart-menu-bundle-offer::before {
+  position: absolute;
+  right: -42px;
+  top: -44px;
+  width: 132px;
+  height: 132px;
+  border-radius: 999px;
+  content: "";
+  background: rgba(63, 143, 53, 0.12);
+}
+
+.smart-menu-screen .smart-menu-offer-kicker {
+  position: relative;
+  z-index: 1;
+  display: inline-flex !important;
+  align-items: center;
+  justify-self: start;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: #fffef6 !important;
+  background: linear-gradient(180deg, #3f8f35, #1f6a2d);
+  font-size: 11px !important;
+  font-weight: 950 !important;
+  line-height: 1;
+}
+
+.smart-menu-screen .smart-menu-bundle-offer strong {
+  position: relative;
+  z-index: 1;
+  color: #164e25;
+  font-size: clamp(22px, 6.2vw, 29px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.6px;
+}
+
+.smart-menu-screen .smart-menu-bundle-offer p {
+  position: relative;
+  z-index: 1;
+  color: #40513d;
+  font-size: 13px !important;
+  line-height: 1.38 !important;
+}
+
+.smart-menu-screen .smart-menu-offer-value {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.smart-menu-screen .smart-menu-offer-value span {
+  display: grid !important;
+  gap: 3px;
+  min-height: 62px;
+  padding: 10px 8px;
+  border: 1px solid rgba(79, 98, 66, 0.12);
+  border-radius: 16px;
+  color: #164e25 !important;
+  background: rgba(255, 255, 255, 0.78);
+  text-align: center;
+}
+
+.smart-menu-screen .smart-menu-offer-value small {
+  color: #53604f;
+  font-size: 9px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.smart-menu-screen .smart-menu-offer-value s {
+  color: #6f766b;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.smart-menu-screen .smart-menu-offer-value b {
+  color: #1f6a2d;
+  font-size: 20px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.smart-menu-screen .smart-menu-offer-list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.smart-menu-screen .smart-menu-offer-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #29462c;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.smart-menu-screen .smart-menu-offer-list li::before {
+  display: grid;
+  flex: 0 0 18px;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  color: #fffef6;
+  content: "✓";
+  background: #3f8f35;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.smart-menu-screen .smart-menu-bundle-offer > button:first-of-type {
+  position: relative;
+  z-index: 1;
+  min-height: 52px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle at 24% 10%, rgba(255, 255, 255, 0.18), transparent 45%),
+    linear-gradient(180deg, #37a13b 0%, #1f7b2e 100%) !important;
+  box-shadow: 0 15px 30px rgba(47, 125, 50, 0.28) !important;
+  font-size: clamp(13px, 3.5vw, 15px) !important;
+}
+
+.smart-menu-screen .smart-menu-bundle-offer > small {
+  position: relative;
+  z-index: 1;
+  color: #53604f;
+  font-size: 11px;
+  font-weight: 850;
+  text-align: center;
+}
+
+.smart-menu-screen .smart-menu-bundle-offer > button:last-of-type {
+  position: relative;
+  z-index: 1;
+  min-height: 34px !important;
+  color: #657060 !important;
+  font-size: 11px !important;
+}
+
+@media (max-width: 370px) {
+  .smart-menu-screen .smart-menu-offer-value {
+    gap: 6px;
+  }
+
+  .smart-menu-screen .smart-menu-offer-value span {
+    padding-inline: 6px;
+  }
+
+  .smart-menu-screen .smart-menu-bundle-offer > button:first-of-type {
+    font-size: 12px !important;
+  }
+}

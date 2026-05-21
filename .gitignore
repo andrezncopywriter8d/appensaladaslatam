@@ -12,3 +12,9 @@ audiowave-stitch-preview.html
 
 vinciule-meu-projeto-mcp-do-stitch/
 ensaladas-en-frasco-v2/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example

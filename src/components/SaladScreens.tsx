@@ -1116,7 +1116,7 @@ function BonusPaymentTrust() {
 }
 
 const SMART_MENU_BONUS_ID = "menu-inteligente-21-dias";
-const MENU_INTELIGENTE_CHECKOUT_URL = "COLOCAR_LINK_DO_CHECKOUT_AQUI";
+const MENU_INTELIGENTE_CHECKOUT_URL = "https://pay.hotmart.com/W105930582P";
 
 export function MenuInteligenteScreen({ active, state, setState, openRecipe, openScreen }: AppContext & { readonly active: boolean }) {
   const [activeTab, setActiveTab] = useState<SmartMenuTab>("semana-1");
